@@ -44,7 +44,7 @@ urlpatterns = [
     path('staff_manage_detail/<int:id>', views.staff_manage_detail, name="staff_manage_detail"),
     path('staff_manage_detail_durable/<int:id>', views.staff_manage_detail_durable, name="staff_manage_detail_durable"),
     #path('edit_staff_manage_detail/<int:id>', views.edit_staff_manage_detail, name="edit_staff_manage_detail"),
-    path('delete_staff_manage_detail/<int:id>', views.delete_staff_manage_detail, name="delete_staff_manage_detail"),
+    #path('delete_staff_manage_detail/<int:id>', views.delete_staff_manage_detail, name="delete_staff_manage_detail"),
     
     path('staff_manage_parcel', views.staff_manage_parcel, name="staff_manage_parcel"), #add parcel
     path('delete_staff_manage_parcel/<int:id>',views.delete_staff_manage_parcel, name="delete_staff_manage_parcel"), #delete

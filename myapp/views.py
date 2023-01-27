@@ -176,11 +176,7 @@ def user_borrow(req):
     search_parcel = ""
     if 'search_parcel' in req.GET:
         search_parcel = req.GET['search_parcel']
-        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel)|Q(quantity__contains=search_parcel)
-                                             |Q(status__contains=search_parcel)|Q(description__contains=search_parcel)
-                                             |Q(start_date__contains=search_parcel)|Q(date_add__contains=search_parcel)
-                                             |Q(type__contains=search_parcel)|Q(statusParcel__contains=search_parcel)
-                                             |Q(nameposition__contains=search_parcel))
+        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel))
     p_listparcel = Paginator(AllLoanParcel, 8)
     page_num = req.GET.get('page', 1)
     try:
@@ -233,11 +229,7 @@ def user_borrow_durable(req):
     search_durable = ""
     if 'search_durable' in req.GET:
         search_durable = req.GET['search_durable']
-        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable)|Q(quantity__contains=search_durable)
-                                             |Q(status__contains=search_durable)|Q(description__contains=search_durable)
-                                             |Q(start_date__contains=search_durable)|Q(date_add__contains=search_durable)
-                                             |Q(type__contains=search_durable)|Q(statusDurable__contains=search_durable)
-                                             |Q(nameposition__contains=search_durable))
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))
     p_listdurable = Paginator(AllLoanDurable, 8)
     page_num = req.GET.get('page', 1)
     try:
@@ -339,11 +331,7 @@ def user_borrowed(req):
     search_durable = ""
     if 'search_durable' in req.GET:
         search_durable = req.GET['search_durable']
-        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable)|Q(quantity__contains=search_durable)
-                                             |Q(status__contains=search_durable)|Q(description__contains=search_durable)
-                                             |Q(start_date__contains=search_durable)|Q(date_add__contains=search_durable)
-                                             |Q(type__contains=search_durable)|Q(statusDurable__contains=search_durable)
-                                             |Q(nameposition__contains=search_durable))    
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))    
     def send_loan_durable(user, loan_durable):
         today = datetime.now().date()
         end_date = loan_durable.end_date
@@ -408,11 +396,7 @@ def user_history(req):
     search_parcel = ""
     if 'search_parcel' in req.GET:
         search_parcel = req.GET['search_parcel']
-        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel)|Q(quantity__contains=search_parcel)
-                                             |Q(status__contains=search_parcel)|Q(description__contains=search_parcel)
-                                             |Q(start_date__contains=search_parcel)|Q(date_add__contains=search_parcel)
-                                             |Q(type__contains=search_parcel)|Q(statusParcel__contains=search_parcel)
-                                             |Q(nameposition__contains=search_parcel))
+        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel))
     p_listparcel = Paginator(AllLoanParcel, 8)
     page_num = req.GET.get('page', 1)
     try:
@@ -464,11 +448,7 @@ def user_history_durable(req):
     search_durable = ""
     if 'search_durable' in req.GET:
         search_durable = req.GET['search_durable']
-        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable)|Q(quantity__contains=search_durable)
-                                             |Q(status__contains=search_durable)|Q(description__contains=search_durable)
-                                             |Q(start_date__contains=search_durable)|Q(date_add__contains=search_durable)
-                                             |Q(type__contains=search_durable)|Q(statusDurable__contains=search_durable)
-                                             |Q(nameposition__contains=search_durable))
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))
     p_listdurable = Paginator(AllLoanDurable, 8)
     page_num = req.GET.get('page', 1)
     try:
@@ -629,7 +609,7 @@ def cart_notupdate(req, id):
             cart_parcel.delete()
     return redirect('/user_cart')
 
-@login_required
+"""@login_required
 def cart_notupdate(req, id):
     if req.user.status == "ถูกจำกัดสิทธิ์":
         return redirect('/')
@@ -652,7 +632,7 @@ def cart_notupdate(req, id):
                 parcel_item.save()  
         elif cart_parcel.quantity < 1:
             cart_parcel.delete()
-    return redirect('/user_cart')
+    return redirect('/user_cart')"""
 
 @login_required
 def user_queue(req):
@@ -1396,8 +1376,10 @@ def user_recommend_detail(req, id):
 
 @login_required
 def deleteRecList(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.phone is None or req.user.token is None:
+    if req.user.status == "ถูกจำกัดสิทธิ์":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = ListFromRec.objects.get(id=id)
     obj.delete()
     messages.success(req, 'ลบการแนะนำรายการสำเร็จ!')

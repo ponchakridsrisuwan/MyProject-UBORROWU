@@ -29,7 +29,7 @@ def admin_detail(req, id):
     }
     return render(req, "pages/admin_detail.html", context)
 
-@login_required
+"""@login_required
 def admin_user_setting_detail(req, id):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
         return redirect('/')
@@ -40,7 +40,7 @@ def admin_user_setting_detail(req, id):
         "navbar" : "admin_user_setting_detail",
         "AllUser" : AllUser,
     }
-    return render(req, "pages/admin_user_setting_detail.html", context)
+    return render(req, "pages/admin_user_setting_detail.html", context)"""
 
 @login_required
 def delete_user(req, id):

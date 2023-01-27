@@ -12,6 +12,6 @@ urlpatterns = [
     path('admin_staff/',views.admin_staff, name="admin_staff"),
     path('admin_block',views.admin_block, name="admin_block"),
     
-    path('admin_user_setting_detail/<int:id>',views.admin_user_setting_detail, name="admin_user_setting_detail"),
+    #path('admin_user_setting_detail/<int:id>',views.admin_user_setting_detail, name="admin_user_setting_detail"),
     
 ]

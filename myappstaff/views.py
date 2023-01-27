@@ -343,11 +343,7 @@ def staff_borrowing_history(req):
     search_parcel = ""
     if 'search_parcel' in req.GET:
         search_parcel = req.GET['search_parcel']
-        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel)|Q(quantity__contains=search_parcel)
-                                             |Q(status__contains=search_parcel)|Q(description__contains=search_parcel)
-                                             |Q(start_date__contains=search_parcel)|Q(date_add__contains=search_parcel)
-                                             |Q(type__contains=search_parcel)|Q(statusParcel__contains=search_parcel)
-                                             |Q(nameposition__contains=search_parcel))
+        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel))
     page_num = req.GET.get('page', 1)
     p = Paginator(AllLoanParcel, 10)
     try:
@@ -395,11 +391,7 @@ def staff_borrowing_history_durable(req):
     search_durable = ""
     if 'search_durable' in req.GET:
         search_durable = req.GET['search_durable']
-        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable)|Q(quantity__contains=search_durable)
-                                             |Q(status__contains=search_durable)|Q(description__contains=search_durable)
-                                             |Q(start_date__contains=search_durable)|Q(date_add__contains=search_durable)
-                                             |Q(type__contains=search_durable)|Q(statusDurable__contains=search_durable)
-                                             |Q(nameposition__contains=search_durable))
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))
     page_num = req.GET.get('page', 1)
     p = Paginator(AllLoanDurable, 10)
     try:
@@ -444,11 +436,7 @@ def staff_index_borrow(req):
     search_parcel = ""
     if 'search_parcel' in req.GET:
         search_parcel = req.GET['search_parcel']
-        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel)|Q(quantity__contains=search_parcel)
-                                             |Q(status__contains=search_parcel)|Q(description__contains=search_parcel)
-                                             |Q(start_date__contains=search_parcel)|Q(date_add__contains=search_parcel)
-                                             |Q(type__contains=search_parcel)|Q(statusParcel__contains=search_parcel)
-                                             |Q(nameposition__contains=search_parcel))
+        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel))
     page_num = req.GET.get('page', 1)
     p = Paginator(AllLoanParcel, 10)
     try:
@@ -492,11 +480,7 @@ def staff_index_borrow_durable(req):
     search_durable = ""
     if 'search_durable' in req.GET:
         search_durable = req.GET['search_durable']
-        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable)|Q(quantity__contains=search_durable)
-                                             |Q(status__contains=search_durable)|Q(description__contains=search_durable)
-                                             |Q(start_date__contains=search_durable)|Q(date_add__contains=search_durable)
-                                             |Q(type__contains=search_durable)|Q(statusDurable__contains=search_durable)
-                                             |Q(nameposition__contains=search_durable))
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))
     page_num = req.GET.get('page', 1)
     p = Paginator(AllLoanDurable, 10)
     try:
@@ -543,11 +527,7 @@ def staff_index_borrownow(req):
     search_durable = ""
     if 'search_durable' in req.GET:
         search_durable = req.GET['search_durable']
-        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable)|Q(quantity__contains=search_durable)
-                                             |Q(status__contains=search_durable)|Q(description__contains=search_durable)
-                                             |Q(start_date__contains=search_durable)|Q(date_add__contains=search_durable)
-                                             |Q(type__contains=search_durable)|Q(statusDurable__contains=search_durable)
-                                             |Q(nameposition__contains=search_durable))
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))
     page_num = req.GET.get('page', 1)
     p = Paginator(AllLoanDurable, 10)
     try:
@@ -594,11 +574,7 @@ def staff_index_return(req):
     search_durable = ""
     if 'search_durable' in req.GET:
         search_durable = req.GET['search_durable']
-        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable)|Q(quantity__contains=search_durable)
-                                             |Q(status__contains=search_durable)|Q(description__contains=search_durable)
-                                             |Q(start_date__contains=search_durable)|Q(date_add__contains=search_durable)
-                                             |Q(type__contains=search_durable)|Q(statusDurable__contains=search_durable)
-                                             |Q(nameposition__contains=search_durable))
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))
     page_num = req.GET.get('page', 1)
     p = Paginator(AllLoanDurable, 10)
     try:
@@ -877,7 +853,7 @@ def staff_manage_parcel(req):
     return render(req, 'pages/staff_manage_parcel.html', context)
 
 
-@login_required
+"""@login_required
 def delete_staff_manage_detail(req, id):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
@@ -885,7 +861,7 @@ def delete_staff_manage_detail(req, id):
         return redirect('/phone_add_number')
     obj = Add_Parcel.objects.get(id=id)
     obj.delete()
-    return redirect('staff_manage_parcel')
+    return redirect('staff_manage_parcel')"""
 
 @login_required
 def edit_staff_manage_parcel(req, id):
@@ -986,6 +962,7 @@ def delete_staff_manage_durable(req, id):
         return redirect('/phone_add_number')
     obj = Add_Durable.objects.get(id=id)
     obj.delete()
+    messages.success(req, 'ลบรายการครุภัณฑ์สำเร็จ!')
     return redirect('staff_manage_durable') 
 
 @login_required
