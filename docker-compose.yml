@@ -54,8 +54,6 @@ services:
       - data:/app/kongadata
     links:
       - kong:kong
-    environment:
-      - NODE_ENV=production
 
 networks:
   default:
