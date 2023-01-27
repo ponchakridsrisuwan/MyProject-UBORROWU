@@ -1,0 +1,81 @@
+amqp @ file:///home/conda/feedstock_root/build_artifacts/amqp_1650283665894/work
+APScheduler==3.9.1.post1
+arabic-reshaper @ file:///home/conda/feedstock_root/build_artifacts/arabic_reshaper_1663811815519/work
+asgiref @ file:///home/conda/feedstock_root/build_artifacts/asgiref_1652752042988/work
+asn1crypto @ file:///home/conda/feedstock_root/build_artifacts/asn1crypto_1647369152656/work
+backports.functools-lru-cache @ file:///home/conda/feedstock_root/build_artifacts/backports.functools_lru_cache_1618230623929/work
+billiard @ file:///Users/runner/miniforge3/conda-bld/billiard_1666871702068/work
+blinker @ file:///home/conda/feedstock_root/build_artifacts/blinker_1664823096650/work
+brotlipy @ file:///Users/runner/miniforge3/conda-bld/brotlipy_1666764961872/work
+celery @ file:///home/conda/feedstock_root/build_artifacts/celery_1653849172470/work
+certifi==2022.12.7
+cffi @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_62rp5d8fd4/croots/recipe/cffi_1659598655556/work
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1661170624537/work
+click @ file:///home/conda/feedstock_root/build_artifacts/click_1666798198223/work
+click-didyoumean @ file:///home/conda/feedstock_root/build_artifacts/click-didyoumean_1642673782881/work
+click-plugins==1.1.1
+click-repl @ file:///home/conda/feedstock_root/build_artifacts/click-repl_1623347986327/work
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1666700638685/work
+configparser @ file:///home/conda/feedstock_root/build_artifacts/configparser_1660952164778/work
+cryptography @ file:///Users/runner/miniforge3/conda-bld/cryptography_1669592241899/work
+cssselect2==0.2.1
+defusedxml @ file:///home/conda/feedstock_root/build_artifacts/defusedxml_1615232257335/work
+Django==4.1.5
+django-allauth @ file:///home/conda/feedstock_root/build_artifacts/django-allauth_1654611948766/work
+django-apscheduler==0.6.2
+django-colorfield @ file:///home/conda/feedstock_root/build_artifacts/django-colorfield_1669996178536/work
+django-dbbackup==3.2.0
+django-dbbackup-ui==0.2.1
+django-extensions @ file:///home/conda/feedstock_root/build_artifacts/django-extensions_1662739193996/work
+django-qr-code==3.1.1
+fonttools @ file:///Users/runner/miniforge3/conda-bld/fonttools_1666827306317/work
+future @ file:///home/conda/feedstock_root/build_artifacts/future_1666786049710/work
+html5lib @ file:///home/conda/feedstock_root/build_artifacts/html5lib_1592930327044/work
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1663625384323/work
+importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1672612343532/work
+kombu @ file:///Users/runner/miniforge3/conda-bld/kombu_1666871940457/work
+lxml @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_1902c961-4bd2-4871-a3c5-70b7317a6521kpj7nz2o/croots/recipe/lxml_1657545138937/work
+munkres==1.1.4
+mysqlclient @ file:///Users/builder/ci_310/mysqlclient_1642534389141/work
+oauthlib @ file:///home/conda/feedstock_root/build_artifacts/oauthlib_1666056362788/work
+oscrypto @ file:///home/conda/feedstock_root/build_artifacts/oscrypto_1610205902676/work
+Pillow==9.2.0
+prompt-toolkit @ file:///home/conda/feedstock_root/build_artifacts/prompt-toolkit_1670414775770/work
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
+pydantic==1.10.4
+pydyf @ file:///home/conda/feedstock_root/build_artifacts/pydyf_1665515407709/work
+pyHanko @ file:///home/conda/feedstock_root/build_artifacts/pyhanko_1671632482054/work
+pyhanko-certvalidator @ file:///home/conda/feedstock_root/build_artifacts/pyhanko-certvalidator_1671516866090/work
+PyJWT @ file:///home/conda/feedstock_root/build_artifacts/pyjwt_1666240235902/work
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1665350324128/work
+PyPDF3 @ file:///home/conda/feedstock_root/build_artifacts/pypdf3_1643992279011/work
+pyphen @ file:///home/conda/feedstock_root/build_artifacts/pyphen_1669716820041/work
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1661604839144/work
+python-bidi==0.4.2
+python3-openid @ file:///home/conda/feedstock_root/build_artifacts/python3-openid_1612988842750/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1671365381334/work
+pytz-deprecation-shim @ file:///Users/runner/miniforge3/conda-bld/pytz-deprecation-shim_1666782093790/work
+PyYAML @ file:///Users/runner/miniforge3/conda-bld/pyyaml_1666772684107/work
+qrcode @ file:///home/conda/feedstock_root/build_artifacts/qrcode_1633145147589/work
+reportlab==3.5.67
+requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1661872987712/work
+requests-oauthlib @ file:///home/conda/feedstock_root/build_artifacts/requests-oauthlib_1643557462909/work
+segno==1.5.2
+simplejson==3.18.1
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+sqlparse @ file:///home/conda/feedstock_root/build_artifacts/sqlparse_1663990453245/work
+svglib @ file:///home/conda/feedstock_root/build_artifacts/svglib_1659755450222/work
+tinycss2 @ file:///home/conda/feedstock_root/build_artifacts/tinycss2_1666100256010/work
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1662214488106/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1665144421445/work
+tzdata @ file:///home/conda/feedstock_root/build_artifacts/python-tzdata_1669846329064/work
+tzlocal @ file:///Users/runner/miniforge3/conda-bld/tzlocal_1666795305603/work
+unicodedata2 @ file:///Users/runner/miniforge3/conda-bld/unicodedata2_1667239910854/work
+uritools @ file:///home/conda/feedstock_root/build_artifacts/uritools_1641167549855/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1669259737463/work
+vine @ file:///home/conda/feedstock_root/build_artifacts/vine_1604930048994/work
+wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1600965781394/work
+weasyprint @ file:///home/conda/feedstock_root/build_artifacts/weasyprint_1671838698646/work/weasyprint-57.2-py3-none-any.whl
+webencodings==0.5.1
+xhtml2pdf @ file:///Users/runner/miniforge3/conda-bld/xhtml2pdf_1655367257822/work
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1669453021653/work
