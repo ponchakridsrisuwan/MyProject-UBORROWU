@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'myapp',
     'myappstaff',
     'myappSuper',
+    #'qrcode'
 ]
 
 MIDDLEWARE = [
@@ -176,7 +177,7 @@ SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'none' #การยืนยันบัญชีอีเมล
 LOGIN_URL = 'login' #เข้าระบบ
 LOGIN_REDIRECT_URL = 'user_index' #การเปลี่ยนเส้นทาง LOGIN
-LOGOUT_REDIRECT_URL = 'login' #การเปลี่ยนเส้นทาง LOGOUT
+LOGOUT_REDIRECT_URL = 'user_index' #การเปลี่ยนเส้นทาง LOGOUT
 SOCIALACCOUNT_LOGIN_ON_GET = True #เข้าสู่ระบบบัญชีโซเชียล
 #ACCOUNT_USER_MODEL_USERNAME_FIELD = None #ช่องข้อมูล user model ของบัญชี
 #ACCOUNT_EMAIL_REQUIRED = True #ต้องมีบัญชีอีเมล

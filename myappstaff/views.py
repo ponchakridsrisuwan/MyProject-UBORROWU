@@ -19,10 +19,12 @@ from datetime import datetime
 from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
 
-
+@login_required
 def staff_setting_position(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     if req.method == "POST":
         nameposition = req.POST.get('nameposition')
         obj = SettingPosition(nameposition=nameposition)
@@ -48,8 +50,10 @@ def staff_setting_position(req):
 
 @login_required
 def deletePosition(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = SettingPosition.objects.get(id=id)
     obj.delete()
     messages.success(req, 'ลบสำเร็จ!')
@@ -57,8 +61,10 @@ def deletePosition(req, id):
 
 @login_required
 def edit_position(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = SettingPosition.objects.get(id=id)
     obj.nameposition = req.POST['nameposition']
     obj.save()
@@ -68,8 +74,10 @@ def edit_position(req,id):
 
 @login_required
 def staff_setting(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     if req.method == "POST":
         name_CategoryType = req.POST.get('name_CategoryType')
         obj = CategoryType(name_CategoryType=name_CategoryType)
@@ -95,8 +103,10 @@ def staff_setting(req):
 
 @login_required
 def deleteCategoryType(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = CategoryType.objects.get(id=id)
     obj.delete()
     messages.success(req, 'ลบสำเร็จ!')
@@ -104,8 +114,10 @@ def deleteCategoryType(req, id):
 
 @login_required
 def edit_staff_setting(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = CategoryType.objects.get(id=id)
     obj.name_CategoryType = req.POST['name_CategoryType']
     obj.save()
@@ -115,8 +127,10 @@ def edit_staff_setting(req,id):
 # การตั้งค่าสถานะ
 @login_required
 def staff_setting_status(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     if req.method == "POST":
         name_CategoryStatus = req.POST.get('name_CategoryStatus')
         obj = CategoryStatus(name_CategoryStatus=name_CategoryStatus)
@@ -142,8 +156,10 @@ def staff_setting_status(req):
 
 @login_required
 def DeleteCategoryStatus(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = CategoryStatus.objects.get(id=id)
     obj.delete()
     messages.success(req, 'ลบสำเร็จ!')
@@ -151,8 +167,10 @@ def DeleteCategoryStatus(req, id):
 
 @login_required
 def edit_staff_setting_status(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = CategoryStatus.objects.get(id=id)
     obj.name_CategoryStatus = req.POST['name_CategoryStatus']
     obj.save()
@@ -162,8 +180,10 @@ def edit_staff_setting_status(req,id):
 # การแนะนำวัสดุเข้าสู่ระบบ    
 @login_required
 def staff_introduction(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllRecList = ListFromRec.objects.filter(status='รออนุมัติ').order_by('name', 'datetime')
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -206,8 +226,10 @@ def staff_introduction(req):
 
 @login_required
 def staff_introduction_update(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllRecList = ListFromRec.objects.filter(id=id).first()
     AllRecList.reasonfromstaff = req.POST['reasonfromstaff']
     AllRecList.status = 'อนุมัติ'
@@ -233,8 +255,10 @@ def staff_introduction_update(req,id):
 
 @login_required
 def staff_introduction_history(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllRecList = ListFromRec.objects.filter(status='อนุมัติ').order_by('name', 'datetime')
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -278,8 +302,10 @@ def staff_introduction_history(req):
 # จัดการข้อมูลการแนะนำวัสดุเข้าสู่ระบบ
 @login_required
 def staff_introduction_detail(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllRecList = ListFromRec.objects.filter(id=id).first()
     context = {
         "AllRecList" : AllRecList,
@@ -289,8 +315,10 @@ def staff_introduction_detail(req, id):
 # ประวัติการยืม
 @login_required
 def staff_borrowing_history(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanParcel = LoanParcel.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='ยืมสำเร็จ'))
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -337,8 +365,10 @@ def staff_borrowing_history(req):
     
 @login_required
 def staff_borrowing_history_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='คืนสำเร็จ'))
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -388,8 +418,10 @@ def staff_borrowing_history_durable(req):
 # จัดการรายการยืม
 @login_required
 def staff_index_borrow(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanParcel = LoanParcel.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -434,8 +466,10 @@ def staff_index_borrow(req):
 
 @login_required
 def staff_index_borrow_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -481,8 +515,10 @@ def staff_index_borrow_durable(req):
 # จัดการรายการยืม
 @login_required
 def staff_index_borrownow(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(Q(status='กำลังยืม'))
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -528,9 +564,12 @@ def staff_index_borrownow(req):
     return render(req,'pages/staff_index_borrownow.html', context)
 
 # จัดการรายการกำลังยืม
+@login_required
 def staff_index_return(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(Q(status='รอยืนยันการคืน'))
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -575,9 +614,12 @@ def staff_index_return(req):
     }
     return render(req,'pages/staff_index_return.html', context)
 
+@login_required
 def staff_return_durable(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(id=id).first()
     if AllLoanDurable is None:
         return redirect('/staff_index_return')
@@ -599,9 +641,12 @@ def staff_return_durable(req,id):
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_return')
 
+@login_required
 def staff_unreturn_durable(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(id=id).first()
     if AllLoanDurable is None:
         return redirect('/staff_index_return')
@@ -624,9 +669,12 @@ def staff_unreturn_durable(req,id):
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_return')
 
+@login_required
 def staff_borrow_parcel(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanParcel = LoanParcel.objects.filter(id=id).first()
     if AllLoanParcel is None :
         return redirect('/staff_index_borrow')
@@ -648,9 +696,12 @@ def staff_borrow_parcel(req,id):
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_borrow')
 
+@login_required
 def staff_borrow_durable(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(id=id).first()
     if AllLoanDurable is None:
         return redirect('/staff_index_borrow_durable')
@@ -673,9 +724,12 @@ def staff_borrow_durable(req,id):
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_borrow_durable')
 
+@login_required
 def staff_unborrow_parcel(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanParcel = LoanParcel.objects.filter(id=id).first()
     if AllLoanParcel is None:
         return redirect('/staff_index_borrow')
@@ -698,9 +752,12 @@ def staff_unborrow_parcel(req,id):
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_borrow')
 
+@login_required
 def staff_unborrow_durable(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(id=id).first()
     if AllLoanDurable is None:
         return redirect('/staff_index_borrow_durable')
@@ -726,8 +783,10 @@ def staff_unborrow_durable(req,id):
 # รายละเอียดจัดการวัสดุ-ครุภัณฑ์
 @login_required
 def staff_manage_detail(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllParcel = Add_Parcel.objects.filter(id=id).first()
     waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
     context = {
@@ -738,8 +797,10 @@ def staff_manage_detail(req, id):
 
 @login_required
 def staff_manage_detail_durable(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllDurable = Add_Durable.objects.filter(id=id).first()
     waiting_qDurable = QueueDurable.objects.filter(queue_item=AllDurable).count()
     waiting_period = waiting_qDurable * AllDurable.numdate
@@ -753,8 +814,10 @@ def staff_manage_detail_durable(req, id):
 # จัดการวัสดุ
 @login_required
 def staff_manage_parcel(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     form = ParcelForm()
     form.fields['name'].initial = 'test'
     if req.method == 'POST':
@@ -816,16 +879,20 @@ def staff_manage_parcel(req):
 
 @login_required
 def delete_staff_manage_detail(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = Add_Parcel.objects.get(id=id)
     obj.delete()
     return redirect('staff_manage_parcel')
 
 @login_required
 def edit_staff_manage_parcel(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllParcel = Add_Parcel.objects.get(id=id)
     form = ParcelForm(req.POST or None, req.FILES or None, instance=AllParcel) 
     if form.is_valid():
@@ -836,8 +903,10 @@ def edit_staff_manage_parcel(req, id):
 
 @login_required
 def delete_staff_manage_parcel(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = Add_Parcel.objects.get(id=id)
     obj.delete()
     messages.success(req, 'ลบรายการวัสดุสำเร็จ!')
@@ -846,8 +915,10 @@ def delete_staff_manage_parcel(req, id):
 # จัดการครุภัณฑ์
 @login_required
 def staff_manage_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     form = DurableForm()
 
     if req.method == 'POST':
@@ -909,16 +980,20 @@ def staff_manage_durable(req):
 
 @login_required
 def delete_staff_manage_durable(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = Add_Durable.objects.get(id=id)
     obj.delete()
     return redirect('staff_manage_durable') 
 
 @login_required
 def edit_staff_manage_durable(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllDurable = Add_Durable.objects.get(id=id)
     form = DurableForm(req.POST or None, req.FILES or None, instance=AllDurable) 
     if form.is_valid():
@@ -935,8 +1010,10 @@ def edit_staff_manage_durable(req,id):
 
 
 def pdf_print(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllRecList = ListFromRec.objects.all()             
     context = {
         "AllRecList" : AllRecList,
@@ -944,8 +1021,10 @@ def pdf_print(req):
     return render( req, 'pages/pdf.html', context)
 
 def pdf_staff_queue(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllQueueParcel = QueueParcel.objects.all()
     context = {
         "AllQueueParcel" : AllQueueParcel,
@@ -953,8 +1032,10 @@ def pdf_staff_queue(req):
     return render( req, 'pages/pdf_staff_queue.html', context)
 
 def pdf_staff_queue_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllQueueDurable = QueueDurable.objects.all()
     context = {
         "AllQueueDurable" : AllQueueDurable,
@@ -962,8 +1043,10 @@ def pdf_staff_queue_durable(req):
     return render( req, 'pages/pdf_staff_queue_durable.html', context)
 
 def pdf_staff_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllDurable = Add_Durable.objects.all()
     context = {
         "AllDurable" : AllDurable,
@@ -971,8 +1054,10 @@ def pdf_staff_durable(req):
     return render( req, 'pages/pdf_staff_durable.html', context)
 
 def pdf_staff_parcel(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllParcel = Add_Parcel.objects.all()
     context = {
         "AllParcel" : AllParcel,
@@ -980,8 +1065,10 @@ def pdf_staff_parcel(req):
     return render( req, 'pages/pdf_staff_parcel.html', context)
 
 def pdf_staff_max_borrow(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     MaxLoanParcel = Add_Parcel.objects.values("statustype","nametype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     context = {
         "MaxLoanParcel" : MaxLoanParcel,
@@ -989,8 +1076,10 @@ def pdf_staff_max_borrow(req):
     return render( req, 'pages/pdf_staff_max_borrow.html', context)
 
 def pdf_staff_max_borrow_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     MaxLoanDurable = Add_Durable.objects.values("statustype","nametype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     context = {
         "MaxLoanDurable" : MaxLoanDurable,
@@ -999,8 +1088,10 @@ def pdf_staff_max_borrow_durable(req):
 
 
 def pdf_print_position(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllDurable = Add_Durable.objects.all()
     AllParcel = Add_Parcel.objects.all()
     AllPosition =  SettingPosition.objects.all()   
@@ -1018,8 +1109,10 @@ def pdf_print_position(req):
     return render( req, 'pages/pdf_print_position.html', context)
 
 def pdf_borrow(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
-        return redirect('/')  
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number') 
     AllLoanParcel = LoanParcel.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='ยืมสำเร็จ')) 
     context = {
         "AllLoanParcel" : AllLoanParcel,
@@ -1027,8 +1120,10 @@ def pdf_borrow(req):
     return render( req, 'pages/pdf_borrow.html', context)
 
 def pdf_borrow_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
-        return redirect('/')  
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllLoanDurable = LoanDurable.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='คืนสำเร็จ'))
     context = {
         "AllLoanDurable" : AllLoanDurable,
@@ -1037,8 +1132,10 @@ def pdf_borrow_durable(req):
 
 @login_required
 def staff_admin_user(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllUser = User.objects.filter(Q(right = "นักศึกษา") | Q(status = "ปกติ"))
     AllUser_count = User.objects.filter(right = "นักศึกษา", status = "ปกติ") 
     if 'sort' in req.GET:
@@ -1079,8 +1176,10 @@ def staff_admin_user(req):
 
 @login_required
 def staff_admin_user_block(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllUser = User.objects.filter(status = "ถูกจำกัดสิทธิ์", right = "นักศึกษา")
     AllUser_count = User.objects.filter(status = "ถูกจำกัดสิทธิ์", right = "นักศึกษา")
     if 'sort' in req.GET:
@@ -1148,8 +1247,10 @@ def update_user_status(user_id):
 
 @login_required
 def staff_user_deadline(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = User.objects.get(id=id)
     deadline_str = req.POST['deadline']
     if deadline_str == '':
@@ -1188,8 +1289,10 @@ def staff_personal_info(req):
 # รายงานภาพรวมวัสดุ
 @login_required
 def staff_report(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllRecList_count = ListFromRec.objects.filter(status='รออนุมัติ') 
     AllLoanDurable_count = LoanDurable.objects.filter(status='รอยืนยันการคืน')
     AllLoanParcel_count_borrow = LoanParcel.objects.filter(status='รออนุมัติ')
@@ -1221,8 +1324,10 @@ def staff_report(req):
 # รายงานการยืมทั้งหมด
 @login_required
 def staff_max_borrow(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     MaxLoanParcel = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -1249,9 +1354,12 @@ def staff_max_borrow(req):
     }
     return render(req,'pages/staff_max_borrow.html', context )
 
+@login_required
 def staff_max_borrow_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     MaxLoanDurable = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -1278,9 +1386,12 @@ def staff_max_borrow_durable(req):
     }
     return render(req,'pages/staff_max_borrow_durable.html', context )
 
+@login_required
 def staff_queue(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllQueueParcel = QueueParcel.objects.all()
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default') 
@@ -1318,9 +1429,12 @@ def staff_queue(req):
     }
     return render(req, 'pages/staff_queue.html', context)
 
+@login_required
 def staff_queue_durable(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllQueueDurable = QueueDurable.objects.all()
     if 'sort' in req.GET:
         last_sort = req.GET.get('sort', 'default')
@@ -1357,9 +1471,12 @@ def staff_queue_durable(req):
     }
     return render(req, 'pages/staff_queue_durable.html', context)
 
+@login_required
 def staff_position(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllDurable = Add_Durable.objects.all()
     AllParcel = Add_Parcel.objects.all()
     AllPosition =  SettingPosition.objects.all()   

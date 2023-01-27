@@ -19,8 +19,10 @@ from datetime import datetime
 
 @login_required
 def admin_detail(req, id):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllUser = User.objects.filter(id=id).first()
     context = {
         "AllUser" : AllUser,
@@ -29,19 +31,23 @@ def admin_detail(req, id):
 
 @login_required
 def admin_user_setting_detail(req, id):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    AllUser = User.objects.filter(id=id).first()
     context = {
         "navbar" : "admin_user_setting_detail",
         "AllUser" : AllUser,
     }
-    AllUser = User.objects.filter(id=id).first()
     return render(req, "pages/admin_user_setting_detail.html", context)
 
 @login_required
 def delete_user(req, id):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = User.objects.get(id=id)
     obj.delete()
     messages.success(req, 'ลบผู้ใช้สำเร็จ!')
@@ -49,8 +55,10 @@ def delete_user(req, id):
 
 @login_required
 def admin_user_status(req,id):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = User.objects.get(id=id)
     obj.right = req.POST['right']
     obj.save()
@@ -67,8 +75,10 @@ def update_user_status(user_id):
 
 @login_required
 def admin_user_deadline(req, id):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     obj = User.objects.get(id=id)
     deadline_str = req.POST['deadline']
     if deadline_str == '':
@@ -101,8 +111,10 @@ scheduler.shutdown()
 
 @login_required
 def admin_user(req):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     #gg_id = User.objects.filter(user=req.user, provider='google')[0].uid
     AllUserStudent = User.objects.filter(Q(right = "นักศึกษา") | Q(status = "ปกติ"))
     AllUserStudent_count = User.objects.filter(right = "นักศึกษา", status = "ปกติ") #count การแนะนำ
@@ -144,8 +156,10 @@ def admin_user(req):
 
 @login_required
 def admin_staff(req):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllUserStaff = User.objects.filter(Q(right = "เจ้าหน้าที่")  | Q(right = "ผู้ดูแลระบบ")  | Q(status = "ปกติ"))
     AllUser_count = User.objects.filter(right = "เจ้าหน้าที่", status = "ปกติ")
     AllUser_count_admin = User.objects.filter(right = "ผู้ดูแลระบบ", status = "ปกติ")
@@ -184,8 +198,10 @@ def admin_staff(req):
 
 @login_required
 def admin_block(req):
-    if req.user.right != "ผู้ดูแลระบบ" or req.user.token == None:
-        return redirect('/') 
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
     AllUser = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
     AllUser_count = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
     if 'sort' in req.GET:

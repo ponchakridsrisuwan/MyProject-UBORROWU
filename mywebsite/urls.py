@@ -32,14 +32,10 @@ from django.shortcuts import redirect
 def login(req):
     if req.method == 'POST':
         if req.user is not None:
-            if req.user.right == "เจ้าหน้าที่":
-                return redirect('/staff_report')
-            elif req.user.right == "ผู้ดูแลระบบ":
-                return redirect('/admin_user')
-            elif req.user.phone is None:
+            if req.user.phone is None:
                 return redirect('/phone_add_number')
             else:
-                return redirect('/')
+                return redirect('/') 
         else:
             return redirect('/login')
     else:

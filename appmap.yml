@@ -1,0 +1,8 @@
+appmap_dir: tmp/appmap
+language: python
+name: MyProject-UBORROWU
+packages:
+- path: myappSuper
+- path: myappstaff
+- path: myapp
+- path: mywebsite
