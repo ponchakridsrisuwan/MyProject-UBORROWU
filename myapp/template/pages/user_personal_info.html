@@ -1,0 +1,157 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block main %}
+
+<div class="container rounded bg-white mt-1 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-pill mt-5"
+                    width="90" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+                <span class="font-weight-bold">{{user.first_name}}&nbsp{{user.last_name}}</span>
+                <span class="text-black-50">{{user.right}}&nbsp{{user.status}}</span>
+                {% if user.status == "ถูกจำกัดสิทธิ์" %}
+                <span data-bs-toggle="modal" data-bs-target="#detail"
+                    class="btn btn-warning rounded-pill badge">รายละเอียดการถูกระงับสิทธิ์</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-right fs-5 fw-bold">ข้อมูลส่วนตัว</p>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label class="labels">ชื่อ</label>
+                        <input type="text" class="form-control rounded-pill" value="{{user.first_name}}" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labels">นามสกุล</label>
+                        <input type="text" class="form-control  rounded-pill" value="{{user.last_name}}" disabled>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <label class="labels">อีเมล</label>
+                        <input type="email" class="form-control rounded-pill" value="{{user.email}}" disabled>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    {% if user.phone != None %}
+                    <div class="col-md-12">
+                        <label class="labels">เบอร์โทร</label>
+                        <input type="text" class="form-control rounded-pill" value="{{user.phone}}" disabled>
+                    </div>
+                    {% else %}
+                    <div class="col-md-12">
+                        <label class="labels">เบอร์โทร</label>
+                        <input type="text" class="form-control rounded-pill" placeholder="กรุณาระบุหมายเลขโทรศัพท์"
+                            disabled>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="mt-5 text-center">
+                    <a class="btn btn-outline-dark rounded-pill ms-2" data-bs-toggle="modal"
+                        data-bs-target="#phone">แก้ไขข้อมูลส่วนตัว</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex">
+                    <p class="fs-5 fw-bold">การเชื่อมต่อ</p>
+                </div>
+                <div class="d-flex flex-row mt-3 exp-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png"
+                        width="60" height="60">
+                    <div class="work-experience ml-1 mx-2">
+                        <span class="font-weight-bold d-block">
+                            Line
+                        </span>
+                        {% if user.phone != none %}
+                        <a class="text-success">
+                            กำลังเชื่อมต่อ
+                        </a>
+                        {% else %}
+                        <a class="text-danger" href="https://notify-bot.line.me/th/" target="_blank">
+                            กรุณาเชื่อมต่อ Line
+                        </a>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <p class="fs-5 fw-bold">กิจกรรมการเข้าสู่ระบบ</p>
+                    <p class="fw-bold">ครั้งแรกที่เข้ามายังเว็บไซต์</p>
+                    <p class="small">{{ user.date_joined|date:"G:i l j F Y" }}</p>
+                    <p class="fw-bold">เข้ามายังเว็บไซต์ครั้งสุดท้าย เมื่อ</p>
+                    <p class="small">{{ user.last_login|date:"G:i l j F Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- รายละเอียดการถูกระงับสิทธิ์ -->
+    <div class="modal fade" id="detail" tabindex="-1" aria-labelledby="detailModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg
+                     modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModal">รายละเอียดการถูกระงับสิทธิ์</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{
+                        user.datestatus }}</span><br>
+                    <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{
+                        user.deadline }}</span><br>
+                    <span class="fw-bold">เหตุผลการระงับสิทธิ์ : </span>
+                    {% if user.reason != none %}
+                    <span class="fw-bold">เหตุผลการระงับสิทธิ์ :</span>
+                    <span class="small text-black-50">{{ user.reason }}</span>
+                    <br>
+                    {% endif %}
+                    {% if user.reasonfromstaff != none %}
+                    <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ :</span>
+                    <span class="small text-black-50">{{ user.reasonfromstaff }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- เพิ่มเบอร์โทร -->
+    <div class="modal fade" id="phone" tabindex="-1" aria-labelledby="phoneModal" aria-hidden="true">
+        <form method="post" action="/phone_add_number" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="phoneModal">แก้ไขข้อมูลส่วนตัว</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            {% if user.phone != none %}
+                            <input id="phone" value="{{ user.phone }}" name="phone" type="text" minlength="10"
+                                maxlength="10" class="form-control rounded-pill"><br>
+                            <input class="form-control rounded-pill" name="token" type="text"  value="{{ user.token }}">    
+                            {% else %}
+                            <input class="form-control rounded-pill" name="phone" type="text"  minlength="10"
+                            maxlength="10" placeholder="กรุณาระบุหมายเลขโทรศัพท์"><br>
+                            <input class="form-control rounded-pill" name="token" type="text"  placeholder="กรุณา Access Token ของ Line">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rounded-pill"
+                            data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-warning rounded-pill">ยืนยันการแก้ไข</button>
+                    </div>
+                </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

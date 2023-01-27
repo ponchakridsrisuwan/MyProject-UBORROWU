@@ -1,0 +1,77 @@
+{% extends 'home.html' %}
+{% block main %}
+{% for position, items in items_position.items %}
+<div class="container">
+    <div class="bg-white rounded-2 mb-4 px-5 py-3">
+        <div class="row no-gutters">
+            <div class="col-md-12">
+                <div class="product-details mr-2">
+                    <div class="d-flex flex-row align-items-center justify-content-between">
+                        <span class="ml-2 fw-bold fs-5">{{ position.nameposition }}</span>
+                        <a href="{% url 'pdf_print_position' %}" class="btn btn-outline-dark rounded-pill">PDF</a>
+                    </div>
+                    <div class="d-flex row rounded-2 small fw-bold justify-content-between mt-2">
+                        <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+                            <div class="align-items-center">
+                                <span>เรียงโดย</span>
+                                <a href="?sort=name" class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+                                <a href="?sort=statustype" class="px-2 me-2 btn {% if last_sort == 'statustype' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ประเภท</a>
+                                <a href="?sort=status" class="px-2 me-2 btn {% if last_sort == 'status' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">สถานะ</a>
+                                <a href="?sort=category" class="px-2 me-2 btn {% if last_sort == 'category' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">หมวดหมู่</a>
+                                <a href="?sort=quantity" class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
+                                <a href="?sort=borrow_count" class="px-2 me-2 btn {% if last_sort == 'borrow_count' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ถูกยืม</a>
+                                <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    <div class="col-sm-12 col-md-12 col-lg-6">
+                        <form class="d-flex" role="search" action="">
+                            <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="query" id="query" value="{{search_query}}">
+                            <button class="btn btn-outline-dark" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+                    <table class="table">
+                        <thead>
+                            <tr class="fw-bold">
+                                <th class="text-center" scope="col">ลำดับ</th>
+                                <th scope="col">รายการ</th>
+                                <th class="text-center" scope="col">ประเภท</th>
+                                <th class="text-center" scope="col">หมวดหมู่</th>
+                                <th class="text-center" scope="col">สถานะ</th>
+                                <th class="text-center" scope="col">จำนวน</th>
+                                <th class="text-center" scope="col">จำนวนครั้งที่ยืม</th>
+                            </tr>
+                        </thead>
+                        <tbody id="xTable">
+                            {% for items in items %}
+                            <tr class="qrow text-center card-body">
+                                <td class="text-center">{{forloop.counter}}</td>
+                                <td>
+                                    <p class="text-start">{{ items.name }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-center">{{ items.statustype }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-center">{{ items.category }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-center">{{ items.status }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-center">{{ items.quantity }}</p>
+                                </td>
+                                <td>
+                                    <p class="text-center">{{ items.borrow_count }}</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

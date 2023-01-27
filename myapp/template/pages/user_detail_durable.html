@@ -1,0 +1,197 @@
+{% extends 'home.html' %}
+{% block main %}
+
+{% if AllDurable %}
+<div class="container-lg mt-1 mb-5">
+
+    <div class="card">
+        <div class="row ">
+            <div class="col-sm-6 col-md-6 col-lg-6 border-end">
+                <div class="d-flex flex-column justify-content-center">
+                    <div class="main_image"> <img data-toggle="magnify" src="{{ AllDurable.image.url | safe }}"
+                            width="500">
+                    </div>
+                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 right-side">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3>{{ AllDurable.name }} </h3>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">หมายเลขทะเบียน</label>
+                        <p>{{ AllDurable.code }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">รายการ</label>
+                        <p>{{ AllDurable.nametype }}</p>
+                    </div>
+                    {% if AllDurable.quantitytype == "∞" %}
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">จำนวน</label>
+                        <p>{{ AllDurable.quantitytype }} รายการ</p>
+                    </div>
+                    {% else %}
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">จำนวน</label>
+                        <p>{{ AllDurable.quantity }} รายการ</p>
+                    </div>
+                    {% endif %}
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">สถานะ</label>
+                        <p>{{ AllDurable.status }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">หมวดหมู่</label>
+                        <p>{{ AllDurable.category }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">ประเภท</label>
+                        <p>{{ AllDurable.statustype }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">ตำแหน่งและชั้นวาง</label>
+                        <p>{{ AllDurable.nameposition }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">เพิ่มเข้าระบบตั้งแต่</label>
+                        <p>{{ AllDurable.date|date:"G:i l j F Y" }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">จำนวนวันที่อนุญาตให้ยืม</label>
+                        <p>{{ AllDurable.numdate }} วัน</p>
+                    </div>
+                    {% if AllDurable.quantity > 0 %}
+                    <div class="d-flex flex-row  gap-3">
+                        <a href="{% url 'add_to_cart_durable' AllDurable.id %}"
+                            class="btn btn-dark rounded-pill addtocart" data-action="add" data-product="{{id}}">
+                            เพิ่มลงรถเข็น</a>
+                    </div><br>
+                    {% else %}
+                    <div class="d-flex flex-row  gap-3">
+                        <a href="{% url 'add_to_cart_durable' AllDurable.id %}"
+                            class="btn btn-dark rounded-pill addtocart" data-action="add" data-product="{{id}}">
+                            จองคิว</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2 my-2 p-5 d-flex flex-row text-center">
+        <div class="col">
+            <span class="fw-bold fs-5">คงเหลือ</span>
+            {% if AllDurable.quantitytype == "∞" %}
+            <p>∞</p>
+            {% else %}
+            <p>{{ AllDurable.quantity }}</p>
+            {% endif %}
+        </div>
+        <div class="col">
+            <span class="fw-bold fs-5">รอคิว</span>
+            <p>{{ waiting_qDurable }}</p>
+        </div>
+        <div class="col">
+            <span class="fw-bold fs-5">ระยะเวลาการรอ</span>
+            <p>ประมาณ {{ waiting_period }} วัน</p>
+        </div>
+        <div class="col">
+            <span class="fw-bold fs-5">ยืมไปแล้ว</span>
+            <p>{{ AllDurable.borrow_count }}</p>
+        </div>
+    </div>
+    <div class="bg-white rounded-2 my-2 p-5 ">
+        <h5>รายละเอียด</h5>
+        <hr>
+        <p>{{ AllDurable.description }}
+        </p>
+        <br><br>
+    </div>
+    <div class="bg-white rounded-2 mb-4 px-5 py-3">
+        <div class="d-flex justify-content-between ">
+            <div>
+                <h5 class="fw-bold">รายการครุภัณฑ์ทั้งหมด</h5>
+            </div>
+            <div>
+                <a class="text-muted" href="{% url 'user_durable_articles' %}">ดูรายการทั้งหมด</a>
+            </div>
+        </div>
+        <hr>
+        <div class="d-flex flex-row flex-nowrap overflow-auto">
+            {% for AllDurableAll in AllDurableAll %}
+            <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block mx-2">
+                <div class="text-center" data-mdb-ripple-color="light">
+                    <img src="{{ AllDurableAll.image.url | safe }}"
+                        style=" object-position: center; max-height: 150px; margin-bottom: 1rem;" />
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <h5 class="card-title text-dark">{{ AllDurableAll.name }}</h5>
+                        <span class="mb-4 text">{{ AllDurableAll.status }}</span>
+                        <a href="{% url 'user_detail_durable' AllDurableAll.id %}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row d-flex">
+        {% for AllParcelAll in AllParcelAll %}
+        <div class="col-6 col-sm-4 col-md-3 mb-4">
+            <div class=" card ">
+                <div class="text-center" data-mdb-ripple-color="light">
+                    <img src="{{ AllParcelAll.image.url | safe }}"
+                        style=" object-position: center; max-height: 250px; margin-bottom: 1rem;" />
+                </div>
+                <div class="card-body small">
+                    <div class="text-center">
+                        <h5 class="card-title">{{ AllParcelAll.name }}</h5>
+                        <span class="mb-4 text-success">{{ AllParcelAll.status }}</span>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>ประเภท</span><span>{{ AllParcelAll.nametype }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>จำนวน</span><span>{{ AllParcelAll.quantity }} รายการ</span>
+                    </div>
+                </div>
+                <a href="{% url 'user_detail' AllParcelAll.id %}" class="stretched-link"></a>
+            </div>
+        </div>
+        {% endfor %}
+        {% for AllDurableAll in AllDurableAll %}
+        <div class="col-6 col-sm-4 col-md-3 mb-4">
+            <div class=" card ">
+                <div class="text-center" data-mdb-ripple-color="light">
+                    <img src="{{ AllDurableAll.image.url | safe }}"
+                        style=" object-position: center; max-height: 250px; margin-bottom: 1rem;" />
+                </div>
+                <div class="card-body small">
+                    <div class="text-center">
+                        <h5 class="card-title">{{ AllDurableAll.name }}</h5>
+                        <span class="mb-4 text-success">{{ AllDurableAll.status }}</span>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>ประเภท</span><span>{{ AllDurableAll.nametype }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>จำนวน</span><span>{{ AllDurableAll.quantity }} รายการ</span>
+                    </div>
+                </div>
+                <a href="{% url 'user_detail_durable' AllDurableAll.id %}" class="stretched-link"></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+{% endif %}
+{% endblock %}

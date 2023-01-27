@@ -1,0 +1,75 @@
+{% extends 'home.html' %}
+{% block main %}
+
+<div class=" container">
+    <div class="bg-white rounded-2 mb-4 px-5 py-3">
+        <div class="d-flex justify-content-between ">
+            <div>
+                <h5 class="fw-bold">ข้อมูลการแนะนำรายการเข้าสู่ระบบ</h5>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex "><span>ผู้แนะนำ</span> &nbsp <span class="text-muted">{{AllRecList.user.first_name}}&nbsp{{ AllRecList.user.last_name }}</span></div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex"><span>วันที่ทำรายการ</span> &nbsp <span class="text-muted">{{AllRecList.datetime|date:"G:m A l j F Y" }}</span></div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex "><span>อีเมล</span> &nbsp <span class="text-muted">{{ AllRecList.user.email}}</span></div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex "><span>เหตุผล</span> &nbsp <span class="text-muted">{{ AllRecList.description}}</span></div>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex justify-content-between ">
+            <div>
+                <h5 class="">ข้อมูลการแนะนำรายการเข้าสู่ระบบ</h5>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex"><span>ชื่อรายการ</span> &nbsp <span class="text-muted">{{ AllRecList.name }}</span>
+                </div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex"><span>ยี่ห้อ</span> &nbsp <span class="text-muted">{{ AllRecList.brand }}</span>
+                </div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex "><span>จำนวน</span> &nbsp <span class="text-muted">{{ AllRecList.quantity }}</span>
+                </div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex "><span>ราคาชิ้นละ</span> &nbsp <span class="text-muted">{{ AllRecList.price }}</span>
+                </div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex "><span>ราคารวม</span> &nbsp <span class="text-muted">{{ AllRecList.total }}</span>
+                </div>
+            </div>
+            <div class="d-flex col-md-5 ">
+                <div class="d-flex "><span>ลิงก์รายการ</span> &nbsp <a class="" href="{{ AllRecList.link }}">{{AllRecList.link}}</a></div>
+            </div>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between ">
+            <div>
+                <h5 class="">รายงานสถานะการแนะนำรายการ</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-flex col-md-5 ">
+                {% if AllRecList.status == "รอรับเรื่อง" %}
+                กรุณารอเจ้าหน้าที่รับเรื่องการแนะนำรายการเข้าระบบ
+                {% else %}
+                <div class="d-flex"><mark>{{ AllRecList.status }}&nbsp{{ AllRecList.reasonfromstaff }}</mark></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

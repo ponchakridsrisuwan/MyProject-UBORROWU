@@ -1,0 +1,200 @@
+{% extends 'homestaff.html' %}
+{% block main %}
+<div class=" container ">
+  <div class="bg-white rounded-2">
+    <div class="d-flex justify-content-between justify-content: right;"></div>
+    <div class="">
+      <div class="bg-white rounded-2 mb-4 px-5 py-3">
+        <div class="d-flex justify-content-between row">
+          <div class="col-md-12 col-lg-6">
+            <h5 class="fw-bold">นักศึกษาที่ถูกระงับสิทธิ์ชั่วคราวในระบบ U Borrow U</h5>
+          </div>
+          <div class="d-flex flex-row col-md-12 col-lg-6 justify-content-end">
+            <div>
+              <p class="fw-bold">จำนวนนักศึกษาที่ถูกระงับสิทธิ์ {{ AllUser_count.count }} คน</p>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex row rounded-2 small fw-bold justify-content-between">
+          <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+              <div class="align-items-center">
+                  <span>เรียงโดย</span>
+                  <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ใช้งานล่าสุด</a>
+                  <a href="?sort=first_name" class="px-2 me-2 btn {% if last_sort == 'first_name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ชื่อ-สกุล</a>
+                  <a href="?sort=deadline" class="px-2 me-2 btn {% if last_sort == 'deadline' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ระยะเวลากลับสู่สถานะปกติ</a>
+                  <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+              </div>
+              
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6">
+              <form class="d-flex" role="search">
+                  <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="search_user" value="{{search_user}}">
+                  <button class="btn btn-outline-dark" type="submit">Search</button>
+              </form>
+          </div>
+      </div>
+        <div class="bg-white rounded-2 mb-4 px-2">
+          <div class="row mt-3">
+            <table class="table">
+              <thead class="table">
+                <tr class="table bg-warning ">
+                  <th class="col" scope="col">ชื่อ-สกุล</th>
+                  <th class="col" scope="col">อีเมล</th>
+                  <th class="col" scope="col">เบอร์โทรศัพท์</th>
+                  <th class="col" scope="col">ใช้งานล่าสุด</th>
+                  <th class="col" scope="col">สิทธิ์</th>
+                  <th class="col" scope="col">สถานะ</th>
+                  <th class="col" scope="col">ระยะเวลากลับสู่สถานะปกติ</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="xTable">
+                {% for AllUser in page.object_list %}
+                <tr class="qrow">
+                  <td>
+                    <p>{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</p>
+                  </td>
+                  <td>
+                    <p>{{ AllUser.email }}</p>
+                  </td>
+                  <td>
+                    {% if AllUser.phone == None %}
+                    <p> N/A </p>
+                    {% else %}
+                    <p>{{ AllUser.phone }}</p>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <p>{{ AllUser.last_login|date:"G:i A j F Y" }}</p>
+                  </td>
+                  <td>
+                    <p>{{ AllUser.right }}</p>
+                  </td>
+                  <td>
+                    <p>{{ AllUser.status }}</p>
+                  </td>
+                  <td>
+                    <div>{{ AllUser.deadline|timeuntil }}</div>
+                  </td>
+                  <td>
+                    <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                    <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm text-center">
+                      <li>
+                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
+                          data-bs-target="#manageitemcatecory-{{forloop.counter}}">จัดการการระงับสิทธิ์</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
+                          data-bs-target="#manageitemcatecory-{{forloop.counter}}">รายละเอียดการถูกระงับสิทธิ์</a>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+
+                <!-- แก้ไขข้อมูล -->
+                <div class="modal fade" id="manageitemcatecory-{{forloop.counter}}" tabindex="-1"
+                  aria-labelledby="ManageUserModal" aria-hidden="true">
+                  <form method="post" action="/staff_user_deadline/{{AllUser.id}}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-dialog modal-lg
+                      modal-fullscreen-lg-down">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="edititemModal">จัดการสิทธิ์</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row mt-2">
+                            <div class="col-md-6">
+                              <label class="labels" for="name">ชื่อ</label>
+                              <input value="{{AllUser.first_name}}" type="text" class="form-control
+                                rounded-pill" disabled>
+                            </div>
+                            <div class="col-md-6">
+                              <label class="labels" for="email">อีเมล</label>
+                              <input value="{{AllUser.email}}" type="text" class="form-control
+                                rounded-pill" disabled>
+                            </div>
+                          </div>
+                          <div class="row mt-2">
+                            <div class="col-md-6">
+                              <label class="labels" for="status">สถานะ</label>
+                              <select class="form-select rounded-pill" aria-label=".form-select-lg" name="status"
+                                id="status">
+                                <option value="ปกติ">ปกติ</option>
+                                <option value="ถูกจำกัดสิทธิ์">ระงับสิทธิ์ชั่วคราว</option>
+                              </select>
+                            </div>
+                            <div class="col-md-6">
+                              <label class="labels text-danger small" for="deadline">* กรุณาระบุวันที่ทุกครั้ง *</label>
+                              <input class="form-select
+                                rounded-pill" name="deadline" id="deadline" type="date">
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <label class="labels ps-2" for="reasonfromstaff">เหตุผลการระงับสิทธิ์
+                            </label>
+                            <textarea id="description" name="reasonfromstaff" name="reasonfromstaff"
+                              class="form-control rounded-4" id="exampleFormControlTextarea1" rows="3"></textarea>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn
+                            btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                          <button type="submit" class="btn btn-warning
+                            rounded-pill">ยืนยันการแก้ไข</button>
+                        </div>
+                      </div>
+                  </form>
+                  <div class="modal-fullscreen-lg-down">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="detailModal">รายละเอียดการถูกระงับสิทธิ์</h5>
+                      </div>
+                      <div class="modal-body">
+                        <span class="fw-bold">ชื่อ-สกุล :</span>
+                        <span class="small text-black-50">{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</span><br>
+                        <span class="fw-bold">อีเมล :</span>
+                        <span class="small text-black-50">{{AllUser.email}}</span><br>
+                        <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ :</span>
+                        <span class="small text-black-50">{{ AllUser.datestatus }}</span>
+                        <br>
+                        <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ :</span>
+                        <span class="small text-black-50">{{ AllUser.deadline }}</span>
+                        <br>
+                        {% if AllUser.reason != None %}
+                        <span class="fw-bold">เหตุผลการระงับสิทธิ์ :</span>
+                        <span class="small text-black-50">{{ AllUser.reason }}</span>
+                        <br>
+                        {% endif %}
+                        {% if AllUser.reasonfromstaff != None %}
+                        <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ :</span>
+                        <span class="small text-black-50">{{ AllUser.reasonfromstaff }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  {% empty %}
+                  <p class="text-center">ยังไม่มีข้อมูลนักศึกษาที่ถูกระงับสิทธิ์ชั่วคราวในระบบ U Borrow U</p>
+
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="page-links">
+          {% if page.has_previous %}
+          <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+          {% endif %}
+          {% if page.has_next %}
+          <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+          {% endif %}
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

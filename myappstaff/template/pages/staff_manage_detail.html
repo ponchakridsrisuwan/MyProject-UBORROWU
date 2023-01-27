@@ -1,0 +1,150 @@
+{% extends 'homestaff.html' %}
+{% block main %}
+<div class="container-lg mt-1 mb-5">
+    <div class="card">
+        <div class="row ">
+            <div class="col-sm-6 col-md-6 col-lg-6 border-end">
+                <div class="d-flex flex-column justify-content-center">
+                    <div class="main_image"> <img data-toggle="magnify" src="{{ AllParcel.image.url | safe }}"
+                            width="500">
+                    </div>
+                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 right-side">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3>{{ AllParcel.name }} </h3>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">รายการ</label>
+                        <p>{{ AllParcel.nametype }}</p>
+                    </div>
+                    {% if AllParcel.quantitytype == "∞" %}
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">จำนวน</label>
+                        <p>{{ AllParcel.quantitytype }} รายการ</p>
+                    </div>
+                    {% else %}
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">จำนวน</label>
+                        <p>{{ AllParcel.quantity }} รายการ</p>
+                    </div>
+                    {% endif %}
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">สถานะ</label>
+                        <p>{{ AllParcel.status }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">หมวดหมู่</label>
+                        <p>{{ AllParcel.category }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">ประเภท</label>
+                        <p>{{ AllParcel.statustype }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">ตำแหน่งและชั้นวาง</label>
+                        <p>{{ AllParcel.nameposition }}</p>
+                    </div>
+                    <div class="d-flex">
+                        <label class="labels px-2 fw-bold">เพิ่มเข้าระบบตั้งแต่</label>
+                        <p>{{ AllParcel.date|date:"G:i l j F Y" }}</p>
+                    </div>
+                    <div class="d-flex flex-row  gap-3">
+                        <a class="btn btn-outline-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#Delete">
+                            ลบ
+                        </a>
+                    </div><br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ลบข้อมูล -->
+    <div class="modal fade" name="Delete" id="Delete" tabindex="-1" aria-labelledby="DeleteModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg
+                        modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="DeleteModal">
+                        คุณต้องการลบ {{ AllParcel.name }} หรือไม่
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="fw-bold">ชื่อวัสดุ : </span><span class="small text-black-50">{{ AllParcel.name}}</span>
+                </div>
+                <div class="modal-body">
+                    <span class="fw-bold">ชั้นวางวัสดุ : </span><span class="small text-black-50">{{AllParcel.nameposition }}</span>
+                </div>
+                <div class="modal-body">
+                    <span class="fw-bold">หมวดหมู่ : </span><span class="small text-black-50">{{ AllParcel.category}}</span>
+                </div>
+                <div class="modal-body">
+                    <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllParcel.status }}</span>
+                </div>
+                {% if AllParcel.quantitytype == "∞" %}
+                <div class="modal-body">
+                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllParcel.quantitytype}}</span>
+                </div>
+                {% else %}
+                <div class="modal-body">
+                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllParcel.quantity }}</span>
+                </div>
+                {% endif %}
+                <div class="modal-body">
+                    <span class="fw-bold">รายละเอียด : </span><span class="small text-black-50">{{ AllParcel.description}}</span>
+                </div>
+                <div class="modal-body">
+                    <span class="fw-bold">รูปภาพ : </span><img alt="image" class="rounded me-4 thumb-post"
+                        src="{{ AllParcel.image.url | safe }}" width="150" height="150">
+                </div>
+                <div class="modal-footer">
+                    <button type="cancer" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+                        ยกเลิก
+                    </button>
+                    <a type="submit" value="ยืนยัน" class="btn btn-warning rounded-pill"
+                        href="{% url 'delete_staff_manage_parcel' AllParcel.id %}">ยืนยัน</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2 my-2 p-5 d-flex flex-row text-center">
+        {% if AllParcel.quantitytype == "∞" %}
+        <div class="col">
+            <span class="fw-bold fs-5">คงเหลือ</span>
+            <p>{{ AllParcel.quantitytype }}</p>
+        </div>
+        {% else %}
+        <div class="col">
+            <span class="fw-bold fs-5">คงเหลือ</span>
+            <p>{{ AllParcel.quantity }}</p>
+        </div>
+        {% endif %}
+        {% if AllParcel.waiting_qParcel is None %}
+        <div class="col">
+            <span class="fw-bold fs-5">จำนวนคิว</span>
+            <p>N/A</p>
+        </div>
+        {% else %}
+        <div class="col">
+            <span class="fw-bold fs-5">จำนวนคิว</span>
+            <p>{{ AllParcel.waiting_qParcel }}</p>
+        </div>
+        {% endif %}
+        <div class="col">
+            <span class="fw-bold fs-5">ยืมไปแล้ว</span>
+            <p>{{ AllParcel.borrow_count }}</p>
+        </div>
+    </div>
+    <div class="bg-white rounded-2 my-2 p-5 ">
+        <h5>รายละเอียด</h5>
+        <hr>
+        <p>{{ AllParcel.description }}
+        </p>
+        <br><br>
+    </div>
+
+</div>
+{% endblock %}

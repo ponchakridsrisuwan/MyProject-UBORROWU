@@ -1,0 +1,105 @@
+{% if user.right == "เจ้าหน้าที่" or user.is_superuser or user.right == "ผู้ดูแลระบบ" and user.status == "ปกติ" %}
+<nav id="navbar_top" class="navbar navbar-expand-lg bg-warning shadow-lg navbar_top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'staff_report' %}">UBU STAFF</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+            aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                <li class="nav-item">
+                    <a class="nav-link fs-6  {% if navbar == 'staff_report' %} active {% endif %}" aria-current="page" href="{% url 'staff_report' %}">หน้าหลัก</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_index_borrow' or navbar == 'staff_index_borrownow' or navbar == 'staff_index_borrow_durable' or navbar == 'staff_index_return' or navbar == 'staff_queue' or navbar == 'staff_queue_durable' or navbar == 'staff_borrowing_history' or navbar == 'staff_borrowing_history_durable' or navbar == 'staff_introduction' or navbar == 'staff_introduction_history' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        ยืม-คืน
+                    </a>
+                    <ul class="dropdown-menu">      
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">รออนุมัติการยืม</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'staff_index_borrow' %}">รออนุมัติการยืมวัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'staff_index_borrow_durable' %}">รออนุมัติการยืมครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'staff_index_borrownow' %}">กำลังยืมครุภัณฑ์</a></li>
+                        <li><a class="dropdown-item" href="{% url 'staff_index_return' %}">รออนุมัติการคืนครุภัณฑ์</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">รายการจองคิว</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'staff_queue' %}">รายการจองคิววัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'staff_queue_durable' %}">รายการจองคิวครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ประวัติการยืม-คืน</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'staff_borrowing_history' %}">ประวัติการยืมวัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'staff_borrowing_history_durable' %}">ประวัติการยืม-คืนครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'staff_introduction' %}" >แนะนำรายการเข้าระบบ</a></li>
+                        <li><a class="dropdown-item" href="{% url 'staff_introduction_history' %}" >ประวัติการแนะนำรายการเข้าระบบ</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-6  {% if navbar == 'staff_position' %} active {% endif %}" aria-current="page" href="{% url 'staff_position' %}">ข้อมูลชั้นวาง</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_manage_parcel' or navbar == 'staff_manage_durable' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">จัดการรายการ</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'staff_manage_parcel' %}" >วัสดุ</a></li>
+                        <li><a class="dropdown-item" href="{% url 'staff_manage_durable' %}" >ครุภัณฑ์</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_setting' or navbar == 'staff_setting_status' or navbar == 'staff_setting_position' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ตั้งค่า
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'staff_setting' %}">จัดการหมวดหมู่</a></li>
+                       
+                        <li><a class="dropdown-item" href="{% url 'staff_setting_status' %}">จัดการสถานะ</a></li>
+
+                        <li><a class="dropdown-item" href="{% url 'staff_setting_position' %}">จัดการชั้นวาง</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_admin_user' or navbar == 'staff_admin_user_block' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        จัดการสิทธิ์นักศึกษา
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item"  href="{% url 'staff_admin_user' %}">นักศึกษาภายในระบบ</a>
+                       
+                        <li><a class="dropdown-item" href="{% url 'staff_admin_user_block' %}">นักศึกษาที่ถูกระงับสิทธิ์</a></li>
+                    </ul>
+                </li>
+                </li>
+            </ul>
+
+            <div class="nav-item dropdown me-5 ms-3 ">
+                <a class="text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ user.first_name }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-lg-end my-2">
+                    <li><a class="dropdown-item" href="{% url 'staff_personal_info' %}" >ข้อมูลส่วนตัว</a></li>
+                    {% if user.right == "Staff" %}
+                    <li><a class="dropdown-item" href="{% url 'user_index' %}">ระบบสำหรับผู้ใช้ทั่วไป</a></li>
+                    {% elif user.right == "ผู้ดูแลระบบ" or user.is_superuser %}
+                    <li><a class="dropdown-item" href="{% url 'user_index' %}">ระบบสำหรับผู้ใช้ทั่วไป</a></li>
+                    <li><a class="dropdown-item" href="{% url 'admin_user' %}">ระบบสำหรับผู้ดูแลระบบ</a></li>
+                    {% endif %}
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">ออกจากระบบ</a></li>
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+</nav>
+{% endif %}

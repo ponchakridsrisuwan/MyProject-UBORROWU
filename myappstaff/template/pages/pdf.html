@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <style type="text/css">
+        @media print {
+            #hid {
+                display: none;
+                /* ซ่อน  */
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div>
+                <h4> ประวัติการแนะนำรายการเข้าระบบ
+                    <button id="hid" onclick="window.print();" class="btn btn-warning "> print </button>
+                </h4>
+            </div>
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th class="col" scope="col">ลำดับ</th>
+                            <th class="col-md-2" scope="col">ผู้แนะนำ</th>
+                            <th class="col-md-1" scope="col">รายการ</th>
+                            <th class="col-md-1 text-center" scope="col">ยี่ห้อ</th>
+                            <th class="col-md-1 text-center" scope="col">จำนวน</th>
+                            <th class="col-md-2 text-center" scope="col">ราคาต่อชิ้น</th>
+                            <th class="col-md-1 text-center" scope="col">ราคารวม</th>
+                            <th class="col-md-2 text-center" scope="col">วันที่ทำรายการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                        {% for Rec in AllRecList %}
+                        <tr class="qrow text-center">
+                            <td>
+                                <p class="text-start">{{ forloop.counter }}</p>
+                            </td>
+                            <td>
+                                <p class="text-start">{{ Rec.user.first_name }}&nbsp{{Rec.user.last_name}}</p>
+                            </td>
+                            <td>
+                                <p class="text-start">{{ Rec.name }}</p>
+                            </td>
+                            <td>
+                                <p>{{ Rec.brand }}</p>
+                            </td>
+                            <td>
+                                <p>{{ Rec.quantity }}</p>
+                            </td>
+                            <td>
+                                <p>{{ Rec.price }}</p>
+                            </td>
+                            <td>
+                                <p>{{ Rec.total }}</p>
+                            </td>
+                            <td>
+                                <p>{{ Rec.datetime|date:"G:m A d M y" }}</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+{% if user.right == "ผู้ดูแลระบบ" or user.is_superuser and user.status == "ปกติ" %}
+<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand  fw-bold fs-4 px-5" href="{% url 'admin_user' %}">ADMIN</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+            aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                <li class="nav-item">
+                    <a class="nav-link fs-6 {% if navbar == 'admin_user' %} active {% endif %}" aria-current="page" href="{% url 'admin_user' %}" >นักศึกษา</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-6 {% if navbar == 'admin_staff' %} active {% endif %}" aria-current="page" href="{% url 'admin_staff' %}" >เจ้าหน้าที่</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-6 {% if navbar == 'admin_block' %} active {% endif %}" aria-current="page" href="{% url 'admin_block' %}" >ผู้ใช้งานที่ถูกระงับสิทธิ์</a>
+                </li>
+            </ul>
+
+            <div class="nav-item dropdown me-5 ms-3 ">
+                <a class="text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ user.first_name}}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-lg-end my-2">
+                    <li><a class="dropdown-item" href="{% url 'user_index' %}">ระบบสำหรับผู้ใช้ทั่วไป</a></li>
+                    <li><a class="dropdown-item" href="{% url 'staff_report' %}">ระบบสำหรับเจ้าหน้าที่</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">ออกจากระบบ</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</nav>
+{% endif %}

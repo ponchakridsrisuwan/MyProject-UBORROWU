@@ -1,0 +1,196 @@
+<nav class="navbar navbar-expand-lg bg-white shadow-lg ">
+    <div class="container-fluid">
+        <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'user_index' %}">U BORROW U</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+            aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                <li class="nav-item ">
+                    <a class="nav-link fs-6 {% if navbar == 'user_index' %} active {% endif %}" aria-current="page"
+                    href="{% url 'user_index' %}">หน้าหลัก</a>
+                </li>
+                {% if user.right == "นักศึกษา" and user.status == "ปกติ" %}
+                <li class="nav-item px-2">
+                    <a class="nav-link fs-6 {% if navbar == 'user_durable_articles' %} active {% endif %}" href="{% url 'user_durable_articles' %}">รายการ</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link fs-6 {% if navbar == 'user_position' %} active {% endif %}" href="{% url 'user_position' %}">ตำแหน่งและชั้นวาง</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'user_borrow' or navbar == 'user_queue' or navbar == 'user_borrowed' or navbar == 'user_history' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        ยืม-คืน
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">รายการยืม</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'user_borrow' %}">รายการยืมวัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user_borrow_durable' %}">รายการยืมครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">รายการที่จองคิว</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'user_queue' %}">รายการที่จองคิววัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user_queue_durable' %}">รายการที่จองคิวครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <li><a class="dropdown-item" href="{% url 'user_borrowed' %}">รายการกำลังยืมครุภัณฑ์</a></li>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ประวัติการยืม-คืน</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'user_history' %}">ประวัติการยืมวัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user_history_durable' %}">ประวัติการยืม-คืนครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'user_recommend' or navbar == 'user_recommend_history' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    แนะนำรายการเข้าระบบ
+                </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'user_recommend' %}">แนะนำรายการ</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user_recommend_history' %}">ประวัติการแนะนำรายการ</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+                <form class="nav-item d-flex p-1 my-1 border rounded-pill" role="search" action="/user_durable_articles">
+                    <input class="form-control bg-none border-0 rounded-pill" type="search" placeholder="Search" aria-label="Search" name="query" id="query" value="{{search_query}}">
+                    <button class="btn btn-outline-secondary rounded-pill" type="submit">Search</button>
+                </form>
+            
+            
+            <div class="nav-item ">
+                <a href="{% url 'user_cart' %}" class="btn border-0 position-relative">
+                    <i class="fa fa-shopping-cart" style="font-size:40px;color:green" ></i>
+                    <span class="position-absolute top-25 start-50 badge rounded-pill bg-danger">
+                        {{Total}}
+                    </span>
+                </a>
+            </div>
+
+            <div class="nav-item dropdown me-5 ms-3 "> 
+                <a class="text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{user.first_name}} </a>
+                <ul class="dropdown-menu dropdown-menu-lg-end my-2">
+                    <li><a class="dropdown-item" href="{% url 'user_personal_info' %}">ข้อมูลส่วนตัว</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">ออกจากระบบ</a></li>
+                </ul>
+                {% elif user.right == "เจ้าหน้าที่" or user.right == "ผู้ดูแลระบบ" or user.is_superuser %}
+                <li class="nav-item px-2">
+                    <a class="nav-link fs-6 {% if navbar == 'user_durable_articles' %} active {% endif %}" href="{% url 'user_durable_articles' %}">รายการ</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link fs-6 {% if navbar == 'user_position' %} active {% endif %}" href="{% url 'user_position' %}">ตำแหน่งและชั้นวาง</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'user_borrow' or navbar == 'user_borrow_durable' or navbar == 'user_queue' or navbar == 'user_queue_durable' or navbar == 'user_borrowed' or navbar == 'user_history' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        ยืม-คืน
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">รายการยืม</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'user_borrow' %}">รายการยืมวัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user_borrow_durable' %}">รายการยืมครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">รายการที่จองคิว</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'user_queue' %}">รายการที่จองคิววัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user_queue_durable' %}">รายการที่จองคิวครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                                <li><a class="dropdown-item" href="{% url 'user_borrowed' %}">รายการกำลังยืมครุภัณฑ์</a></li>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ประวัติการยืม-คืน</a>
+                            <ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+                                <li><a class="dropdown-item" href="{% url 'user_history' %}">ประวัติการยืมวัสดุ</a></li>
+                                <li><a class="dropdown-item" href="{% url 'user_history_durable' %}">ประวัติการยืม-คืนครุภัณฑ์</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <form class="nav-item d-flex p-1 my-1 border rounded-pill" role="search" action="/user_durable_articles">
+                <input class="form-control bg-none border-0 rounded-pill" type="search" placeholder="Search" aria-label="Search" name="query" id="query" value="{{search_query}}">
+                <button class="btn btn-outline-secondary rounded-pill" type="submit">Search</button>
+            </form>
+            
+            <div class="nav-item ">
+                <a href="{% url 'user_cart' %}" class="btn border-0 position-relative">
+                    <i class="fa fa-shopping-cart" style="font-size:40px;color:green" ></i>
+                    <span class="position-absolute top-25 start-50 badge rounded-pill bg-danger">
+                      {{Total}}
+                    </span>
+                </a>
+            </div>
+
+            <div class="nav-item dropdown me-5 ms-3 "> 
+                <a class="text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{user.first_name}} </a>
+                <ul class="dropdown-menu dropdown-menu-lg-end my-2">
+                    <li><a class="dropdown-item" href="{% url 'user_personal_info' %}">ข้อมูลส่วนตัว</a></li>
+                    {% if user.right == "เจ้าหน้าที่" %}
+                    <li><a class="dropdown-item" href="{% url 'staff_report' %}">ระบบสำหรับเจ้าหน้าที่</a></li>
+                    {% elif user.right == "ผู้ดูแลระบบ" or user.is_superuser %}
+                    <li><a class="dropdown-item" href="{% url 'staff_report' %}">ระบบสำหรับเจ้าหน้าที่</a></li>
+                    <li><a class="dropdown-item" href="{% url 'admin_user' %}">ระบบสำหรับผู้ดูแลระบบ</a></li>
+                    {% endif %}
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">ออกจากระบบ</a></li>
+                </ul>
+                {% elif user.right == "นักศึกษา" and user.status == "ถูกจำกัดสิทธิ์" %}
+                <li class="nav-item px-2">
+                    <a class="nav-link fs-6 {% if navbar == 'user_durable_articles' %} active {% endif %}" href="{% url 'user_durable_articles' %}">รายการ</a>
+                </li>
+            </ul>
+
+            <form class="nav-item d-flex p-1 my-1 border rounded-pill" role="search" action="/user_durable_articles">
+                <input class="form-control bg-none border-0 rounded-pill" type="search" placeholder="Search" aria-label="Search" name="query" id="query" value="{{search_query}}">
+                <button class="btn btn-outline-secondary rounded-pill" type="submit">Search</button>
+            </form>
+            
+            <div class="nav-item dropdown me-5 ms-3 "> 
+                <a class="text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{user.first_name}} </a>
+                <ul class="dropdown-menu dropdown-menu-lg-end my-2">
+                    <li><a class="dropdown-item" href="{% url 'user_personal_info' %}">ข้อมูลส่วนตัว</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">ออกจากระบบ</a></li>
+
+                {% else %} 
+                <li class="nav-item px-2">
+                    <a class="nav-link fs-6 {% if navbar == 'user_durable_articles' %} active {% endif %}" href="{% url 'user_durable_articles' %}">รายการ</a>
+                </li>
+                <li class="nav-item px-2">
+                    <a class="nav-link fs-6 {% if navbar == 'user_position' %} active {% endif %}" href="{% url 'user_position' %}">ตำแหน่งและชั้นวาง</a>
+                </li>
+               <a class="text-black mx-2 btn btn-success text-white" href="{% url 'login' %}" >
+                เข้าสู่ระบบ </a>
+            {% endif %}
+            </div>
+
+        </div>
+    </div>
+</nav>

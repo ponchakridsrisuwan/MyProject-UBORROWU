@@ -1,0 +1,88 @@
+{% extends 'home.html' %} {% block main %}
+<div class=" container">
+  <div class="bg-white rounded-2 mb-4 px-5 py-3">
+    <div class="d-flex justify-content-between rounded-2 align-items-center">
+      <div>
+        <h5 class="fw-bold">ประวัติการแนะนำรายการ</h5>
+      </div>
+    </div>
+    <div class="d-flex row rounded-2 small fw-bold justify-content-between">
+      <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+          <div class="align-items-center">
+              <span>เรียงโดย</span>
+              <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่ทำรายการ</a>
+              <a href="?sort=name" class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+              <a href="?sort=brand" class="px-2 me-2 btn {% if last_sort == 'brand' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ยี่ห้อ</a>
+              <a href="?sort=quantity" class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
+              <a href="?sort=price" class="px-2 me-2 btn {% if last_sort == 'price' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ราคา</a>
+              <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+          </div>
+          
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-6">
+          <form class="d-flex" role="search">
+              <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="search_rec" value="{{search_rec}}">
+              <button class="btn btn-outline-dark" type="submit">Search</button>
+          </form>
+      </div>
+  </div>
+    <div class="row mt-3">
+      <table class="table table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th class="col-md-2" scope="col">ผู้แนะนำ</th>
+            <th class="col-md-3" scope="col">รายการ</th>
+            <th class="col-md-1 text-center" scope="col">ยี่ห้อ</th>
+            <th class="col-md-1 text-center" scope="col">จำนวน</th>
+            <th class="col-md-1 text-center" scope="col">ราคาต่อ</th>
+            <th class="col-md-1 text-center" scope="col">ราคารวม</th>
+            <th class="col-md-2 text-center" scope="col">วันที่ทำรายการ</th>
+            <th class="col-md-3 text-center" scope="col">สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="xTable">
+          {% for AllRecList in page.object_list %}
+          <tr class="qrow text-center">
+            <td>
+              <p class="text-start">{{ AllRecList.user.first_name }}&nbsp{{ AllRecList.user.last_name }}</p>
+            </td>
+            <td>
+              <p class="text-start">{{ AllRecList.name }}</p>
+            </td>
+            <td>
+              <p class="text-center">{{ AllRecList.brand }}</p>
+            </td>
+            <td>
+              <p class="text-center">{{ AllRecList.quantity }}</p>
+            </td>
+            <td>
+              <p class="text-center">{{ AllRecList.price }}</p>
+            </td>
+            <td>
+              <p class="text-center">{{ AllRecList.total }}</p>
+            </td>
+            <td>
+              <p class="text-center">{{ AllRecList.datetime|date:"G:m A d M y" }}</p>
+            </td>
+            <td>
+              <a class="btn btn-success rounded-pill badge"
+                href="{% url 'user_recommend_detail' AllRecList.id %}">ตรวจสอบ</a>
+            </td>
+          </tr>
+    {% empty %}
+    <p class="text-center">ยังไม่มีข้อมูลประวัติการแนะนำรายการเข้าระบบ</p>
+    {% endfor %}
+    </tbody>
+    <div class="page-links">
+      {% if page.has_previous %}
+      <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+      {% endif %}
+      {% if page.has_next %}
+      <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+      {% endif %}
+</div>
+    </table><br><br>
+  </div>
+</div>
+</div>
+{% endblock %}

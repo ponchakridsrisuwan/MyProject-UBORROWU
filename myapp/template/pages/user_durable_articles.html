@@ -1,0 +1,142 @@
+{% extends 'home.html' %}
+{% block class_user_durable_articles %}active{% endblock %}
+{% load static %}
+{% block main %}
+
+<div class="container-fluid d-md-flex ">
+    <nav class="col-lg-2 col-md col-sm col-12 bg-white rounded-2" width="300">
+        <div class="small p-4">
+            <h6 class="fw-bold">ค้นหาแบบละเอียด</h6>
+            <ul class="list-unstyled components ms-2">
+                <li>
+                    <h6 class="fw-bold">หมวดหมู่</h6>
+                    {% for AllCategoryType in AllCategoryType %}
+                    <li>
+                        <a href="?sort=category&category={{ AllCategoryType.id }}" 
+                        class="px-2 me-2 btn {% if last_sort == 'category' and AllCategoryType.id == selected_category %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">
+                        {{ AllCategoryType.name_CategoryType }}
+                    </a>
+                    </li>
+                    {% endfor %}
+                      
+                </li>
+                <hr>
+                <li>
+                    <h6 class="fw-bold">ประเภท</h6>
+                    {% for statustype in statustype %}
+                    <li>
+                        <a href="?sort=statustype&statustype={{ statustype }}" class="px-2 me-2 btn {% if last_sort == 'statustype' %}btn-outline-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">{{ statustype }}</a>
+                    </li>
+                {% endfor %}                
+                </li>
+                <hr>
+                <li>
+                    <h6 class="fw-bold">รายการ</h6>
+                    {% for nametype in nametype %}
+                    <li>
+                        <a href="?sort=nametype&nametype={{ nametype }}" class="px-2 me-2 btn {% if last_sort == 'nametype' %}btn-outline-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">{{ nametype }}</a>
+                    </li>
+                {% endfor %}                
+                </li>
+                <hr>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="col-lg-10 col-md-10 col-sm-12 col-12 px-2">
+        <!-- รายการพัสด -->
+        <div class="bg-white d-flex flex-row align-items-center justify-content-between rounded-2 mb-3 px-5 py-3">
+            <div class="d-flex flex-row align-items-center">
+                    <div class="align-items-center">
+                        <span>เรียงโดย</span>
+                        <a href="?sort=name" class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+                        <a href="?sort=quantity" class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
+                        <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+        </div>
+
+
+        <div class="row small">
+            {% for AllDurable in AllDurable%}
+            <div class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4">
+                <div class="card border bg-gray ">
+                    <div class="text-center">
+                        <img src="{{ AllDurable.image.url | safe }}" style="
+                                            object-position: center;
+                                            max-height: 200px;
+                                            margin-bottom: 1rem;">
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h5 class="card-title">{{ AllDurable.name }}</h5>
+                            <span class="mb-4 text-success">{{ Durable.status }}</span>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-between">
+                                <span>รายการ</span>
+                                <span>{{ AllDurable.nametype }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>ประเภท</span>
+                                <span>{{ AllDurable.statustype }}</span>
+                            </div>
+                            {% if AllDurable.quantitytype == "∞" %}
+                            <div class="d-flex justify-content-between">
+                                <span>จำนวน</span><span>{{ AllDurable.quantitytype }} </span>
+                            </div>
+                            {% else %}
+                            <div class="d-flex justify-content-between">
+                                <span>จำนวน</span><span>{{ AllDurable.quantity }} </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <a href="{% url 'user_detail_durable' AllDurable.id %}" class="stretched-link"></a>
+                </div>
+            </div>
+            {% endfor %}
+            {% for AllParcel in AllParcel %}
+            <div class="col-6 col-sm-4 col-md-3 col-lg-3 mb-2">
+                <div class="card border bg-gray ">
+                    <div class="text-center">
+                        <img src="{{ AllParcel.image.url | safe }}" style="
+                                            object-position: center;
+                                            max-height: 200px;
+                                            margin-bottom: 1rem;">
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h5 class="card-title">{{ AllParcel.name }}</h5>
+                            <span class="mb-4 text-success">{{ Parcel.status }}</span>
+                        </div>
+                        <div>
+                            <div class="d-flex justify-content-between">
+                                <span>รายการ</span>
+                                <span>{{ AllParcel.nametype }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>ประเภท</span>
+                                <span>{{ AllParcel.statustype }}</span>
+                            </div>
+                            {% if AllParcel.quantitytype == "∞" %}
+                            <div class="d-flex justify-content-between">
+                                <span>จำนวน</span><span>{{ AllParcel.quantitytype }} </span>
+                            </div>
+                            {% else %}
+                            <div class="d-flex justify-content-between">
+                                <span>จำนวน</span><span>{{ AllParcel.quantity }} </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <a href="{% url 'user_detail' AllParcel.id %}" class="stretched-link"></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

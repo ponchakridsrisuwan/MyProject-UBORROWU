@@ -1,0 +1,25 @@
+{% load static %}
+{% include "components/myhead.html" %}
+<body class="">
+    {% include "components/header.html" %}
+    {% include 'messages.html' %}
+    <br>
+    <main class="min-h-screen">
+        {% block main %}
+
+        {% endblock %}
+
+    </main>
+    <!-- {% include "components/footer.html" %} -->
+</body>
+
+</html>
+
+
+{% comment %}
+#สำหรับ html
+{% extends 'home.html' ,%}
+{% block main %}
+
+{% endblock %}
+{% endcomment %}

@@ -1,0 +1,220 @@
+{% extends 'home.html' %} 
+{% block main %}
+
+    <div class="container mt-1 p-3 rounded-2 cart bg-white">
+        
+        <div class="row no-gutters">
+            <div class="col-md-12">
+                <div class="product-details mr-2">
+                    <div class="d-flex flex-row align-items-center"><span
+                            class="ml-2 fw-bold fs-5">รถเข็นของวัสดุ</span></div>
+                    <hr>
+                    {% if TotalParcel is not None %}
+                    <div class="d-flex ">
+                        <span class="text-muted small">คุณมีวัสดุทั้งหมด {{TotalParcel}} รายการ</span>
+                    </div>
+                    {% else %}
+                    <div class="d-flex ">
+                        <span class="text-muted small">คุณยังไม่ได้เลือกรายการวัสดุ</span>
+                    </div>
+                    {% endif %}
+                    {% for AllCartParcel in AllCartParcel %}
+                    <div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded-2 ">
+                        <div class="d-flex flex-row">
+                            <img class="rounded me-2" src="{{ AllCartParcel.parcel_item.image.url | safe }}" width="70">
+                            <div class="ml-2"><span  class="font-weight-bold d-block">{{ AllCartParcel.parcel_item.name }}</span>
+                                <span class="small text-muted" name="spac">สถานะ : {{ AllCartParcel.parcel_item.status }}</span><br>
+                                <span class="small " name="spac"><a href="{% url 'user_detail' AllCartParcel.parcel_item.id %}">รายละเอียด</a></span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center ">
+                            <a class="btn btn-outline-secondary btn-sm px-2" href="{% url 'cart_notupdate' AllCartParcel.parcel_item.id %}">-</a>
+                            <span class="d-block px-3">{{ AllCartParcel.quantity }}</span>
+                            <a class="btn btn-outline-secondary btn-sm px-2" href="{% url 'cart_update' AllCartParcel.parcel_item.id %}" >+</a>
+                            <span class="rounded-pill align-items-center p-2 ms-4 fa fa-trash fa-2x" data-bs-toggle="modal" data-bs-target="#Delete-{{forloop.counter}}"></span>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!-- ลบข้อมูล -->
+                <div class="modal fade" name="Delete" id="Delete-{{forloop.counter}}" tabindex="-1"
+                aria-labelledby="DeleteModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="DeleteModal">
+                                คุณต้องการลบ {{ AllCartParcel.parcel_item.name }} ทั้งหมดออกจากรถเข็นหรือไม่
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="cancer" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+                                ยกเลิก
+                            </button>
+                            <a type="submit" value="ยืนยัน" class="btn btn-warning rounded-pill"
+                                href="{% url 'delete_add_to_cart' AllCartParcel.id %}">ยืนยัน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              {% endfor %}
+                </div>
+                <div class="mt-2 text-center">
+                    <a class="btn btn-outline-dark rounded-pill ms-2" data-bs-toggle="modal"
+                      data-bs-target="#AddParcel">ยืมวัสดุ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ยืมวัสดุ -->
+    <div class="modal fade" name="AddParcel" id="AddParcel" tabindex="-1"
+    aria-labelledby="AddParcelmodal" aria-hidden="true">
+    <form method="post" action="/add_multiple_to_borrow_parcel" enctype="multipart/form-data" >
+        {% csrf_token %}
+    <div class="modal-dialog modal-lg
+    modal-fullscreen-lg-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddParcelModal">
+                    กรอกข้อมูลการยืมวัสดุ
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                <label class="labels" for="start_date">วันที่ต้องการยืม</label>
+                <input id="start_date" name="start_date" type="date" class="form-control rounded-pill">
+              </div>
+              <div class="col-md-12">
+                <label class="labels ps-2" for="description">เหตุผลการยืม</label>
+                <textarea id="description" name="description"
+                  class="form-control rounded-4"
+                  id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+                    ยกเลิก
+                </button>
+                <button type="submit" value="ยืนยัน" class="btn btn-warning rounded-pill">ยืนยัน</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+
+
+
+    <div class="container mt-1 p-3 rounded-2 cart bg-white">
+        <div class="row no-gutters">
+            <div class="col-md-12">
+                <div class="product-details mr-2">
+                    <div class="d-flex flex-row align-items-center"><span
+                            class="ml-2 fw-bold fs-5">รถเข็นของครุภัณฑ์</span></div>
+                    <hr>
+                    {% if TotalDurable is not None %}
+                    <div class="d-flex ">
+                        <span class="text-muted small">คุณมีครุภัณฑ์ทั้งหมด {{TotalDurable}} รายการ</span>
+                    </div>
+                    {% else %}
+                    <div class="d-flex ">
+                        <span class="text-muted small">คุณยังไม่ได้เลือกรายการครุภัณฑ์</span>
+                    </div>
+                    {% endif %}
+            {% for AllCartDurable in AllCartDurable %}
+                    <div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded-2 ">
+                        <div class="d-flex flex-row">
+                            <img class="rounded me-2" src="{{ AllCartDurable.durable_item.image.url | safe }}" width="70">
+                            <div class="ml-2"><span  class="font-weight-bold d-block">{{ AllCartDurable.durable_item.name }}</span>
+                                <span class="small text-muted" name="spac">สถานะ : {{ AllCartDurable.durable_item.status }}</span><br>
+                                <span class="small " name="spac"><a href="{% url 'user_detail' AllCartDurable.durable_item.id %}">รายละเอียด</a></span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center ">
+                            <a class="btn btn-outline-secondary btn-sm px-2" href="{% url 'cart_notupdate_durable' AllCartDurable.durable_item.id %}">-</a>
+                            <span class="d-block px-3">{{ AllCartDurable.quantity }}</span>
+                            <a class="btn btn-outline-secondary btn-sm px-2" href="{% url 'cart_update_durable' AllCartDurable.durable_item.id %}">+</a>
+                            <span class="rounded-pill align-items-center p-2 ms-4 fa fa-trash fa-2x" data-bs-toggle="modal" data-bs-target="#DeleteDurable-{{forloop.counter}}"></span>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!-- ลบข้อมูล -->
+                <div class="modal fade" name="DeleteDurable" id="DeleteDurable-{{forloop.counter}}" tabindex="-1"
+                aria-labelledby="DeleteDurableModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg
+                modal-fullscreen-lg-down">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="DeleteDurableModal">
+                                คุณต้องการลบ {{ AllCartDurable.durable_item.name }} หรือไม่
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="cancer" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+                                ยกเลิก
+                            </button>
+                            <a type="submit" value="ยืนยัน" class="btn btn-warning rounded-pill"
+                                href="{% url 'delete_durable_add_to_cart' AllCartDurable.id %}">ยืนยัน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-2 text-center">
+                    <a class="btn btn-outline-dark rounded-pill ms-2" data-bs-toggle="modal"
+                      data-bs-target="#AddDurable">ยืมครุภัณฑ์</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- ยืมครุภัณฑ์ -->
+    <div class="modal fade" name="AddDurable" id="AddDurable" tabindex="-1"
+    aria-labelledby="AddDurablemodal" aria-hidden="true">
+    <form method="post" action="/add_multiple_to_borrow_durable" enctype="multipart/form-data" >
+        {% csrf_token %}
+    <div class="modal-dialog modal-lg
+    modal-fullscreen-lg-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddDurableModal">
+                    กรอกข้อมูลการยืมครุภัณฑ์
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                <label class="labels" for="start_date">วันที่ต้องการยืม</label>
+                <input id="start_date" name="start_date" type="date" class="form-control rounded-pill">
+              </div>
+              <div class="col-md-12">
+                <label class="labels" for="end_date">วันที่ต้องการคืน</label>
+                <input id="end_date" name="end_date" type="date" class="form-control rounded-pill">
+              </div>
+              <div class="col-md-12">
+                <label class="labels ps-2" for="description">เหตุผลการยืม</label>
+                <textarea id="description" name="description"
+                  class="form-control rounded-4"
+                  id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+                    ยกเลิก
+                </button>
+                <button type="submit" value="ยืนยัน" class="btn btn-warning rounded-pill">ยืนยัน</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+        {% endblock %}

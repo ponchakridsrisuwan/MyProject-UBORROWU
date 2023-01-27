@@ -1,0 +1,252 @@
+{% extends 'home.html' %} {% block main %}
+<div class=" container">
+  <div class="bg-white rounded-2 mb-4 px-5 py-3">
+    <!-- จัดการวัสดุ-ครุภัณฑ์ -->
+    <div class="d-flex justify-content-between rounded-2 align-items-center">
+      <div>
+        <h5 class="fw-bold">รายการแนะนำ</h5>
+      </div>
+      <div class="d-flex flex-row">
+        <a class="btn btn-outline-dark rounded-pill ms-2" data-bs-toggle="modal"
+          data-bs-target="#additem">เพิ่มรายการ</a>
+      </div>
+    </div>
+    <div class="d-flex row rounded-2 small fw-bold justify-content-between">
+      <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+          <div class="align-items-center">
+              <span>เรียงโดย</span>
+              <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่ทำรายการ</a>
+              <a href="?sort=name" class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+              <a href="?sort=brand" class="px-2 me-2 btn {% if last_sort == 'brand' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ยี่ห้อ</a>
+              <a href="?sort=quantity" class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
+              <a href="?sort=price" class="px-2 me-2 btn {% if last_sort == 'price' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ราคา</a>
+              <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+          </div>
+          
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-6">
+          <form class="d-flex" role="search">
+              <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="search_rec" value="{{search_rec}}">
+              <button class="btn btn-outline-dark" type="submit">Search</button>
+          </form>
+      </div>
+  </div>
+    <!-- เพิ่มรายการ -->
+    <div class="modal fade" id="additem" tabindex="-1" aria-labelledby="additemModal" aria-hidden="true">
+      <form method="post" action="user_recommend" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="additemModal">เพิ่มรายการแนะนำ</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="col-md-12">
+                <label class="labels" for="name">ชื่อ</label>
+                <input id="name" name="name" type="text" class="form-control
+                  rounded-pill">
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6">
+                  <label class="labels" for="brand">ยี่ห้อ</label>
+                  <input id="brand" name="brand" type="text" class="form-control
+                    rounded-pill">
+                </div>
+                <div class="col-md-6">
+                  <label class="labels" for="link">ลิงก์วัสดุ</label>
+                  <input id="link" name="link" type="text" class="form-control
+                    rounded-pill">
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6">
+                  <label class="labels" for="quantity">จำนวน</label>
+                  <input id="quantity" name="quantity" type="text" class="form-control rounded-pill">
+                </div>
+                <div class="col-md-6">
+                  <label class="labels" for="price">ราคาต่อชิ้น</label>
+                  <input id="price" name="price" type="text" class="form-control
+                    rounded-pill">
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label class="labels ps-2" for="description">เหตุผลการแนะนำรายการเข้าระบบ
+                </label>
+                <textarea id="description" name="description" class="form-control rounded-4"
+                  id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+              <button type="submit" class="btn btn-warning rounded-pill">ยืนยันการแนะนำ</button>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <td></td>
+          <td></td>
+          <th class="col-md-3" scope="col">ผู้แนะนำ</th>
+          <th class="col-md-2" scope="col">รายการ</th>
+          <th class="col-md-1 text-center" scope="col">ยี่ห้อ</th>
+          <th class="col-md-1 text-center" scope="col">จำนวน</th>
+          <th class="col-md-1 text-center" scope="col">ราคาต่อชิ้น</th>
+          <th class="col-md-2 text-center" scope="col">วันที่ทำรายการ</th>
+          <th class="col-md-3 text-center" scope="col">สถานะ</th>
+        </tr>
+      </thead>
+      <tbody id="xTable">
+        {% for AllRecList in page.object_list %}
+        <tr class="qrow text-center">
+          <td>
+            <a data-bs-toggle="modal" data-bs-target="#Delete-{{forloop.counter}}">
+              <i class="fa fa-trash" value="DeleteRecList"></i>
+            </a>
+          </td>
+          <td>
+            <a data-bs-toggle="modal" data-bs-target="#Edit-{{forloop.counter}}">
+              <i class="fa fa-edit" value="EditRecList"></i>
+            </a>
+          </td>
+          <td>
+            <p class="text-start">{{ AllRecList.user.first_name }}&nbsp{{AllRecList.user.last_name }}</p>
+          </td>
+          <td>
+            <p class="text-start">{{ AllRecList.name }}</p>
+          </td>
+          <td>
+            <p class="text-center">{{ AllRecList.brand }}</p>
+          </td>
+          <td>
+            <p class="text-center">{{ AllRecList.quantity }}</p>
+          </td>
+          <td>
+            <p class="text-center">{{ AllRecList.price }}</p>
+          </td>
+          <td>
+            <p class="text-center">{{ AllRecList.datetime|date:"G:m A d M y" }}</p>
+          </td>
+          <td>
+            <a class="btn btn-warning rounded-pill badge"
+              href="{% url 'user_recommend_detail' AllRecList.id %}">ตรวจสอบ</a>
+          </td>
+        </tr>
+
+        <!-- ลบข้อมูล -->
+        <div class="modal fade" name="Delete" id="Delete-{{forloop.counter}}" tabindex="-1"
+          aria-labelledby="DeleteuserModal" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="DeleteuserModal">ยืนยันการลบ {{AllRecList.name}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">รายการ : </span><span class="small text-black-50">{{AllRecList.name}}</span>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">ยี่ห้อ : </span><span class="small text-black-50">{{ AllRecList.brand }}</span>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllRecList.quantity }}</span>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">ราคาต่อชิ้น : </span><span class="small text-black-50">{{ AllRecList.price }}</span>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">ราคารวม : </span><span class="small text-black-50">{{ AllRecList.total }}</span>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">วันที่ทำรายการ : </span><span class="small text-black-50">{{AllRecList.datetime|date:"G:m A d M y" }}</span>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">รายละเอียด : </span><span class="small text-black-50">{{ AllRecList.description}}</span>
+              </div>
+              <div class="modal-body">
+                <span class="fw-bold">ลิงก์รายการ : </span><a href="{{ AllRecList.link }}" class="small ">{{AllRecList.link }}</a>
+              </div>
+              <div class="modal-footer">
+                <button type="cancer" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                <a type="submit" value="ยืนยัน" class="btn btn-warning
+                    rounded-pill" href="{% url 'deleteRecList' AllRecList.id %}">ยืนยัน</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- แก้ไขข้อมูล -->
+        <div class="modal fade" id="Edit-{{forloop.counter}}" tabindex="-1" aria-labelledby="additemModal"
+          aria-hidden="true">
+          <form method="post" action="/user_recommend_edit/{{AllRecList.id}}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="additemModal">แก้ไขข้อมูลการแนะนำรายการ</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="col-md-12">
+                    <label class="labels" for="name">ชื่อ</label>
+                    <input value="{{ AllRecList.name }}" id="name" name="name" type="text"
+                      class="form-control rounded-pill">
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-md-6">
+                      <label class="labels" for="brand">ยี่ห้อ</label>
+                      <input value="{{ AllRecList.brand }}" id="brand" name="brand" type="text" class="form-control
+                          rounded-pill">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="labels" for="link">ลิงก์วัสดุ</label>
+                      <input value="{{ AllRecList.link }}" id="link" name="link" type="text" class="form-control
+                          rounded-pill">
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-md-6">
+                      <label class="labels" for="quantity">จำนวน</label>
+                      <input value="{{ AllRecList.quantity }}" id="quantity" name="quantity" type="text" class="form-control
+                          rounded-pill">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="labels" for="price">ราคาต่อชิ้น</label>
+                      <input value="{{ AllRecList.price }}" id="price" name="price" type="text" class="form-control
+                          rounded-pill">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="labels ps-2" for="description">เหตุผลการแนะนำรายการเข้าระบบ
+                    </label>
+                    <textarea value="{{ AllRecList.description }}" id="description" name="description" class="form-control
+                        rounded-4" id="exampleFormControlTextarea1" rows="3">{{ AllRecList.description }}</textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                  <button type="submit" class="btn btn-warning rounded-pill">ยืนยันการแก้ไข</button>
+                </div>
+              </div>
+          </form>
+        </div>
+        {% empty %}
+        <p class="text-center">ยังไม่มีข้อมูลการแนะนำรายการเข้าระบบ</p>
+        {% endfor %}
+      </tbody>
+      <div class="page-links">
+        {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+        {% endif %}
+        {% if page.has_next %}
+        <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+        {% endif %}
+      </div>
+    </table><br><br>
+  </div>
+</div>
+{% endblock %}

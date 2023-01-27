@@ -1,0 +1,27 @@
+{% load static %}
+{% if user.right == "เจ้าหน้าที่" or user.right == "ผู้ดูแลระบบ" or user.is_superuser and user.status == "ปกติ" %}
+{% include "components/myhead.html" %}
+<body class="">
+    {% include "components/headerstaff.html" %}
+    {% include 'messages.html' %}
+    <br>
+    <main class="min-h-screen">
+        {% block main %}
+        <br><br><br>
+
+        <h3 class="text-center text-white">TODO LIST</h3>
+        {% endblock %}
+
+    </main>
+    <!-- {% include "components/footer.html" %} -->
+</body>
+
+</html>
+{% else %}
+<br>
+<h2 class="text-center">คุณไม่มีสิทธิ์เข้าถึง กรุณาติดต่อผู้ดูแลระบบ</h2>
+{% endif %}
+
+<script>
+
+</script>

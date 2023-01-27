@@ -1,0 +1,160 @@
+{% extends 'homeAdmin.html' %}
+{% block main %}
+{% load static %}
+<div class=" container  ">
+    <div class="bg-white rounded-2 mb-4 px-5 py-3">
+        <div class="d-flex justify-content-between justify-content: right;"></div>
+
+        <div class="bg-white rounded-2">
+            <div class="d-flex justify-content-between row">
+                <div class="col-md-12 col-lg-6">
+                    <h5 class="fw-bold">เจ้าหน้าที่ในระบบ U Borrow U</h5>
+                </div>
+                <div class="d-flex flex-row col-md-12 col-lg-6 justify-content-end">
+                    <div>
+                        <p class="fw-bold">จำนวนเจ้าหน้าที่ {{ AllUserStaff_count.count }} คน จำนวนผู้ดูแลระบบ {{AllUser_count_admin.count }} คน</p>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex row rounded-2 small fw-bold justify-content-between">
+                <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+                    <div class="align-items-center">
+                        <span>เรียงโดย</span>
+                        <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ใช้งานล่าสุด</a>
+                        <a href="?sort=first_name" class="px-2 me-2 btn {% if last_sort == 'first_name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ชื่อ-สกุล</a>
+                        <a href="?sort=email" class="px-2 me-2 btn {% if last_sort == 'email' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">อีเมล</a>
+                        <a href="?sort=right" class="px-2 me-2 btn {% if last_sort == 'right' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">สิทธิ์</a>
+                        <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="search_user" value="{{search_user}}">
+                        <button class="btn btn-outline-dark" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+            <div class="bg-white rounded-2 mb-4 px-2">
+                <div class="row mt-3">
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="col" scope="col">ชื่อ-สกุล</th>
+                                <th class="col" scope="col">อีเมล</th>
+                                <th class="col" scope="col">เบอร์โทรศัพท์</th>
+                                <th class="col" scope="col">ใช้งานล่าสุด</th>
+                                <th class="col" scope="col">สิทธิ์</th>
+                                <th class="col" scope="col">สถานะ</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="xTable">
+                            {% for AllUserStaff in AllUserStaff %}
+                            {% if AllUserStaff.right == "เจ้าหน้าที่" and AllUserStaff.status == "ปกติ" or AllUserStaff.right == "ผู้ดูแลระบบ" %}
+                            <tr class="qrow">
+                                <td>
+                                    <p>{{AllUserStaff.first_name}}&nbsp{{AllUserStaff.last_name}}</p>
+                                </td>
+                                <td>
+                                    <p>{{ AllUserStaff.email }}</p>
+                                </td>
+                                <td>
+                                    {% if AllUserStaff.phone == None %}
+                                    <p> N/A </p>
+                                    {% else %}
+                                    <p>{{ AllUserStaff.phone }}</p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <p>{{ AllUserStaff.last_login|date:"G:i A j F Y" }}</p>
+                                </td>
+                                <td>
+                                    <p>{{ AllUserStaff.right }}</p>
+                                </td>
+                                <td>
+                                    <p>{{ AllUserStaff.status }}</p>
+                                </td>
+                                <td>
+                                    <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown"
+                                        aria-expanded="false"></i>
+                                    <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm text-center">
+                                        <li>
+                                            <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#manageitemcatecory-{{forloop.counter}}">เปลี่ยนแปลงสิทธิ์</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item btn-0 btn-sm"
+                                                href="{% url 'admin_detail' AllUserStaff.id %}">ข้อมูลส่วนตัว</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                            <!-- moal เปลี่ยนแปลงสิทธิ์ -->
+                            <div class="modal fade" id="manageitemcatecory-{{forloop.counter}}" tabindex="-1"
+                                aria-labelledby="edititemModal" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                                    <form method="post" action="/admin_user_status/{{AllUserStaff.id}}"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="edititemModal">เปลี่ยนแปลงสิทธิ์
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-6">
+                                                            <label class="labels" for="name">ชื่อ</label>
+                                                            <input value="{{AllUserStaff.first_name}}" type="text"
+                                                                class="form-control rounded-pill" disabled>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="labels" for="email">อีเมล</label>
+                                                            <input value="{{AllUserStaff.email}}" type="text"
+                                                                class="form-control rounded-pill" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-6">
+                                                            <label class="labels" for="status">สถานะ</label>
+                                                            <input value="{{AllUserStaff.status}}" type="text"
+                                                                class="form-control rounded-pill" disabled>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="labels" for="right">สิทธิ์ผู้ใช้งาน</label>
+                                                            <select class="form-select rounded-pill"
+                                                                aria-label=".form-select-lg" name="right" id="right">
+                                                                <option value="นักศึกษา">นักศึกษา</option>
+                                                                <option value="เจ้าหน้าที่">เจ้าหน้าที่</option>
+                                                                <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary rounded-pill"
+                                                        data-bs-dismiss="modal">ยกเลิก</button>
+                                                    <button type="submit"
+                                                        class="btn btn-warning rounded-pill">ยืนยันการแก้ไข</button>
+                                                </div>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% empty %}
+                            <p class="text-center">ยังไม่มีข้อมูลเจ้าหน้าที่ในระบบ U Borrow U</p>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

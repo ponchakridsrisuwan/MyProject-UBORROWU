@@ -1,0 +1,221 @@
+{% extends 'homestaff.html' %}
+{% block main %}
+
+<div class=" container">
+    <div class="bg-white rounded-2 mb-4 px-5 py-3">
+        <div class="d-flex justify-content-between ">
+            <div>
+                <h5 class="fw-bold">รายการอนุมัติการยืมวัสดุ</h5>
+            </div>
+        </div>
+        <div class="d-flex row rounded-2 small fw-bold justify-content-between">
+            <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+                <div class="align-items-center">
+                    <span>เรียงโดย</span>
+                    <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่ทำรายการ</a>
+                    <a href="?sort=start_date" class="px-2 me-2 btn {% if last_sort == 'start_date' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่ต้องการยืม</a>
+                    <a href="?sort=name" class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+                    <a href="?sort=quantity" class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
+                    <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                </div>
+                
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="search_parcel" value="{{search_parcel}}">
+                    <button class="btn btn-outline-dark" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+        <table class="table">
+            <thead class="table">
+              <tr class="table bg-warning">
+                    <th class="col" scope="col">ชื่อ-สกุล</th>
+                    <th class="col" scope="col">รายการ</th>
+                    <th class="col" scope="col">จำนวน</th>
+                    <th class="col" scope="col">วันที่ทำรายการ</th>
+                    <th class="col" scope="col">วันที่ต้องการยืม </th>
+                    <th class="col" scope="col">สถานะ</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="xTable">
+                {% for AllLoanParcel in page.object_list %}
+                <tr class="qrow">
+                    <td>
+                        <p>{{ AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</p>
+                    </td>
+                    <td>
+                        <p>{{ AllLoanParcel.name }}</p>
+                    </td>
+                    <td>
+                        <p>{{ AllLoanParcel.quantity }}</p>
+                    </td>
+                    <td>
+                        <p>{{ AllLoanParcel.date_add }}</p>
+                    </td>
+                    <td>
+                        <p>{{ AllLoanParcel.start_date }}</p>
+                    </td>
+                    <td>
+                        <p class="text-warning">{{ AllLoanParcel.status }}</p>
+                    </td>
+                    <td>
+                        <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                        <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm
+                            text-center">
+                            <li>
+                                <a class="dropdown-item btn-0
+                                    btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#detail-{{forloop.counter}}">รายละเอียด</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item btn-0
+                                    btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#approved-{{forloop.counter}}">อนุมัติ</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item btn-0
+                                    btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#disapproved-{{forloop.counter}}">ไม่อนุมัติ</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <!-- รายละเอียด -->
+                <div class="modal fade" id="detail-{{forloop.counter}}" tabindex="-1" aria-labelledby="detailModal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold" id="detailModal">รายละเอียดการยืม {{AllLoanParcel.name
+                                    }} ของ{{AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <span class="fw-bold">รายการวัสดุที่ยืม :
+                                </span><span class="small text-black-50">{{AllLoanParcel.name }}</span><br>
+                                <span class="fw-bold">จำนวน : </span><span
+                                    class="small text-black-50">{{AllLoanParcel.quantity }}</span><br>
+                                <span class="fw-bold">หมวดหมู่ : </span><span
+                                    class="small text-black-50">{{AllLoanParcel.type }}</span><br>
+                                <span class="fw-bold">วันที่ทำรายการ :
+                                </span><span class="small text-black-50">{{AllLoanParcel.date_add }}</span><br>
+                                <span class="fw-bold">วันที่ต้องการยืม :
+                                </span><span class="small text-black-50">{{AllLoanParcel.start_date }}</span><br>
+                                <span class="fw-bold">สถานะ : </span><span
+                                    class="small text-black-50">{{AllLoanParcel.status }}</span><br>
+                                <span class="fw-bold">เหตุผลการยืม : </span><span
+                                    class="small text-black-50">{{AllLoanParcel.description }}</span><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- อนุมัติ -->
+                <div class="modal fade" id="approved-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
+                    aria-hidden="true">
+                    <form method="post" action="/staff_borrow_parcel/{{AllLoanParcel.id }}"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-dialog modal-lg
+                            modal-fullscreen-lg-down">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="approvedModal">ยืนยันการอนุมัติการยืมของ
+                                        {{AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <span class="fw-bold">จำนวน :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.quantity }}</span>&nbsp
+                                    <span class="fw-bold">เหตุผลการยืม :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.description }}</span><br>
+                                    <span class="fw-bold">วันที่ทำรายการ :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.date_add }}</span>&nbsp
+                                    <span class="fw-bold">วันที่ต้องการยืม :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.start_date }}</span>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="reasonfromstaff" style="height:
+                                            100px" type="text" name="reasonfromstaff"></textarea>
+                                        <label for="floatingTextarea2">รายละเอียดเพิ่มเติม</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn
+                                        btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                    <button type="submit" class="btn btn-warning
+                                        rounded-pill">ยืนยัน</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ไม่อนุมัติ -->
+                <div class="modal fade" id="disapproved-{{forloop.counter}}" tabindex="-1"
+                    aria-labelledby="disapprovedModal" aria-hidden="true">
+                    <form method="post" action="/staff_unborrow_durable/{{AllLoanParcel.id }}"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-dialog modal-lg
+                            modal-fullscreen-lg-down">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="disapprovedModal">ยืนยันการไม่อนุมัติการยืม {{
+                                        AllLoanParcel.name}} ของ
+                                        {{ AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <span class="fw-bold">จำนวน :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.quantity }}</span>&nbsp
+                                    <span class="fw-bold">เหตุผลการยืม :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.description }}</span><br>
+                                    <span class="fw-bold">วันที่ทำรายการ :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.date_add }}</span>&nbsp
+                                    <span class="fw-bold">วันที่ต้องการยืม :
+                                    </span><span class="small text-black-50">{{AllLoanParcel.start_date }}</span>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="reasonfromstaff" style="height:
+                                            100px" type="text" name="reasonfromstaff"></textarea>
+                                        <label for="floatingTextarea2">เหตุผลในการไม่อนุมัติ</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn
+                                        btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                    <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% empty %}
+                <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมวัสดุ</p>
+
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="page-links">
+            {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+            {% endif %}
+            {% if page.has_next %}
+            <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

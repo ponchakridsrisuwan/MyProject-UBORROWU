@@ -1,0 +1,124 @@
+{% extends 'homestaff.html' %}
+{% block main %}
+
+<div class=" container">
+    <div class="bg-white rounded-2 mb-4 px-5 py-3">
+        <div class="d-flex justify-content-between ">
+            <div>
+                <h5 class="fw-bold">ประวัติการยืม-คืนครุภัณฑ์</h5>
+            </div>
+            <div>
+                <a href="{% url 'pdf_borrow_durable' %}" class="btn btn-outline-dark rounded-pill">PDF</a>
+            </div>
+        </div>
+        <div class="d-flex row rounded-2 small fw-bold justify-content-between mt-2">
+            <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+                <div class="align-items-center">
+                    <span>เรียงโดย</span>
+                    <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่ทำรายการ</a>
+                    <a href="?sort=start_date" class="px-2 me-2 btn {% if last_sort == 'start_date' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่ยืม</a>
+                    <a href="?sort=name" class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+                    <a href="?sort=quantity" class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
+                    <a href="?sort=status" class="px-2 me-2 btn {% if last_sort == 'status' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">สถานะ</a>
+                    <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                </div>
+                
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="search_parcel" value="{{search_parcel}}">
+                    <button class="btn btn-outline-dark" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+        <table class="table">
+            <thead class="table">
+              <tr class="table bg-warning">
+                    <th class="col-md-1 text-center" scope="col">ลำดับ</th>
+                    <th class="col-md-2" scope="col">ผู้ยืม</th>
+                    <th class="col-md-3" scope="col">รายการ</th>
+                    <th class="col-md-1 text-center" scope="col">จำนวน</th>
+                    <th class="col-md-2 text-center" scope="col">วันที่ยืม</th>
+                    <th class="col-md-2 text-center" scope="col">ทำรายการเมื่อ</th>
+                    <th class="col-md-3 text-center" scope="col">สถานะ</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="xTable">
+                {% for AllLoanDurable in AllLoanDurable %}
+                <tr class="qrow text-center card-body">
+                    <td class="text-center">{{forloop.counter}}</td>
+                    <td>
+                        <p class="text-start">{{ AllLoanDurable.user.first_name }}&nbsp{{ AllLoanDurable.user.last_name
+                            }}</p>
+                    </td>
+                    <td>
+                        <p class="text-start">{{ AllLoanDurable.name }}</p>
+                    </td>
+                    <td>
+                        <p class="text-center">{{ AllLoanDurable.quantity }}</p>
+                    </td>
+                    <td>
+                        <p class="text-center">{{ AllLoanDurable.date_add|date:"j N Y" }}</p>
+                    </td>
+                    <td>
+                        <p class="text-center">{{ AllLoanDurable.start_date|date:"j N Y" }}</p>
+                    </td>
+                    <td>
+                        <p class="text-center">{{ AllLoanDurable.status }}</p>
+                    </td>
+                    <td>
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#detail-{{forloop.counter}}"
+                            class="text-center btn btn-success rounded-pill badge">รายละเอียด</a>
+                    </td>
+                </tr>
+
+                <!-- รายละเอียด -->
+                <div class="modal fade" id="detail-{{forloop.counter}}" tabindex="-1" aria-labelledby="detailModal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold" id="detailModal">รายละเอียดการยืม {{AllLoanDurable.name
+                                    }} ของ{{AllLoanDurable.user.first_name}}&nbsp{{AllLoanDurable.user.last_name }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <span class="fw-bold">รายการครุภัณฑ์ที่ยืม :
+                                </span><span class="small text-black-50">{{AllLoanDurable.name }}</span><br>
+                                <span class="fw-bold">จำนวน : </span><span
+                                    class="small text-black-50">{{AllLoanDurable.quantity }}</span><br>
+                                <span class="fw-bold">หมวดหมู่ : </span><span
+                                    class="small text-black-50">{{AllLoanDurable.type }}</span><br>
+                                <span class="fw-bold">วันที่ทำรายการ :
+                                </span><span class="small text-black-50">{{AllLoanDurable.date_add }}</span><br>
+                                <span class="fw-bold">วันที่ยืม :
+                                </span><span class="small text-black-50">{{AllLoanDurable.start_date }}</span><br>
+                                <span class="fw-bold">กำหนดคืน :
+                                </span><span class="small text-black-50">{{AllLoanDurable.end_date}}</span><br>
+                                <span class="fw-bold">สถานะ : </span><span
+                                    class="small text-black-50">{{AllLoanDurable.status }}</span><br>
+                                <span class="fw-bold">เหตุผลการยืม : </span><span
+                                    class="small text-black-50">{{AllLoanDurable.description }}</span><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center">ยังไม่มีข้อมูลรายการประวัติการยืม-คืนครุภัณฑ์</p>
+
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="page-links">
+            {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+            {% endif %}
+            {% if page.has_next %}
+            <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

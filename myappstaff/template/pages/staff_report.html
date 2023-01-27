@@ -1,0 +1,336 @@
+{% extends 'homestaff.html' %}
+{% block main %}
+<div class=" container">
+    <div class="row">
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-6 col-sm-6 col-md-2 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class=" text-primary text-uppercase mb-1">
+                                รออนุมัติการยืมวัสดุ</div>
+                            <div class="h5 mb-0 ">{{ AllLoanParcel_count_borrow.count }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'staff_index_borrow' %}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-6 col-sm-6 col-md-2 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class=" text-primary text-uppercase mb-1">
+                                รออนุมัติการยืมครุภัณฑ์</div>
+                            <div class="h5 mb-0 ">{{ AllLoanDurable_count_borrow.count }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'staff_index_borrow_durable' %}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Card Example -->
+        <div class="col-6 col-sm-6 col-md-2 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class=" text-danger text-uppercase mb-1">
+                                กำลังยืมครุภัณฑ์
+                            </div>
+                            <div class="h5 mb-0 ">{{ AllLoanDurable_count_borrownow.count }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'staff_index_borrownow' %}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Annual) Card Example -->
+        <div class="col-6 col-sm-6 col-md-2 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class=" text-success text-uppercase mb-1">
+                                รออนุมัติการคืนครุภัณฑ์</div>
+                            <div class="h5 mb-0 ">{{ AllLoanDurable_count.count }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'staff_index_return' %}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-6 col-sm-6 col-md-2 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class=" text-warning text-uppercase mb-1">
+                                แนะนำรายการเข้าระบบ</div>
+                            <div class="h5 mb-0 ">{{ AllRecList_count.count }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'staff_introduction' %}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-6 col-sm-6 col-md-2 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class=" text-black text-uppercase mb-1">
+                                จำนวนนักศึกษาในระบบ</div>
+                            <div class="h5 mb-0 ">{{ AllUser_count.count }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'staff_admin_user' %}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="row container mb-4">
+            <div class="col-xl-8 col-lg-7  ">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">รายงานภาพรวมในระบบ</h6>
+                    </div>
+                    <canvas id="myChart" class="p-3"></canvas>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-5  ">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">รายงานภาพรวมของนักศึกษา/สมาชิก</h6>
+                    </div>
+                    <canvas id="myChartdo" class="p-3"></canvas>
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                const ctx = document.getElementById('myChart');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['รออนุมัติการยืมวัสดุ', 'รออนุมัติการยืมครุภัณฑ์', 'กำลังยืมครุภัณฑ์', 'รออนุมัติการคืนครุภัณฑ์', 'แนะนำรายการเข้าระบบ'],
+                        datasets: [{
+                            label: 'Number of Items',
+                            data: [{{ AllLoanParcel_count_borrow.count }}, {{ AllLoanDurable_count_borrow.count }},{{ AllRecList_count.count }}, {{ AllLoanDurable_count.count }}, {{ AllRecList_count.count }}],
+                    backgroundColor: [
+                    '#cde4f2',
+                    '#cdf2ee',
+                    '#f2cdd2',
+                    '#cdf2d1',
+                    '#f5f1d5',
+                ],
+                    borderWidth: 1
+                                }]
+                            },
+                    options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+                        });
+
+                var ctd = document.getElementById('myChartdo').getContext('2d');
+                var chart = new Chart(ctd, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['จำนวนนักศึกษาในระบบ', 'จำนวนนักศึกษาที่ถูกระงับสิทธิ์ชั่วคราวในระบบ '],
+                        datasets: [{
+                            label: 'Number of Items',
+                            data: [{{ AllUser_count.count }}, {{ AllUser_count_block.count }}],
+                    backgroundColor: [
+                        '#77757f',
+                        '#4e4d53',
+                    ],
+                    borderColor: [
+                        '#77757f',
+                        '#4e4d53',
+                    ],
+                    borderWidth: 1
+                }]
+                        },
+                options: {
+                    cutoutPercentage: 75, // This is the option for the hole in the center
+                        responsive: false,
+                            legend: {
+                        position: 'right',
+                            labels: {
+                            fontColor: '#000'
+                        }
+                    }
+                }
+                    });
+
+            </script>
+
+        </div>
+    </div>
+
+
+    <div class="bg-white shadow rounded-2 mb-4 px-5 py-3">
+        <div class="d-flex justify-content-between ">
+            <div>
+                <h5 class="fw-bold">รายงานภาพรวม</h5>
+            </div>
+        </div>
+        <hr>
+
+
+        <div class="row mt-3  mx-5">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-md-8" scope="col">รายการ</th>
+                        <th class="col-md-2 text-center" scope="col">จำนวน (รายการ)</th>
+                        <th class="col-md-2 text-center" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="xTable">
+                    <tr class="qrow text-center">
+                        <td>
+                            <p class="text-start">จำนวนรายการวัสดุที่คงเหลือในระบบ</p>
+                        </td>
+                        <td>
+                            <p>{{ AllParcel_report }}</p>
+                        </td>
+                        <td><a class="btn btn-warning rounded-pill badge"
+                                href="{% url 'staff_manage_parcel' %}">รายละเอียด</a></td>
+                    </tr>
+                    <tr class="qrow text-center">
+                        <td>
+                            <p class="text-start">จำนวนรายการครุภัณฑ์ที่คงเหลือในระบบ</p>
+                        </td>
+                        <td>
+                            <p>{{ AllDurable_report }}</p>
+                        </td>
+                        <td><a class="btn btn-warning rounded-pill badge"
+                                href="{% url 'staff_manage_durable' %}">รายละเอียด</a></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <div class=" container">
+        <div class="bg-white shadow rounded-2 mb-4 px-5 py-3">
+            <div class="d-flex justify-content-between ">
+                <div>
+                    <h5 class="fw-bold">รายงานการยืมวัสดุที่ถูกยืมมากที่สุด 3 ลำดับแรก</h5>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <div>
+
+                    <a class="text-muted" href="{% url 'staff_max_borrow' %}">ดูรายการทั้งหมด</a>
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-3  mx-5">
+                <table class="table">
+                    <thead class="table">
+                      <tr class="table bg-warning">
+                            <th class="col-md-3" scope="col">รายการ</th>
+                            <th class="col-md-2  text-center" scope="col">ประเภทรายการ</th>
+                            <th class="col-md-2  text-center" scope="col">ประเภท</th>
+                            <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
+                            <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
+                            <th class="col-md-2 text-center" scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="xTable">
+                        {% for MaxLoanParcel in MaxLoanParcel %}
+                        <tr class="qrow text-center">
+                            <td>
+                                <p class="text-start">{{ MaxLoanParcel.name }}</p>
+                            </td>
+                            <td>{{ MaxLoanParcel.nametype }}</td>
+                            <td>{{ MaxLoanParcel.statustype }}</td>
+                            {% if MaxLoanParcel.quantitytype != "ต้องการระบุจำนวน" %}
+                            <td>{{ MaxLoanParcel.quantitytype }}</td>
+                            {% else %}
+                            <td>{{ MaxLoanParcel.quantity }}</td>
+                            {% endif %}
+                            <td>{{ MaxLoanParcel.borrow_count }}</td>
+                        </tr>
+                        {% empty %}
+                        <p class="text-center">ยังไม่มีข้อมูลรายงานการยืมวัสดุที่ถูกยืมมากที่สุด 3 ลำดับแรก</p>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class=" container">
+        <div class="bg-white shadow rounded-2 mb-4 px-5 py-3">
+            <div class="d-flex justify-content-between ">
+                <div>
+                    <h5 class="fw-bold">รายงานการยืมครุภัณฑ์ที่ถูกยืมมากที่สุด 3 ลำดับแรก</h5>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <div>
+
+                    <a class="text-muted" href="{% url 'staff_max_borrow_durable' %}">ดูรายการทั้งหมด</a>
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-3  mx-5">
+                <table class="table">
+                    <thead class="table">
+                      <tr class="table bg-warning">
+                            <th class="col-md-3" scope="col">รายการ</th>
+                            <th class="col-md-2  text-center" scope="col">ประเภทรายการ</th>
+                            <th class="col-md-2  text-center" scope="col">ประเภท</th>
+                            <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
+                            <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
+                            <th class="col-md-2 text-center" scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="xTable">
+                        {% for MaxLoanDurable in MaxLoanDurable %}
+                        <tr class="qrow text-center">
+                            <td>
+                                <p class="text-start">{{ MaxLoanDurable.name }}</p>
+                            </td>
+                            <td>{{ MaxLoanDurable.nametype }}</td>
+                            <td>{{ MaxLoanDurable.statustype }}</td>
+                            <td>{{ MaxLoanDurable.quantity }}</td>
+                            <td>{{ MaxLoanDurable.borrow_count }}</td>
+                        </tr>
+                        {% empty %}
+                        <p class="text-center">ยังไม่มีข้อมูลรายงานการยืมครุภัณฑ์ที่ถูกยืมมากที่สุด 3 ลำดับแรก</p>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

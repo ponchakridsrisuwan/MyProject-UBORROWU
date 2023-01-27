@@ -1,0 +1,67 @@
+{% extends 'home.html' %}
+{% block main %}
+<div class="container mt-1 p-3 rounded-2 cart bg-white">
+    <div class="d-flex flex-row align-items-center">
+        <span class="ml-2 fw-bold fs-5">รายการจองคิวครุภัณฑ์</span>
+    </div>
+    <div class="bg-white rounded-2">
+        <div class="d-flex justify-content-between "></div>
+        <div class="d-flex row rounded-2 small fw-bold justify-content-between">
+            <div class="d-flex col-sm-12 col-md-12 col-lg-6">
+                <div class="align-items-center">
+                    <span>เรียงโดย</span>
+                    <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่ทำรายการ</a>
+                    <a href="?sort=name" class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+                    <a href="?sort=type" class="px-2 me-2 btn {% if last_sort == 'type' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ประเภท</a>
+                    <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                </div>
+                
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search" name="search_q" value="{{search_q}}">
+                    <button class="btn btn-outline-dark" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr class="fw-bold">
+                    <th class="text-center" scope="col">ลำดับ</th>
+                    <th scope="col">รายการ</th>
+                    <th class="text-center" scope="col">ประเภท</th>
+                    <th class="text-center" scope="col">ทำรายการเมื่อ</th>
+                    <th class="text-center" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody id="xTable">
+                {% for AllQueueDurable in pagequeuedurable.object_list %}
+                <tr class="qrow text-center card-body">
+                    <td class="text-center">{{forloop.counter}}</td>
+                    <td>
+                        <p class="text-start">{{ AllQueueDurable.name }}</p>
+                    </td>
+                    <td>
+                        <p class="text-center">{{ AllQueueDurable.type }}</p>
+                    </td>
+                    <td>
+                        <p class="text-center">{{ AllQueueDurable.date_q|date:"j N Y" }}</p>
+                    </td>
+                </tr>
+                {% empty %}
+                <p class="text-center">ยังไม่มีข้อมูลการจองคิวครุภัณฑ์</p>
+
+                {% endfor %}
+            </tbody>
+            <div class="page-links">
+                {% if pagequeuedurable.has_previous %}
+                <a href="?page={{ pagequeuedurable.previous_page_number }}">หน้าก่อนหน้า</a>
+                {% endif %}
+                {% if pagequeuedurable.has_next %}
+                <a href="?page={{ pagequeuedurable.next_page_number }}">หน้าถัดไป</a>
+                {% endif %}
+            </div>
+        </table>
+    </div>
+</div>
+{% endblock %}
