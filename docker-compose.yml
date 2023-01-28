@@ -1,66 +1,27 @@
-version: '3.9'
+version: '3.7'
 services:
-  kong-database:
-    image: postgres:latest
-    container_name: kong-database
-    restart: always
-    ports:
-      - 15432:5432
-    networks:
-      - default
-    volumes:
-      - db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=kong
-      - POSTGRES_USER=kong
-      - POSTGRES_PASSWORD=kong
-
-  kong:
-    image: kong:latest
-    container_name: kong
-    restart: always
-    ports:
-      - 18000:8000
-      - 18443:8443
-      - 127.0.0.1:8001:8001
-      - 18444:8444
-    links:
-      - kong-database:kong-database
-    networks:
-      - default
-    environment:
-      - LC_CTYPE=en_US.UTF-8
-      - LC_ALL=en_US.UTF-8
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-database
-      - KONG_PG_USER=kong
-      - KONG_PG_PASSWORD=kong
-      - KONG_CASSANDRA_CONTACT_POINTS=kong-database
-      - KONG_PROXY_ACCESS_LOG=/dev/stdout
-      - KONG_ADMIN_ACCESS_LOG=/dev/stdout
-      - KONG_PROXY_ERROR_LOG=/dev/stderr
-      - KONG_ADMIN_ERROR_LOG=/dev/stderr
-      - KONG_ADMIN_LISTEN=0.0.0.0:18001, 0.0.0.0:18444 ssl
-    
-  konga:
-    image: pantsel/konga
-    container_name: kong-konga
-    restart: always
-    ports:
-      - 1337:1337
-    networks:
-      - default
-    volumes:
-      - data:/app/kongadata
-    links:
-      - kong:kong
-
-networks:
-  default:
-    driver: bridge
-
-volumes:
   db:
-    driver: local
-  data:
-    driver: local
+    image: mariadb:10
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD = mariadb
+      - MYSQL_DATABASE = mariadb
+      - MYSQL_USER = mariadb
+      - MYSQL_PASSWORD = mariadb
+      - MARIADB_ROOT_PASSWORD=mysecretpassword
+    ports:
+      - 3306:3306
+    volumes:
+      - "mysqldata:/var/lib/mysql"  
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+      
+volumes:
+  mysqldata:
