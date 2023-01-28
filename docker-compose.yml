@@ -5,15 +5,26 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD = mariadb
-      - MYSQL_DATABASE = mariadb
-      - MYSQL_USER = mariadb
-      - MYSQL_PASSWORD = mariadb
+      - MYSQL_ROOT_PASSWORD=mariadb
+      - MYSQL_DATABASE=mariadb
+      - MYSQL_USER=mariadb
+      - MYSQL_PASSWORD=mariadb
       - MARIADB_ROOT_PASSWORD=mysecretpassword
     ports:
       - 3306:3306
     volumes:
       - "mysqldata:/var/lib/mysql"  
+
+  web:
+    build: .
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DATABASE_URL=mariadb+mariadbconnector://user:mariadb@db:3306/mariadb
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
 
   adminer:
     image: adminer
