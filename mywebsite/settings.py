@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'allauth.account', #new
     'allauth.socialaccount', #new
     'allauth.socialaccount.providers.google', #new
-    'django_extensions', 
     'myapp',
     'myappstaff',
     'myappSuper',
