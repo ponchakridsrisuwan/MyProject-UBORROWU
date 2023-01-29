@@ -91,16 +91,22 @@ WSGI_APPLICATION = 'mywebsite.wsgi.application'
     }
 }"""
 
+DATABASE_URL = os.environ.get('DATABASE_URL', '')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mariadb',
-        'USER': 'mariadb',
-        'PASSWORD': 'mariadb',
-        'HOST': 'db',
-        'PORT': 3306,
+        'NAME': 'mariadb', 
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
+
+if DATABASE_URL:
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)
 
 
 # Password validation
