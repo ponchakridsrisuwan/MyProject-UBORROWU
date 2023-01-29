@@ -11,7 +11,7 @@ services:
       - MYSQL_PASSWORD=mariadb
       - MARIADB_ROOT_PASSWORD=mysecretpassword
     ports:
-      - 3306:3306
+      - 9051:3306
     volumes:
       - "mysqldata:/var/lib/mysql"  
 
@@ -20,17 +20,9 @@ services:
     restart: always
     command: python manage.py runserver 0.0.0.0:8000
     environment:
-      - DATABASE_URL=mariadb+mariadbconnector://user:mariadb@db:3306/mariadb
+      - DATABASE_URL=mariadb+mariadbconnector://user:mariadb@db:9052/mariadb
     ports:
-      - "8000:8000"
-    depends_on:
-      - db
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+      - "9052:8000"
     depends_on:
       - db
       
