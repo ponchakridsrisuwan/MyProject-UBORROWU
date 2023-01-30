@@ -80,13 +80,13 @@
                     </thead>
                     <tbody id="xTable">
                         {% for AllParcel in page.object_list %}
-                        <tr class="qrow">
+                        <tr class="qrow ">
                             <td>
                                 <a class="d-flex align-items-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' AllParcel.id %}">
                                     <img src="{{ AllParcel.image.url | safe }}" style="
                                         object-position: center;
-                                        max-width: 70px;" height="70" class=" rounded-circle">
+                                        max-width: 70px;" height="70" class=" rounded-circle ">
                                     <div class="ms-3">
                                         <span class="fw-bold">{{ AllParcel.name }}</span><br>
                                         <span class="small text-muted">{{ AllParcel.category }}</span>
