@@ -71,8 +71,8 @@
                     จัดการการระงับสิทธิ์</p>
                 <p data-bs-toggle="modal" data-bs-target="#deleteitemcategory-{{forloop.counter}}"
                     class="btn btn-danger rounded-pill">ลบผู้ใช้</p>
-                <i class="material-icons px-2" data-bs-toggle="tooltip" data-bs-placement="right"
-                    title="การบล็อค">&#xe88f;</i>
+                    <i class="fa fa-info-circle " style="font-size:20px; color:rgb(197, 197, 197)" data-bs-toggle="tooltip" data-bs-placement="right"
+                    title="การบล็อค"></i>
                 <hr>
                 <div>
                     <p class="fs-5 fw-bold">กิจกรรมการเข้าสู่ระบบ</p>
@@ -95,40 +95,18 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <span class="fw-bold">ชื่อ-สกุล : </span><span
-                            class="small text-black-50">{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</span>
-                    </div>
-                    <div class="modal-body">
-                        <span class="fw-bold">อีเมล : </span><span class="small text-black-50">{{ AllUser.email
-                            }}</span>
-                    </div>
-                    <div class="modal-body">
-                        <span class="fw-bold">สิทธิ์ : </span><span class="small text-black-50">{{ AllUser.right
-                            }}</span>
-                    </div>
-                    <div class="modal-body">
-                        <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllUser.status
-                            }}</span>
-                    </div>
+                        <span class="fw-bold">ชื่อ-สกุล : </span><span class="small text-black-50">{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</span><br>
+                        <span class="fw-bold">อีเมล : </span><span class="small text-black-50">{{ AllUser.email}}</span><br>
+                        <span class="fw-bold">สิทธิ์ : </span><span class="small text-black-50">{{ AllUser.right}}</span><br>
+                        <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllUser.status}}</span><br>
                     {% if AllUser.reason != None %}
-                    <div class="modal-body">
-                        <span class="fw-bold">เหตุผลจากผู้ดูแลระบบ : </span><span class="small text-black-50">{{
-                            AllUser.reason }}</span>
-                    </div>
+                        <span class="fw-bold">เหตุผลจากผู้ดูแลระบบ : </span><span class="small text-black-50">{{AllUser.reason }}</span><br>
                     {% endif %}
                     {% if AllUser.reasonfromstaff != None %}
-                    <div class="modal-body">
-                        <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ : </span><span class="small text-black-50">{{
-                            AllUser.reasonfromstaff }}</span>
-                    </div>
+                        <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ : </span><span class="small text-black-50">{{AllUser.reasonfromstaff }}</span><br>
                     {% endif %}
-                    <div class="modal-body">
-                        <span class="fw-bold">ครั้งแรกที่เข้ามายังเว็บไซต์ : </span><span class="small text-black-50">{{
-                            AllUser.date_joined }}</span>
-                    </div>
-                    <div class="modal-body">
-                        <span class="fw-bold">เข้ามายังเว็บไซต์ครั้งสุดท้าย : </span><span
-                            class="small text-black-50">{{ AllUser.last_login }}</span>
+                        <span class="fw-bold">ครั้งแรกที่เข้ามายังเว็บไซต์ : </span><span class="small text-black-50">{{AllUser.date_joined }}</span><br>
+                        <span class="fw-bold">เข้ามายังเว็บไซต์ครั้งสุดท้าย : </span><span class="small text-black-50">{{ AllUser.last_login }}</span><br>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn
