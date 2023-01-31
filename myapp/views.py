@@ -1117,6 +1117,11 @@ def user_durable_articles(req):
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
         AllCategoryType = CategoryType.objects.all()
+        AllCartParcel_sum = CartParcel.objects.filter().aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter().aggregate(Sum('quantity'))
+        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+        Total = TotalParcel + TotalDurable
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')
             if req.GET['sort'] == 'name':
@@ -1158,6 +1163,7 @@ def user_durable_articles(req):
             "search_query" : search_query,
             "AllCategoryType" : AllCategoryType,
             "selected_category" : selected_category,
+            "Total" : Total,
         }
         return render(req, 'pages/user_durable_articles.html', context)   
     else:  
@@ -1362,6 +1368,11 @@ def user_position(req):
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
         AllPosition =  SettingPosition.objects.all()   
+        AllCartParcel_sum = CartParcel.objects.filter().aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter().aggregate(Sum('quantity'))
+        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+        Total = TotalParcel + TotalDurable
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')
             if req.GET['sort'] == 'name':
@@ -1411,6 +1422,7 @@ def user_position(req):
                 "AllPosition" : AllPosition,
                 "search_query" : search_query,
                 "last_sort" : last_sort,
+                "Total" : Total,
                 }    
         return render(req, 'pages/user_position.html', context)
     else:
