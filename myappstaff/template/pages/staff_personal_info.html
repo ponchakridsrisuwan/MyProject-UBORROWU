@@ -67,10 +67,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{ user.datestatus
-                    }}</span><br>
-                <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{
-                    user.deadline }}</span><br>
+                <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{ user.datestatus}}</span><br>
+                <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{ user.deadline }}</span><br>
                 <span class="fw-bold">เหตุผลการระงับสิทธิ์ : </span>
                 {% if user.reason == None %}
                 <span class="small text-black-50">ผู้ดูแลระบบไม่ได้ระบุเหตุผล : </span><br>

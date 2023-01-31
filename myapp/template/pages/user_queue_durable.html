@@ -31,6 +31,7 @@
                     <th scope="col">รายการ</th>
                     <th class="text-center" scope="col">ประเภท</th>
                     <th class="text-center" scope="col">ทำรายการเมื่อ</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="xTable">
@@ -46,7 +47,47 @@
                     <td>
                         <p class="text-center">{{ AllQueueDurable.date_q|date:"j N Y" }}</p>
                     </td>
+                    <td>
+                        <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                        <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm
+                            text-center">
+                            <li>
+                                <a class="dropdown-item btn-0
+                                    btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#cancel-{{forloop.counter}}">ยกเลิกการจองคิว</a>
+                            </li>
+                        </ul>
+                    </td>
                 </tr>
+                <!-- ลบข้อมูล -->
+                <div class="modal fade" name="cancel" id="cancel-{{forloop.counter}}" tabindex="-1"
+                    aria-labelledby="cancelModal" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="DcancelModal">ยืนยันการยกเลิกการจอง {{AllQueueDurable.name}}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <span class="fw-bold">รายการ : </span><span
+                                    class="small text-black-50">{{AllQueueDurable.name}}</span>
+                            </div>
+                            <div class="modal-body">
+                                <span class="fw-bold">ยี่ห้อ : </span><span class="small text-black-50">{{AllQueueDurable.type }}</span>
+                            </div>
+                            <div class="modal-body">
+                                <span class="fw-bold">วันที่ทำรายการ : </span><span class="small text-black-50">{{ AllQueueDurable.date_q|date:"G:m A d M y" }}</span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="cancer" class="btn btn-secondary rounded-pill"
+                                    data-bs-dismiss="modal">ยกเลิก</button>
+                                <a type="submit" value="ยืนยัน" class="btn btn-warning rounded-pill" href="{% url 'delete_queue_durable' AllQueueDurable.id %}">ยืนยัน</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% empty %}
                 <p class="text-center">ยังไม่มีข้อมูลการจองคิวครุภัณฑ์</p>
 

@@ -1245,7 +1245,7 @@ def staff_user_deadline(req, id):
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_admin_user_block') 
 
-scheduler.shutdown()
+# scheduler.shutdown()
 
 @login_required
 def staff_personal_info(req):

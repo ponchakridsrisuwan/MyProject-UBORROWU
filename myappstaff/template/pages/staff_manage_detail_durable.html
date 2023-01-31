@@ -104,39 +104,31 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span class="fw-bold">เลขครุภัณฑ์ : </span><span class="small text-black-50">{{ AllDurable.code
-                        }}</span>
+                    <span class="fw-bold">เลขครุภัณฑ์ : </span><span class="small text-black-50">{{ AllDurable.code}}</span>
                 </div>
                 <div class="modal-body">
-                    <span class="fw-bold">ชื่อครุภัณฑ์ : </span><span class="small text-black-50">{{ AllDurable.name
-                        }}</span>
+                    <span class="fw-bold">ชื่อครุภัณฑ์ : </span><span class="small text-black-50">{{ AllDurable.name }}</span>
                 </div>
                 <div class="modal-body">
-                    <span class="fw-bold">หมวดหมู่ : </span><span class="small text-black-50">{{ AllDurable.category
-                        }}</span>
+                    <span class="fw-bold">หมวดหมู่ : </span><span class="small text-black-50">{{ AllDurable.category}}</span>
                 </div>
                 <div class="modal-body">
-                    <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllDurable.status
-                        }}</span>
+                    <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllDurable.status}}</span>
                 </div>
                 {% if AllDurable.quantitytype == "∞" %}
                 <div class="modal-body">
-                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllDurable.quantitytype
-                        }}</span>
+                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllDurable.quantitytype}}</span>
                 </div>
                 {% else %}
                 <div class="modal-body">
-                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllDurable.quantity
-                        }}</span>
+                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllDurable.quantity }}</span>
                 </div>
                 {% endif %}
                 <div class="modal-body">
-                    <span class="fw-bold">จำนวนวันที่อนุญาตให้ยืม : </span><span class="small text-black-50">{{
-                        AllDurable.numdate }}</span>
+                    <span class="fw-bold">จำนวนวันที่อนุญาตให้ยืม : </span><span class="small text-black-50">{{AllDurable.numdate }}</span>
                 </div>
                 <div class="modal-body">
-                    <span class="fw-bold">รายละเอียด : </span><span class="small text-black-50">{{
-                        AllDurable.description }}</span>
+                    <span class="fw-bold">รายละเอียด : </span><span class="small text-black-50">{{ AllDurable.description }}</span>
                 </div>
                 <div class="modal-body">
                     <span class="fw-bold">รูปภาพ : </span><img alt="image" class="rounded me-4 thumb-post"

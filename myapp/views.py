@@ -507,11 +507,11 @@ def add_to_cart(req, id):
             parcel_item.quantity -= 1
             parcel_item.borrow_count += 1  
             parcel_item.save()
-            queue_item.delete()
+            # queue_item.delete()
             messages.success(req, 'เพิ่มรายการสำเร็จ!')
         ex_cart_parcel = CartParcel.objects.filter(parcel_item=parcel_item, user=req.user)
         if ex_cart_parcel.exists():
-            cart_parcel = ex_cart_parcel.first()
+            cart_parcel = ex_cart_parcel.first() 
             cart_parcel.quantity += 1
             cart_parcel.name = parcel_item.name
             cart_parcel.type = parcel_item.nametype
