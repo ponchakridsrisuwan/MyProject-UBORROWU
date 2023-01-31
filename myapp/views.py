@@ -20,7 +20,7 @@ from datetime import datetime
 
 #หน้าหลัก
 def HomePage(req):
-    if req.user.is_anonymous:
+    if req.user.is_anonymous or req.user:
         AllParcel = Add_Parcel.objects.all()
         AllDurable = Add_Durable.objects.all()
         selected_category = req.GET.get('category', None)
@@ -1140,7 +1140,7 @@ def user_detail_durable(req, id):
 
 #หน้ารายการวัสดุ
 def user_durable_articles(req):
-    if req.user.is_anonymous:
+    if req.user.is_anonymous or req.user.is_active:
         selected_category = req.GET.get('category', None)
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
@@ -1386,7 +1386,7 @@ def deleteRecList(req, id):
     return redirect('/user_recommend')
 
 def user_position(req):
-    if req.user.is_anonymous:
+    if req.user.is_anonymous or req.user:
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
         AllPosition =  SettingPosition.objects.all()   
