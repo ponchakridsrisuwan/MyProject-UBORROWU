@@ -1067,8 +1067,8 @@ def user_detail(req, id):
     TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
     TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
     Total = TotalParcel + TotalDurable
-    AllParcelAll = Add_Parcel.objects.all()
-    AllDurableAll = Add_Durable.objects.all()
+    AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
+    AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     AllParcel = Add_Parcel.objects.filter(id=id).first()
     waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
     context = {
@@ -1091,8 +1091,8 @@ def user_detail_durable(req, id):
     TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
     TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
     Total = TotalParcel + TotalDurable
-    AllDurableAll = Add_Durable.objects.all()
-    AllParcelAll = Add_Parcel.objects.all()
+    AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
+    AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     AllDurable = Add_Durable.objects.filter(id=id).first()
     waiting_qDurable = QueueDurable.objects.filter(queue_item=AllDurable).count()
     if AllDurable is not None:
