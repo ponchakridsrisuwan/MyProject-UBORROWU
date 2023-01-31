@@ -810,7 +810,7 @@ def add_to_cart_durable(req, id):
             durable_item.quantity -= 1
             durable_item.borrow_count += 1  
             durable_item.save()
-            queue_item.delete()
+            # queue_item.delete()
             messages.success(req, 'เพิ่มรายการสำเร็จ!')
         existing_cart_durable = CartDurable.objects.filter(durable_item=durable_item, user=req.user)
         if existing_cart_durable.exists():
@@ -869,7 +869,7 @@ def add_to_cart_durable(req, id):
             queue_item = QueueDurable.objects.create(user=req.user, queue_item=durable_item, name=durable_item.name, type=durable_item.nametype)
             queue_item.name = durable_item.name
             queue_item.type = durable_item.nametype
-            queue_item.statusDurable = durable_item.statusDurable
+            # queue_item.statusDurable = durable_item.statusDurable
             queue_item.save()
             messages.success(req, 'จองคิวสำเร็จ!')
         return redirect('/user_queue_durable')

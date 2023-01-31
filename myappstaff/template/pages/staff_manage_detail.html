@@ -72,32 +72,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span class="fw-bold">ชื่อวัสดุ : </span><span class="small text-black-50">{{ AllParcel.name}}</span>
-                </div>
-                <div class="modal-body">
-                    <span class="fw-bold">ชั้นวางวัสดุ : </span><span class="small text-black-50">{{AllParcel.nameposition }}</span>
-                </div>
-                <div class="modal-body">
-                    <span class="fw-bold">หมวดหมู่ : </span><span class="small text-black-50">{{ AllParcel.category}}</span>
-                </div>
-                <div class="modal-body">
-                    <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllParcel.status }}</span>
-                </div>
+                    <span class="fw-bold">ชื่อวัสดุ : </span><span class="small text-black-50">{{ AllParcel.name}}</span><br>
+                    <span class="fw-bold">ชั้นวางวัสดุ : </span><span class="small text-black-50">{{AllParcel.nameposition }}</span><br>
+                    <span class="fw-bold">หมวดหมู่ : </span><span class="small text-black-50">{{ AllParcel.category}}</span><br>
+                    <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllParcel.status }}</span><br>
                 {% if AllParcel.quantitytype == "∞" %}
-                <div class="modal-body">
-                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllParcel.quantitytype}}</span>
-                </div>
+                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllParcel.quantitytype}}</span><br>
                 {% else %}
-                <div class="modal-body">
-                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllParcel.quantity }}</span>
-                </div>
+                    <span class="fw-bold">จำนวน : </span><span class="small text-black-50">{{ AllParcel.quantity }}</span><br>
                 {% endif %}
-                <div class="modal-body">
-                    <span class="fw-bold">รายละเอียด : </span><span class="small text-black-50">{{ AllParcel.description}}</span>
-                </div>
-                <div class="modal-body">
+                    <span class="fw-bold">รายละเอียด : </span><span class="small text-black-50">{{ AllParcel.description}}</span><br>
                     <span class="fw-bold">รูปภาพ : </span><img alt="image" class="rounded me-4 thumb-post"
-                        src="{{ AllParcel.image.url | safe }}" width="150" height="150">
+                        src="{{ AllParcel.image.url | safe }}" width="150" height="150"><br>
                 </div>
                 <div class="modal-footer">
                     <button type="cancer" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">

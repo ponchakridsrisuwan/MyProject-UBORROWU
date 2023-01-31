@@ -233,19 +233,15 @@
         </div>
     </div>
 
-    <div class=" container">
+
         <div class="bg-white shadow rounded-2 mb-4 px-5 py-3">
             <div class="d-flex justify-content-between ">
                 <div>
                     <h5 class="fw-bold">รายงานการยืมวัสดุที่ถูกยืมมากที่สุด 3 ลำดับแรก</h5>
                 </div>
+                <a class="text-muted" href="{% url 'staff_max_borrow' %}">ดูรายการทั้งหมด</a>
             </div>
-            <div class="d-flex justify-content-end">
-                <div>
-
-                    <a class="text-muted" href="{% url 'staff_max_borrow' %}">ดูรายการทั้งหมด</a>
-                </div>
-            </div>
+           
             <hr>
             <div class="row mt-3  mx-5">
                 <table class="table">
@@ -256,23 +252,28 @@
                             <th class="col-md-2  text-center" scope="col">ประเภท</th>
                             <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
                             <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
-                            <th class="col-md-2 text-center" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for MaxLoanParcel in MaxLoanParcel %}
                         <tr class="qrow text-center">
                             <td>
-                                <p class="text-start">{{ MaxLoanParcel.name }}</p>
+                                <a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}"><p class="text-start">{{ MaxLoanParcel.name }}</p></a>
                             </td>
-                            <td>{{ MaxLoanParcel.nametype }}</td>
-                            <td>{{ MaxLoanParcel.statustype }}</td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.nametype }}</a></td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.statustype }}</a></td>
                             {% if MaxLoanParcel.quantitytype != "ต้องการระบุจำนวน" %}
-                            <td>{{ MaxLoanParcel.quantitytype }}</td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.quantitytype }}</a></td>
                             {% else %}
-                            <td>{{ MaxLoanParcel.quantity }}</td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.quantity }}</a></td>
                             {% endif %}
-                            <td>{{ MaxLoanParcel.borrow_count }}</td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.borrow_count }}</a></td>
                         </tr>
                         {% empty %}
                         <p class="text-center">ยังไม่มีข้อมูลรายงานการยืมวัสดุที่ถูกยืมมากที่สุด 3 ลำดับแรก</p>
@@ -291,12 +292,7 @@
                 <div>
                     <h5 class="fw-bold">รายงานการยืมครุภัณฑ์ที่ถูกยืมมากที่สุด 3 ลำดับแรก</h5>
                 </div>
-            </div>
-            <div class="d-flex justify-content-end">
-                <div>
-
-                    <a class="text-muted" href="{% url 'staff_max_borrow_durable' %}">ดูรายการทั้งหมด</a>
-                </div>
+                <a class="text-muted" href="{% url 'staff_max_borrow_durable' %}">ดูรายการทั้งหมด</a>
             </div>
             <hr>
             <div class="row mt-3  mx-5">
@@ -308,19 +304,23 @@
                             <th class="col-md-2  text-center" scope="col">ประเภท</th>
                             <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
                             <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
-                            <th class="col-md-2 text-center" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for MaxLoanDurable in MaxLoanDurable %}
                         <tr class="qrow text-center">
                             <td>
-                                <p class="text-start">{{ MaxLoanDurable.name }}</p>
+                                <a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}"><p class="text-start">{{ MaxLoanDurable.name }}</p></a>
                             </td>
-                            <td>{{ MaxLoanDurable.nametype }}</td>
-                            <td>{{ MaxLoanDurable.statustype }}</td>
-                            <td>{{ MaxLoanDurable.quantity }}</td>
-                            <td>{{ MaxLoanDurable.borrow_count }}</td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}">{{ MaxLoanDurable.nametype }}</a></td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}">{{ MaxLoanDurable.statustype }}</a></td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}">{{ MaxLoanDurable.quantity }}</a></td>
+                            <td><a class="text-center text-black" style="text-decoration:none"
+                                href="{% url 'staff_manage_detail' MaxLoanDurable.id %}">{{ MaxLoanDurable.borrow_count }}</a></td>
                         </tr>
                         {% empty %}
                         <p class="text-center">ยังไม่มีข้อมูลรายงานการยืมครุภัณฑ์ที่ถูกยืมมากที่สุด 3 ลำดับแรก</p>
