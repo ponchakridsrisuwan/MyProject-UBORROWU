@@ -20,11 +20,16 @@ from datetime import datetime
 
 #หน้าหลัก
 def HomePage(req):
+    AllParcel = Add_Parcel.objects.all()
+    AllDurable = Add_Durable.objects.all()
     if req.user.is_anonymous or req.user:
-        AllParcel = Add_Parcel.objects.all()
-        AllDurable = Add_Durable.objects.all()
         selected_category = req.GET.get('category', None)
         AllCategoryType = CategoryType.objects.all()
+        AllCartParcel_sum = CartParcel.objects.filter().aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter().aggregate(Sum('quantity'))
+        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+        Total = TotalParcel + TotalDurable
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')
             if req.GET['sort'] == 'category':
@@ -39,7 +44,6 @@ def HomePage(req):
             AllDurable = Add_Durable.objects.all()
             AllParcel = Add_Parcel.objects.all() 
         p_listparcel = Paginator(AllParcel, 8)
-        
         p_listdurable = Paginator(AllDurable, 8)
         page_num = req.GET.get('page', 1)
         try:
@@ -47,69 +51,37 @@ def HomePage(req):
             pagedurable = p_listdurable.page(page_num)
         except:
             pageparcel = p_listparcel.page(1)  
-            pagedurable = p_listdurable.page(1)     
+            pagedurable = p_listdurable.page(1)      
         context = {
             "navbar" : "user_index",
+            "Total" : Total,
+            "last_sort" : last_sort,
+            "selected_category" : selected_category,
+            "AllCategoryType" : AllCategoryType,
             "AllParcel" : AllParcel,
             "AllDurable" : AllDurable,
             "pageparcel" : pageparcel,
             "pagedurable" : pagedurable,
-            "last_sort" : last_sort,
-            "selected_category" : selected_category,
-            "AllCategoryType" : AllCategoryType,
         }    
         return render(req, 'pages/user_index.html', context)
-    if req.user.phone is None or req.user.token is None:
-        return redirect('/phone_add_number')
-    AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-    Total = TotalParcel + TotalDurable
-    AllParcel = Add_Parcel.objects.all()
-    AllDurable = Add_Durable.objects.all()
-    AllLoanParcel = LoanParcel.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ'), user=req.user)
-    AllLoanDurable = LoanDurable.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ') | Q(status='กำลังยืม') 
-                                                | Q(status='รอยืนยันการคืน')| Q(status='คืนไม่สำเร็จ') , user=req.user)
-    selected_category = req.GET.get('category', None)
-    AllCategoryType = CategoryType.objects.all()
-    if 'sort' in req.GET:
-        last_sort = req.GET.get('sort', 'default')
-        if req.GET['sort'] == 'category':
-            AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
-            AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
-        else:
-            last_sort = 'default'
-            AllDurable = Add_Durable.objects.all()
-            AllParcel = Add_Parcel.objects.all()
     else:
-        last_sort = 'default'
-        AllDurable = Add_Durable.objects.all()
-        AllParcel = Add_Parcel.objects.all() 
-    p_listparcel = Paginator(AllParcel, 8)
-    
-    p_listdurable = Paginator(AllDurable, 8)
-    page_num = req.GET.get('page', 1)
-    try:
-        pageparcel = p_listparcel.page(page_num)
-        pagedurable = p_listdurable.page(page_num)
-    except:
-        pageparcel = p_listparcel.page(1)  
-        pagedurable = p_listdurable.page(1)     
-    context = {
-        "navbar" : "user_index",
-        "AllParcel" : AllParcel,
-        "AllDurable" : AllDurable,
-        "pageparcel" : pageparcel,
-        "pagedurable" : pagedurable,
-        "AllLoanParcel" : AllLoanParcel,
-        "AllLoanDurable" : AllLoanDurable,
-        "Total" : Total,
-        "last_sort" : last_sort,
-        "selected_category" : selected_category,
-        "AllCategoryType" : AllCategoryType,
-    }    
-    return render(req, 'pages/user_index.html', context)
+        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+        Total = TotalParcel + TotalDurable
+        AllLoanParcel = LoanParcel.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ'), user=req.user)
+        AllLoanDurable = LoanDurable.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ') | Q(status='กำลังยืม') 
+                                                    | Q(status='รอยืนยันการคืน')| Q(status='คืนไม่สำเร็จ') , user=req.user)
+        context = {
+            "navbar" : "user_index",
+            "Total" : Total,
+            "AllLoanParcel" : AllLoanParcel,
+            "AllLoanDurable" : AllLoanDurable,
+            "AllParcel" : AllParcel,
+            "AllDurable" : AllDurable,
+        }    
+        return render(req, 'pages/user_index.html', context)
 
 def phone_add_number(req):
     if req.method == 'POST':
