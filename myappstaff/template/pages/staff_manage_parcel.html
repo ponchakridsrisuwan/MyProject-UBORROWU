@@ -1,5 +1,5 @@
 {% extends 'homestaff.html' %} {% block main %}
-<div class="container">
+<div class="container ">
     <div class="bg-white rounded-2 mb-4 px-5 py-3">
         <!-- จัดการวัสดุ-ครุภัณฑ์ -->
         <div class="d-flex justify-content-between rounded-2
@@ -64,17 +64,16 @@
                 </form>
             </div>
         </div>
-        <div class="tab-content">
-            <div class="tab-pane active show fade" id="table">
-                <!-- แบบtable -->
-                <table class="table">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table small">
                     <thead class="table">
-                        <tr class="table bg-warning">
+                        <tr class="table bg-warning ">
                             <th class="col-md-4" scope="col">รายการ</th>
-                            <th class="col-md-1 text-center" scope="col">จำนวนครั้งที่ยืม</th>
-                            <th class="col-md-1 text-center" scope="col">คงเหลือ</th>
+                            <th class="col-md-1 text-center" scope="col">จำนวนที่ยืม</th>
+                            <th class="col-md-1 text-center" scope="col">เหลือ</th>
                             <th class="col-md-1 text-center" scope="col">สถานะ</th>
-                            <th class="col-md-2 text-center" scope="col"> วันที่เพิ่มเข้าระบบ </th>
+                            <th class="col-md-2 text-center" scope="col">วันที่เพิ่ม</th>
                             <th class="col-md-1"></th>
                         </tr>
                     </thead>
@@ -84,9 +83,7 @@
                             <td>
                                 <a class="d-flex align-items-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' AllParcel.id %}">
-                                    <img src="{{ AllParcel.image.url | safe }}" style="
-                                        object-position: center;
-                                        max-width: 70px;" height="70" class=" rounded-circle ">
+                                    <div class="text-center thumbnailsmall rounded-circle"><img src="{{ AllParcel.image.url | safe }}" ></div>
                                     <div class="ms-3">
                                         <span class="fw-bold">{{ AllParcel.name }}</span><br>
                                         <span class="small text-muted">{{ AllParcel.category }}</span>

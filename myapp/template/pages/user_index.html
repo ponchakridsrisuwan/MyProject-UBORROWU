@@ -3,7 +3,7 @@
 {% block main %}
 
 {% load static %}
-<div class=" container-lg py-3 ">
+<div class=" container-lg py-3 small">
     <!-- รายการยืมบ่อยที่สุด -->
     {% if AllParcel != none and AllDurable != none %}
     <div class="bg-white rounded-2 mb-4 px-5 py-3">
@@ -19,9 +19,9 @@
         <div class="d-flex flex-row flex-nowrap overflow-auto">
             {% for AllParcel in AllParcel %}
             <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block mx-2">
-                <div class="text-center" data-mdb-ripple-color="light">
+                <div class="text-center thumbnail" data-mdb-ripple-color="light">
                     <img src="{{ AllParcel.image.url | safe }}"
-                        style=" object-position: center; max-height: 150px; margin-bottom: 1rem;" />
+                        class=""/>
                 </div>
                 <div class="card-body">
                     <div class="text-center">
@@ -34,9 +34,9 @@
             {% endfor %}
             {% for AllDurable in AllDurable %}
             <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block mx-2">
-                <div class="text-center" data-mdb-ripple-color="light">
+                <div class="text-center thumbnail" data-mdb-ripple-color="light">
                     <img src="{{ AllDurable.image.url | safe }}"
-                        style=" object-position: center; max-height: 150px; margin-bottom: 1rem;" />
+                        class="" />
                 </div>
                 <div class="card-body">
                     <div class="text-center">
@@ -230,11 +230,8 @@
         {% for AllParcel in pageparcel.object_list %}
         <div class="col-6 col-sm-4 col-md-3 mb-4 ">
             <div class="card border bg-gray ">
-                <div class="text-center">
-                    <img src="{{ AllParcel.image.url | safe }}" style="
-                        object-position: center;
-                        max-height: 250px;
-                        margin-bottom: 1rem;">
+                <div class="text-center thumbnailey">
+                    <img src="{{ AllParcel.image.url | safe }}">
                 </div>
                 <div class="card-body small">
                     <div class="text-center">
@@ -282,11 +279,8 @@
                 {% for AllDurable in pagedurable.object_list %}
                 <div class="col-6 col-sm-4 col-md-3 mb-4 ">
                     <div class="card border bg-gray ">
-                        <div class="text-center">
-                            <img src="{{ AllDurable.image.url | safe }}" style="
-                                object-position: center;
-                                max-height: 250px;
-                                margin-bottom: 1rem;">
+                        <div class="text-center thumbnailey">
+                            <img src="{{ AllDurable.image.url | safe }}">
                         </div>
                         <div class="card-body small">
                             <div class="text-center">

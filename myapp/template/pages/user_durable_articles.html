@@ -3,8 +3,8 @@
 {% load static %}
 {% block main %}
 
-<div class="container-fluid d-md-flex ">
-    <nav class="col-lg-2 col-md col-sm col-12 bg-white rounded-2" width="300">
+<div class="container-fluid d-md-flex small">
+    <nav class="col-lg-2 col-md col-sm col-12 bg-white rounded-2 mb-3" width="300">
         <div class="small p-4">
             <h6 class="fw-bold">ค้นหาแบบละเอียด</h6>
             <ul class="list-unstyled components ms-2">
@@ -61,11 +61,8 @@
             {% for AllDurable in AllDurable%}
             <div class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4">
                 <div class="card border bg-gray ">
-                    <div class="text-center">
-                        <img src="{{ AllDurable.image.url | safe }}" style="
-                                            object-position: center;
-                                            max-height: 200px;
-                                            margin-bottom: 1rem;">
+                    <div class="text-center thumbnailey">
+                        <img src="{{ AllDurable.image.url | safe }}">
                     </div>
                     <div class="card-body">
                         <div class="text-center">
@@ -99,11 +96,8 @@
             {% for AllParcel in AllParcel %}
             <div class="col-6 col-sm-4 col-md-3 col-lg-3 mb-2">
                 <div class="card border bg-gray ">
-                    <div class="text-center">
-                        <img src="{{ AllParcel.image.url | safe }}" style="
-                                            object-position: center;
-                                            max-height: 200px;
-                                            margin-bottom: 1rem;">
+                    <div class="text-center thumbnailey">
+                        <img src="{{ AllParcel.image.url | safe }}">
                     </div>
                     <div class="card-body">
                         <div class="text-center">
