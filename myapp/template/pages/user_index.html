@@ -6,9 +6,10 @@
 <div class=" container-lg py-3 small">
     <!-- รายการยืมบ่อยที่สุด -->
     {% if AllParcel != none and AllDurable != none %}
-    <div class="bg-white rounded-2 mb-4 px-5 py-3">
-        <div class="d-flex justify-content-between ">
-            <div>
+    <div class="bg-white rounded-2 mb-4">
+        <div class="px-5">
+        <div class="d-flex justify-content-between pt-3">
+            <div >
                 <h5 class="fw-bold">รายการทั้งหมด</h5>
             </div>
             <div>
@@ -16,9 +17,11 @@
             </div>
         </div>
         <hr>
-        <div class="d-flex flex-row flex-nowrap overflow-auto">
+    </div>
+    
+        <div class="d-flex flex-row flex-nowrap overflow-auto ">
             {% for AllParcel in AllParcel %}
-            <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block mx-2">
+            <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block ms-2 mb-4">
                 <div class="text-center thumbnail" data-mdb-ripple-color="light">
                     <img src="{{ AllParcel.image.url | safe }}"
                         class=""/>
@@ -33,7 +36,7 @@
             </div>
             {% endfor %}
             {% for AllDurable in AllDurable %}
-            <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block mx-2">
+            <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block ms-2 mb-4">
                 <div class="text-center thumbnail" data-mdb-ripple-color="light">
                     <img src="{{ AllDurable.image.url | safe }}"
                         class="" />
@@ -216,8 +219,7 @@
 
     <!-- รายการพัสด -->
 
-    <div class="bg-white d-flex justify-content-between rounded-2 mb-4 px-5
-        py-3">
+    <div class="bg-white d-flex justify-content-between rounded-2 mb-4 px-5 py-3">
         <div>
             <h5 class="fw-bold">รายการวัสดุ</h5>
         </div>
@@ -270,8 +272,7 @@
                     <h5 class="fw-bold">รายการครุภัณฑ์</h5>
                 </div>
                 <div>
-                    <a class="text-muted" href="{% url 'user_durable_articles'
-                        %}">ดูรายการทั้งหมด</a>
+                    <a class="text-muted" href="{% url 'user_durable_articles' %}">ดูรายการทั้งหมด</a>
                 </div>
             </div>
             
@@ -279,7 +280,7 @@
                 {% for AllDurable in pagedurable.object_list %}
                 <div class="col-6 col-sm-4 col-md-3 mb-4 ">
                     <div class="card border bg-gray ">
-                        <div class="text-center thumbnailey">
+                        <div class="text-center thumbnailey w-100">
                             <img src="{{ AllDurable.image.url | safe }}">
                         </div>
                         <div class="card-body small">
@@ -303,7 +304,7 @@
                                 </div>
                                 {% endif %}
                                 <div class="d-flex justify-content-between">
-                                    <span>จำนวนวันที่อนุญาตให้ยืม</span><span>{{AllDurable.numdate }} วัน</span>
+                                    <span>จำนวนวันที่ให้ยืม</span><span>{{AllDurable.numdate }} วัน</span>
                                 </div>
                             </div>
                             <a href="{% url 'user_detail_durable' AllDurable.id %}" class="stretched-link"></a>
