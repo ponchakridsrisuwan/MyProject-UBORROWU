@@ -1226,8 +1226,8 @@ def staff_user_deadline(req, id):
         obj.deadline = datetime.now() + timedelta(days=7)
     else:
         obj.deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
-    obj.reason = req.POST['reason']
-    obj.status = req.POST['status']
+    obj.reasonfromstaff = req.POST['reasonfromstaff']
+    obj.status = "ถูกจำกัดสิทธิ์"
     obj.save()
     messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
     users = User.objects.filter(right="นักศึกษา")
@@ -1241,6 +1241,31 @@ def staff_user_deadline(req, id):
                             'Authorization': 'Bearer ' + token 
                             }
             msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reason, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+            msg = ' '.join(map(str, msg)) 
+            requests.post(url, headers=headers, data={'message': msg})
+    return redirect('/staff_admin_user_block') 
+
+@login_required
+def staff_user_return(req, id):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    obj = User.objects.get(id=id)
+    obj.status = "ปกติ"
+    obj.save()
+    messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
+    users = User.objects.filter(right="นักศึกษา")
+    datetime_th = th_tz.localize(datetime.now())
+    for user in users:
+        if user.token:
+            url = 'https://notify-api.line.me/api/notify'
+            token = user.token 
+            headers = {
+                            'content-type': 'application/x-www-form-urlencoded',
+                            'Authorization': 'Bearer ' + token 
+                            }
+            msg = ['สถานะการใช้งานของคุณกลับสู่สถานะปกติเมื่อ ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
             msg = ' '.join(map(str, msg)) 
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_admin_user_block') 

@@ -6,7 +6,8 @@ urlpatterns = [
     path('admin_detail/<int:id>',views.admin_detail, name="admin_detail"), #delete
     
     path('admin_user',views.admin_user, name="admin_user"),
-    path('admin_user_deadline/<int:id>',views.admin_user_deadline, name="admin_user_edit"),
+    path('admin_user_deadline/<int:id>',views.admin_user_deadline, name="admin_user_deadline"),
+    path('admin_user_return/<int:id>',views.admin_user_return, name="admin_user_return"),
     path('admin_user_status/<int:id>',views.admin_user_status, name="admin_user_status"),
     
     path('admin_staff/',views.admin_staff, name="admin_staff"),

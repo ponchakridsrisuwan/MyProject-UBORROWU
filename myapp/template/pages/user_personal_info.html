@@ -107,15 +107,7 @@
                     <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{
                         user.deadline }}</span><br>
                     <span class="fw-bold">เหตุผลการระงับสิทธิ์ : </span>
-                    {% if user.reason != none %}
-                    <span class="fw-bold">เหตุผลการระงับสิทธิ์ :</span>
-                    <span class="small text-black-50">{{ user.reason }}</span>
-                    <br>
-                    {% endif %}
-                    {% if user.reasonfromstaff != none %}
-                    <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ :</span>
                     <span class="small text-black-50">{{ user.reasonfromstaff }}</span>
-                    {% endif %}
                 </div>
             </div>
         </div>
