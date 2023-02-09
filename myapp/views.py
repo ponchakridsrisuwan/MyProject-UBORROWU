@@ -1147,61 +1147,71 @@ def user_detail_durable(req, id):
     return render(req,'pages/user_detail_durable.html',context)
 
 
-#หน้ารายการวัสดุ
+# หน้ารายการวัสดุ
 def user_durable_articles(req):
-        selected_category = req.GET.get('category', None)
-        AllDurable = Add_Durable.objects.all()
-        AllParcel = Add_Parcel.objects.all()
-        AllCategoryType = CategoryType.objects.all()
-        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-        Total = TotalParcel + TotalDurable
-        if 'sort' in req.GET:
-            last_sort = req.GET.get('sort', 'default')
-            if req.GET['sort'] == 'name':
-                AllParcel = AllParcel.order_by('name')
-                AllDurable = AllDurable.order_by('name')
-            elif req.GET['sort'] == 'quantity':
-                AllParcel = AllParcel.order_by('-quantity')
-                AllDurable = AllDurable.order_by('-quantity')    
-            elif 'sort' in req.GET and req.GET['sort'] == 'statustype' and 'statustype' in req.GET:
-                AllDurable = AllDurable.filter(statustype=req.GET['statustype']).order_by('statustype')
-                AllParcel = AllParcel.filter(statustype=req.GET['statustype']).order_by('statustype')
-            elif 'sort' in req.GET and req.GET['sort'] == 'nametype' and 'nametype' in req.GET:
-                AllDurable = AllDurable.filter(nametype=req.GET['nametype']).order_by('nametype')
-                AllParcel = AllParcel.filter(nametype=req.GET['nametype']).order_by('nametype')    
-            elif req.GET['sort'] == 'category':
-                AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
-                AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
-            elif req.GET['sort'] == 'default':
-                AllDurable = Add_Durable.objects.all()
-                AllParcel = Add_Parcel.objects.all()
-            else:
-                last_sort = 'default'
-                AllDurable = Add_Durable.objects.all()
-                AllParcel = Add_Parcel.objects.all()
+    selected_category = req.GET.get('category', None)
+    AllDurable = Add_Durable.objects.all()
+    AllParcel = Add_Parcel.objects.all()
+    AllCategoryType = CategoryType.objects.all()
+    statustype_list = [i[0] for i in STATUSTYPE]
+    nametype_list = [i[0] for i in NAMETYPE] 
+    AllCartParcel_sum = CartParcel.objects.filter(user=req.user).aggregate(Sum('quantity'))
+    AllCartDurabl_sum = CartDurable.objects.filter(user=req.user).aggregate(Sum('quantity'))
+    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+    Total = TotalParcel + TotalDurable
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'name':
+            AllParcel = AllParcel.order_by('name')
+            AllDurable = AllDurable.order_by('name')
+        elif req.GET['sort'] == 'quantity':
+            AllParcel = AllParcel.order_by('-quantity')
+            AllDurable = AllDurable.order_by('-quantity')
+        elif 'sort' in req.GET and req.GET['sort'] == 'statustype' and 'statustype' in req.GET:
+            AllDurable = AllDurable.filter(
+                statustype=req.GET['statustype']).order_by('statustype')
+            AllParcel = AllParcel.filter(
+                statustype=req.GET['statustype']).order_by('statustype')
+        elif 'sort' in req.GET and req.GET['sort'] == 'nametype' and 'nametype' in req.GET:
+            AllDurable = AllDurable.filter(
+                nametype=req.GET['nametype']).order_by('nametype')
+            AllParcel = AllParcel.filter(
+                nametype=req.GET['nametype']).order_by('nametype')
+        elif req.GET['sort'] == 'category':
+            AllDurable = AllDurable.filter(category=req.GET['category']).order_by(
+                'category__name_CategoryType')
+            AllParcel = AllParcel.filter(category=req.GET['category']).order_by(
+                'category__name_CategoryType')
+        elif req.GET['sort'] == 'default':
+            AllDurable = Add_Durable.objects.all()
+            AllParcel = Add_Parcel.objects.all()
         else:
             last_sort = 'default'
             AllDurable = Add_Durable.objects.all()
-            AllParcel = Add_Parcel.objects.all() 
-        search_query = ""
-        if 'query' in req.GET:
-            search_query = req.GET['query']
-            AllParcel = AllParcel.filter(name__icontains=search_query)
-            AllDurable = AllDurable.filter(name__icontains=search_query) 
-        context = {
-            "navbar" : "user_durable_articles",
-            "last_sort" : last_sort,
-            "AllParcel" : AllParcel,
-            "AllDurable" : AllDurable,
-            "search_query" : search_query,
-            "AllCategoryType" : AllCategoryType,
-            "selected_category" : selected_category,
-            "Total" : Total,
-        }
-        return render(req, 'pages/user_durable_articles.html', context)   
+            AllParcel = Add_Parcel.objects.all()
+    else:
+        last_sort = 'default'
+        AllDurable = Add_Durable.objects.all()
+        AllParcel = Add_Parcel.objects.all()
+    search_query = ""
+    if 'query' in req.GET:
+        search_query = req.GET['query']
+        AllParcel = AllParcel.filter(name__icontains=search_query)
+        AllDurable = AllDurable.filter(name__icontains=search_query)
+    context = {
+        "navbar": "user_durable_articles",
+        "last_sort": last_sort,
+        "AllParcel": AllParcel,
+        "AllDurable": AllDurable,
+        "statustype": statustype_list,
+        "nametype": nametype_list,
+        "search_query": search_query,
+        "AllCategoryType": AllCategoryType,
+        "selected_category": selected_category,
+        "Total": Total,
+    }
+    return render(req, 'pages/user_durable_articles.html', context)  
     
 def login_user_durable_articles(req):
         selected_category = req.GET.get('category', None)
