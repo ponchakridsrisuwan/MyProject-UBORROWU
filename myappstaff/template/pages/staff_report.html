@@ -198,33 +198,29 @@
 
 
         <div class="row mt-3  mx-5">
-            <table class="table">
+            <table class="table small">
                 <thead>
                     <tr>
                         <th class="col-md-8" scope="col">รายการ</th>
                         <th class="col-md-2 text-center" scope="col">จำนวน (รายการ)</th>
-                        <th class="col-md-2 text-center" scope="col"></th>
+                        <th class="col-md-2 text-center" scope="col">รายละเอียด</th>
                     </tr>
                 </thead>
                 <tbody id="xTable">
-                    <tr class="qrow text-center">
+                    <tr class="qrow">
                         <td>
-                            <p class="text-start">จำนวนรายการวัสดุที่คงเหลือในระบบ</p>
+                            <span class="text-start">จำนวนรายการวัสดุที่คงเหลือในระบบ</span>
                         </td>
-                        <td>
-                            <p>{{ AllParcel_report }}</p>
-                        </td>
-                        <td><a class="btn btn-warning rounded-pill badge"
+                        <td class="text-center">{{ AllParcel_report }}</td>
+                        <td class="text-center"><a class="btn btn-warning rounded-pill badge"
                                 href="{% url 'staff_manage_parcel' %}">รายละเอียด</a></td>
                     </tr>
-                    <tr class="qrow text-center">
+                    <tr class="qrow">
                         <td>
-                            <p class="text-start">จำนวนรายการครุภัณฑ์ที่คงเหลือในระบบ</p>
+                            <span class="text-start">จำนวนรายการครุภัณฑ์ที่คงเหลือในระบบ</span>
                         </td>
-                        <td>
-                            <p>{{ AllDurable_report }}</p>
-                        </td>
-                        <td><a class="btn btn-warning rounded-pill badge"
+                        <td class="text-center">{{ AllDurable_report }}</td>
+                        <td class="text-center"><a class="btn btn-warning rounded-pill badge"
                                 href="{% url 'staff_manage_durable' %}">รายละเอียด</a></td>
                     </tr>
                 </tbody>
@@ -244,22 +240,22 @@
            
             <hr>
             <div class="row mt-3  mx-5">
-                <table class="table">
+                <table class="table small">
                     <thead class="table">
                       <tr class="table bg-warning">
-                            <th class="col-md-3" scope="col">รายการ</th>
+                            <th class="col-md-4" scope="col">รายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภทรายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภท</th>
                             <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
-                            <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
+                            <th class="col-md-2 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for MaxLoanParcel in MaxLoanParcel %}
-                        <tr class="qrow text-center">
+                        <tr class="qrow">
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}"><p class="text-start">{{ MaxLoanParcel.name }}</p></a>
+                                <a class="text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}"><span class="text-start d-inline-block text-truncate" style="max-width: 330px;">{{ MaxLoanParcel.name }}</span></a>
                             </td>
                             <td><a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.nametype }}</a></td>
@@ -296,22 +292,22 @@
             </div>
             <hr>
             <div class="row mt-3  mx-5">
-                <table class="table">
+                <table class="table small">
                     <thead class="table">
                       <tr class="table bg-warning">
-                            <th class="col-md-3" scope="col">รายการ</th>
+                            <th class="col-md-4" scope="col">รายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภทรายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภท</th>
                             <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
-                            <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
+                            <th class="col-md-2 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for MaxLoanDurable in MaxLoanDurable %}
-                        <tr class="qrow text-center">
+                        <tr class="qrow">
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}"><p class="text-start">{{ MaxLoanDurable.name }}</p></a>
+                                <a class="text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}"><span class="text-start d-inline-block text-truncate" style="max-width: 330px;">{{ MaxLoanDurable.name }}</span></a>
                             </td>
                             <td><a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' MaxLoanDurable.id %}">{{ MaxLoanDurable.nametype }}</a></td>

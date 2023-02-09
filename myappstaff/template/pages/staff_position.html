@@ -41,42 +41,42 @@
                 <table class="table small">
                     <thead class="table">
                       <tr class="table bg-warning">
-                                <th class="text-center" scope="col">ลำดับ</th>
-                                <th scope="col">รายการ</th>
-                                <th class="text-center" scope="col">ประเภท</th>
-                                <th class="text-center" scope="col">หมวดหมู่</th>
-                                <th class="text-center" scope="col">สถานะ</th>
-                                <th class="text-center" scope="col">จำนวน</th>
-                                <th class="text-center" scope="col">จำนวนครั้งที่ยืม</th>
+                                <th class="col-md-1 text-center" scope="col">ลำดับ</th>
+                                <th class="col-md-6 " scope="col">รายการ</th>
+                                <th class="col-md-1 text-center" scope="col">ประเภท</th>
+                                <th class="col-md-1 text-center" scope="col">หมวดหมู่</th>
+                                <th class="col-md-1 text-center" scope="col">สถานะ</th>
+                                <th class="col-md-1 text-center" scope="col">จำนวน</th>
+                                <th class="col-md-1 text-center" scope="col">จำนวนครั้งที่ยืม</th>
                             </tr>
                         </thead>
                         <tbody id="xTable">
                             {% for items in items %}
-                            <tr class="qrow text-center card-body">
+                            <tr class="qrow">
                                 <td class="text-center">{{forloop.counter}}</td>
                                 <td>
-                                    <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' items.id %}"><p class="text-start">{{ items.name }}</p></a>
+                                    <a class="text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-start d-inline-block text-truncate" style="max-width: 500px;">{{ items.name }}</span></a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' items.id %}"><p class="text-center">{{ items.statustype }}</p></a>
+                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-center">{{ items.statustype }}</span></a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' items.id %}"><p class="text-center">{{ items.category }}</p></a>
+                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-center">{{ items.category }}</span></a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' items.id %}"><p class="text-center">{{ items.status }}</p></a>
+                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-center">{{ items.status }}</span></a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' items.id %}"><p class="text-center">{{ items.quantity }}</p></a>
+                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-center">{{ items.quantity }}</span></a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' items.id %}"><p class="text-center">{{ items.borrow_count }}</p></a>
+                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-center">{{ items.borrow_count }}</span></a>
                                 </td>
                             </tr>
                             {% endfor %}

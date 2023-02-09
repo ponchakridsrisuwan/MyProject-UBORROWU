@@ -33,35 +33,35 @@
         </div>
         <div class="col-lg-12 px-2">
             <div class="table-responsive">
-            <table class="table">
+            <table class="table small">
                 <thead class="table">
                   <tr class="table bg-warning">
                         <th class="text-center" scope="col">ลำดับ</th>
                         <th scope="col">ชื่อ-สกุล</th>
                         <th scope="col">อีเมล</th>
                         <th scope="col">รายการ</th>
-                        <th class="text-center" scope="col">ประเภท</th>
-                        <th class="text-center" scope="col">ทำรายการเมื่อ</th>
+                        <th scope="col">ประเภท</th>
+                        <th scope="col">ทำรายการเมื่อ</th>
                     </tr>
                 </thead>
                 <tbody id="xTable">
                     {% for AllQueueParcel in page.object_list %}
-                    <tr class="qrow text-center card-body">
+                    <tr class="qrow ">
                         <td class="text-center">{{forloop.counter}}</td>
                         <td>
-                            <p class="text-start">{{ AllQueueParcel.user.first_name }}&nbsp{{AllQueueParcel.user.last_name}}</p>
+                            <span class="text-start">{{ AllQueueParcel.user.first_name }}&nbsp{{AllQueueParcel.user.last_name}}</span>
                         </td>
                         <td>
-                            <p class="text-start">{{ AllQueueParcel.user.email }}</p>
+                            <span class="text-start">{{ AllQueueParcel.user.email }}</span>
                         </td>
                         <td>
-                            <p class="text-start">{{ AllQueueParcel.name }}</p>
+                            <span class="text-start">{{ AllQueueParcel.name }}</span>
                         </td>
                         <td>
-                            <p class="text-center">{{ AllQueueParcel.type }}</p>
+                            <span class="text-center">{{ AllQueueParcel.type }}</span>
                         </td>
                         <td>
-                            <p class="text-center">{{ AllQueueParcel.date_q|date:"j N Y" }}</p>
+                            <span class="text-center">{{ AllQueueParcel.date_q|date:"j N Y" }}</span>
                         </td>
                     </tr>
                     {% empty %}

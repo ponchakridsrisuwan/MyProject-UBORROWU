@@ -25,7 +25,10 @@
                     <h6 class="fw-bold">ประเภท</h6>
                     {% for statustype in statustype %}
                     <li>
-                        <a href="?sort=statustype&statustype={{ statustype }}" class="px-2 me-2 btn {% if last_sort == 'statustype' %}btn-outline-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">{{ statustype }}</a>
+                        <a href="?sort=statustype&statustype={{ statustype }}" 
+                        class="px-2 me-2 btn {% if last_sort == 'statustype' %}btn-outline-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">
+                        {{ statustype }}
+                    </a>
                     </li>
                 {% endfor %}                
                 </li>
@@ -34,7 +37,10 @@
                     <h6 class="fw-bold">รายการ</h6>
                     {% for nametype in nametype %}
                     <li>
-                        <a href="?sort=nametype&nametype={{ nametype }}" class="px-2 me-2 btn {% if last_sort == 'nametype' %}btn-outline-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">{{ nametype }}</a>
+                        <a href="?sort=nametype&nametype={{ nametype }}" 
+                        class="px-2 me-2 btn {% if last_sort == 'nametype' %}btn-outline-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">
+                        {{ nametype }}
+                    </a>
                     </li>
                 {% endfor %}                
                 </li>
@@ -66,7 +72,7 @@
                     </div>
                     <div class="card-body">
                         <div class="text-center">
-                            <h5 class="card-title">{{ AllDurable.name }}</h5>
+                            <h5 class="card-title text-truncate">{{ AllDurable.name }}</h5>
                             <span class="mb-4 text-success">{{ Durable.status }}</span>
                         </div>
                         <div>
@@ -101,7 +107,7 @@
                     </div>
                     <div class="card-body">
                         <div class="text-center">
-                            <h5 class="card-title">{{ AllParcel.name }}</h5>
+                            <h5 class="card-title text-truncate">{{ AllParcel.name }}</h5>
                             <span class="mb-4 text-success">{{ Parcel.status }}</span>
                         </div>
                         <div>

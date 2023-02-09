@@ -71,11 +71,11 @@
                 <table class="table small">
                     <thead class="table">
                         <tr class="table bg-warning ">
-                            <th class="col-md-4" scope="col">รายการ</th>
+                            <th class="col-md-7" scope="col">รายการ</th>
                             <th class="col-md-1 text-center" scope="col">จำนวนที่ยืม</th>
                             <th class="col-md-1 text-center" scope="col">เหลือ</th>
                             <th class="col-md-1 text-center" scope="col">สถานะ</th>
-                            <th class="col-md-2 text-center" scope="col">วันที่เพิ่ม</th>
+                            <th class="col-md-1 text-center" scope="col">วันที่เพิ่ม</th>
                             <th class="col-md-1"></th>
                         </tr>
                     </thead>
@@ -87,7 +87,7 @@
                                     href="{% url 'staff_manage_detail' AllParcel.id %}">
                                     <div class="text-center thumbnailsmall rounded-circle"><img src="{{ AllParcel.image.url | safe }}" ></div>
                                     <div class="ms-3">
-                                        <span class="fw-bold">{{ AllParcel.name }}</span><br>
+                                        <span class="fw-bold d-inline-block text-truncate" style="max-width: 450px;">{{ AllParcel.name }}</span><br>
                                         <span class="small text-muted">{{ AllParcel.category }}</span>
                                     </div>
                                 </a>
