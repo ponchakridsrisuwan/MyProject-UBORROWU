@@ -4,6 +4,9 @@ from myapp import views
 
 urlpatterns = [
     path('',views.HomePage, name="user_index"),
+    path('login_user_index',views.login_user_index, name="login_user_index"),
+    path('login_user_position',views.login_user_position, name="login_user_position"),
+    path('login_user_durable_articles',views.login_user_durable_articles, name="login_user_durable_articles"),
     path('phone_add_number',views.phone_add_number, name="phone_add_number"), 
     
     path('user_borrow',views.user_borrow, name="user_borrow"), 

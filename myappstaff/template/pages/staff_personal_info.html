@@ -70,17 +70,7 @@
                 <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{ user.datestatus}}</span><br>
                 <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{ user.deadline }}</span><br>
                 <span class="fw-bold">เหตุผลการระงับสิทธิ์ : </span>
-                {% if user.reason == None %}
-                <span class="small text-black-50">ผู้ดูแลระบบไม่ได้ระบุเหตุผล : </span><br>
-                {% else %}
-                <span class="small text-black-50">{{ user.reason }}</span><br>
-                <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ : </span>
-                {% if user.reasonfromstaff == None %}
-                <span class="small text-black-50">เจ้าหน้าที่ไม่ได้ระบุเหตุผล</span>
-                {% else %}
                 <span class="small text-black-50">{{ user.reasonfromstaff }}</span>
-                {% endif %}
-                {% endif %}
             </div>
         </div>
     </div>

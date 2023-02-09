@@ -25,8 +25,8 @@ def HomePage(req):
     if req.user.is_anonymous or req.user:
         selected_category = req.GET.get('category', None)
         AllCategoryType = CategoryType.objects.all()
-        AllCartParcel_sum = CartParcel.objects.filter().aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter().aggregate(Sum('quantity'))
+        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
         TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
         TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
         Total = TotalParcel + TotalDurable
@@ -83,6 +83,45 @@ def HomePage(req):
         }    
         return render(req, 'pages/user_index.html', context)
 
+def login_user_index(req):
+    AllParcel = Add_Parcel.objects.all()
+    AllDurable = Add_Durable.objects.all()
+    selected_category = req.GET.get('category', None)
+    AllCategoryType = CategoryType.objects.all()
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'category':
+            AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+            AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+        else:
+            last_sort = 'default'
+            AllDurable = Add_Durable.objects.all()
+            AllParcel = Add_Parcel.objects.all()
+    else:
+        last_sort = 'default'
+        AllDurable = Add_Durable.objects.all()
+        AllParcel = Add_Parcel.objects.all() 
+    p_listparcel = Paginator(AllParcel, 8)
+    p_listdurable = Paginator(AllDurable, 8)
+    page_num = req.GET.get('page', 1)
+    try:
+        pageparcel = p_listparcel.page(page_num)
+        pagedurable = p_listdurable.page(page_num)
+    except:
+        pageparcel = p_listparcel.page(1)  
+        pagedurable = p_listdurable.page(1)      
+    context = {
+            "navbar" : "login_user_index",
+            "last_sort" : last_sort,
+            "selected_category" : selected_category,
+            "AllCategoryType" : AllCategoryType,
+            "AllParcel" : AllParcel,
+            "AllDurable" : AllDurable,
+            "pageparcel" : pageparcel,
+            "pagedurable" : pagedurable,
+            }    
+    return render(req, 'pages/login_user_index.html', context)
+
 def phone_add_number(req):
     if req.method == 'POST':
         phone = req.POST['phone']
@@ -100,8 +139,6 @@ def phone_add_number(req):
 
 @login_required    
 def user_personal_info(req):
-    if req.user.status == "ถูกจำกัดสิทธิ์":
-        return redirect('/')
     if req.user.phone is None or req.user.token is None:
         return redirect('/phone_add_number')
     AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1112,13 +1149,12 @@ def user_detail_durable(req, id):
 
 #หน้ารายการวัสดุ
 def user_durable_articles(req):
-    if req.user.is_anonymous or req.user.is_active:
         selected_category = req.GET.get('category', None)
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
         AllCategoryType = CategoryType.objects.all()
-        AllCartParcel_sum = CartParcel.objects.filter().aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter().aggregate(Sum('quantity'))
+        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
         TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
         TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
         Total = TotalParcel + TotalDurable
@@ -1166,21 +1202,55 @@ def user_durable_articles(req):
             "Total" : Total,
         }
         return render(req, 'pages/user_durable_articles.html', context)   
-    else:  
-        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-        Total = TotalParcel + TotalDurable
-        statustype_list = [i[0] for i in STATUSTYPE]
-        nametype_list = [i[0] for i in NAMETYPE] 
+    
+def login_user_durable_articles(req):
+        selected_category = req.GET.get('category', None)
+        AllDurable = Add_Durable.objects.all()
+        AllParcel = Add_Parcel.objects.all()
+        AllCategoryType = CategoryType.objects.all()
+        if 'sort' in req.GET:
+            last_sort = req.GET.get('sort', 'default')
+            if req.GET['sort'] == 'name':
+                AllParcel = AllParcel.order_by('name')
+                AllDurable = AllDurable.order_by('name')
+            elif req.GET['sort'] == 'quantity':
+                AllParcel = AllParcel.order_by('-quantity')
+                AllDurable = AllDurable.order_by('-quantity')    
+            elif 'sort' in req.GET and req.GET['sort'] == 'statustype' and 'statustype' in req.GET:
+                AllDurable = AllDurable.filter(statustype=req.GET['statustype']).order_by('statustype')
+                AllParcel = AllParcel.filter(statustype=req.GET['statustype']).order_by('statustype')
+            elif 'sort' in req.GET and req.GET['sort'] == 'nametype' and 'nametype' in req.GET:
+                AllDurable = AllDurable.filter(nametype=req.GET['nametype']).order_by('nametype')
+                AllParcel = AllParcel.filter(nametype=req.GET['nametype']).order_by('nametype')    
+            elif req.GET['sort'] == 'category':
+                AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+                AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+            elif req.GET['sort'] == 'default':
+                AllDurable = Add_Durable.objects.all()
+                AllParcel = Add_Parcel.objects.all()
+            else:
+                last_sort = 'default'
+                AllDurable = Add_Durable.objects.all()
+                AllParcel = Add_Parcel.objects.all()
+        else:
+            last_sort = 'default'
+            AllDurable = Add_Durable.objects.all()
+            AllParcel = Add_Parcel.objects.all() 
+        search_query = ""
+        if 'query' in req.GET:
+            search_query = req.GET['query']
+            AllParcel = AllParcel.filter(name__icontains=search_query)
+            AllDurable = AllDurable.filter(name__icontains=search_query) 
         context = {
-                "navbar" : "user_durable_articles",
-                "Total" : Total,
-                "nametype" : nametype_list,
-                "status" : statustype_list,
-                }
-        return render(req, 'pages/user_durable_articles.html', context)
+            "navbar" : "user_durable_articles",
+            "last_sort" : last_sort,
+            "AllParcel" : AllParcel,
+            "AllDurable" : AllDurable,
+            "search_query" : search_query,
+            "AllCategoryType" : AllCategoryType,
+            "selected_category" : selected_category,
+        }
+        return render(req, 'pages/login_user_durable_articles.html', context)   
 
 @login_required
 def user_recommend_history(req):
@@ -1364,59 +1434,58 @@ def deleteRecList(req, id):
     return redirect('/user_recommend')
 
 def user_position(req):
-    if req.user.is_anonymous or req.user:
-        AllDurable = Add_Durable.objects.all()
-        AllParcel = Add_Parcel.objects.all()
-        AllPosition =  SettingPosition.objects.all()   
-        AllCartParcel_sum = CartParcel.objects.filter().aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter().aggregate(Sum('quantity'))
-        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-        Total = TotalParcel + TotalDurable
-        if 'sort' in req.GET:
-            last_sort = req.GET.get('sort', 'default')
-            if req.GET['sort'] == 'name':
-                AllParcel = AllParcel.order_by('name')
-                AllDurable = AllDurable.order_by('name')
-            elif req.GET['sort'] == 'category':
-                AllParcel = AllParcel.order_by('category')
-                AllDurable = AllDurable.order_by('category')    
-            elif req.GET['sort'] == 'statustype':
-                AllParcel = AllParcel.order_by('statustype')
-                AllDurable = AllDurable.order_by('statustype')
-            elif req.GET['sort'] == 'status':
-                AllParcel = AllParcel.order_by('status')
-                AllDurable = AllDurable.order_by('status')    
-            elif req.GET['sort'] == 'quantity':
-                AllParcel = AllParcel.order_by('-quantity')
-                AllDurable = AllDurable.order_by('-quantity')    
-            elif req.GET['sort'] == 'borrow_count':
-                AllParcel = AllParcel.order_by('-borrow_count')
-                AllDurable = AllDurable.order_by('-borrow_count')    
-            elif req.GET['sort'] == 'default':
-                AllDurable = Add_Durable.objects.all()
-                AllParcel = Add_Parcel.objects.all()
-            else:
-                last_sort = 'default'
-                AllDurable = Add_Durable.objects.all()
-                AllParcel = Add_Parcel.objects.all()
+    AllDurable = Add_Durable.objects.all()
+    AllParcel = Add_Parcel.objects.all()
+    AllPosition =  SettingPosition.objects.all()   
+    AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+    AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
+    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+    Total = TotalParcel + TotalDurable
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'name':
+            AllParcel = AllParcel.order_by('name')
+            AllDurable = AllDurable.order_by('name')
+        elif req.GET['sort'] == 'category':
+            AllParcel = AllParcel.order_by('category')
+            AllDurable = AllDurable.order_by('category')    
+        elif req.GET['sort'] == 'statustype':
+            AllParcel = AllParcel.order_by('statustype')
+            AllDurable = AllDurable.order_by('statustype')
+        elif req.GET['sort'] == 'status':
+            AllParcel = AllParcel.order_by('status')
+            AllDurable = AllDurable.order_by('status')    
+        elif req.GET['sort'] == 'quantity':
+            AllParcel = AllParcel.order_by('-quantity')
+            AllDurable = AllDurable.order_by('-quantity')    
+        elif req.GET['sort'] == 'borrow_count':
+            AllParcel = AllParcel.order_by('-borrow_count')
+            AllDurable = AllDurable.order_by('-borrow_count')    
+        elif req.GET['sort'] == 'default':
+            AllDurable = Add_Durable.objects.all()
+            AllParcel = Add_Parcel.objects.all()
         else:
             last_sort = 'default'
             AllDurable = Add_Durable.objects.all()
             AllParcel = Add_Parcel.objects.all()
-        search_query = ""
-        if 'query' in req.GET:
-            search_query = req.GET['query']
-            AllParcel = AllParcel.filter(name__icontains=search_query)
-            AllDurable = AllDurable.filter(name__icontains=search_query)    
-        items_position = {}
-        for position in AllPosition:
-            items_position[position] = []
-        for AllParcel in AllParcel:
-            items_position[AllParcel.nameposition].append(AllParcel)
-        for AllDurable in AllDurable:
-            items_position[AllDurable.nameposition].append(AllDurable)
-        context ={
+    else:
+        last_sort = 'default'
+        AllDurable = Add_Durable.objects.all()
+        AllParcel = Add_Parcel.objects.all()
+    search_query = ""
+    if 'query' in req.GET:
+        search_query = req.GET['query']
+        AllParcel = AllParcel.filter(name__icontains=search_query)
+        AllDurable = AllDurable.filter(name__icontains=search_query)    
+    items_position = {}
+    for position in AllPosition:
+        items_position[position] = []
+    for AllParcel in AllParcel:
+        items_position[AllParcel.nameposition].append(AllParcel)
+    for AllDurable in AllDurable:
+        items_position[AllDurable.nameposition].append(AllDurable)
+    context ={
                 'navbar' : 'user_position',
                 "items_position": items_position,
                 "AllPosition" : AllPosition,
@@ -1424,19 +1493,64 @@ def user_position(req):
                 "last_sort" : last_sort,
                 "Total" : Total,
                 }    
-        return render(req, 'pages/user_position.html', context)
-    else:
-        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-        Total = TotalParcel + TotalDurable
-        context ={
-                    'navbar' : 'user_position',
-                    "Total" : Total,
-                }
     return render(req, 'pages/user_position.html', context)
 
+def login_user_position(req):
+    AllDurable = Add_Durable.objects.all()
+    AllParcel = Add_Parcel.objects.all()
+    AllPosition =  SettingPosition.objects.all()   
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'name':
+            AllParcel = AllParcel.order_by('name')
+            AllDurable = AllDurable.order_by('name')
+        elif req.GET['sort'] == 'category':
+            AllParcel = AllParcel.order_by('category')
+            AllDurable = AllDurable.order_by('category')    
+        elif req.GET['sort'] == 'statustype':
+            AllParcel = AllParcel.order_by('statustype')
+            AllDurable = AllDurable.order_by('statustype')
+        elif req.GET['sort'] == 'status':
+            AllParcel = AllParcel.order_by('status')
+            AllDurable = AllDurable.order_by('status')    
+        elif req.GET['sort'] == 'quantity':
+            AllParcel = AllParcel.order_by('-quantity')
+            AllDurable = AllDurable.order_by('-quantity')    
+        elif req.GET['sort'] == 'borrow_count':
+            AllParcel = AllParcel.order_by('-borrow_count')
+            AllDurable = AllDurable.order_by('-borrow_count')    
+        elif req.GET['sort'] == 'default':
+            AllDurable = Add_Durable.objects.all()
+            AllParcel = Add_Parcel.objects.all()
+        else:
+            last_sort = 'default'
+            AllDurable = Add_Durable.objects.all()
+            AllParcel = Add_Parcel.objects.all()
+    else:
+        last_sort = 'default'
+        AllDurable = Add_Durable.objects.all()
+        AllParcel = Add_Parcel.objects.all()
+    search_query = ""
+    if 'query' in req.GET:
+        search_query = req.GET['query']
+        AllParcel = AllParcel.filter(name__icontains=search_query)
+        AllDurable = AllDurable.filter(name__icontains=search_query)    
+    items_position = {}
+    for position in AllPosition:
+        items_position[position] = []
+    for AllParcel in AllParcel:
+        items_position[AllParcel.nameposition].append(AllParcel)
+    for AllDurable in AllDurable:
+        items_position[AllDurable.nameposition].append(AllDurable)
+    context ={
+                'navbar' : 'user_position',
+                "items_position": items_position,
+                "AllPosition" : AllPosition,
+                "search_query" : search_query,
+                "last_sort" : last_sort,
+                }    
+    return render(req, 'pages/login_user_position.html', context)
+    
 def pdf_print_position(req):
     AllDurable = Add_Durable.objects.all()
     AllParcel = Add_Parcel.objects.all()

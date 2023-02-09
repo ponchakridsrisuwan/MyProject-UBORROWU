@@ -80,7 +80,7 @@
           <!-- แก้ไขข้อมูล -->
           <div class="modal fade" id="manageitemcatecory-{{forloop.counter}}" tabindex="-1"
             aria-labelledby="ManageUserModal" aria-hidden="true">
-            <form method="post" action="/admin_user_deadline/{{AllUser.id}}" enctype="multipart/form-data">
+            <form method="post" action="/admin_user_return/{{AllUser.id}}" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="modal-dialog modal-lg
                     modal-fullscreen-lg-down">
@@ -89,45 +89,11 @@
                     <h5 class="modal-title" id="edititemModal">จัดการสิทธิ์</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-body">
-                    <div class="row mt-2">
-                      <div class="col-md-6">
-                        <label class="labels" for="name">ชื่อ</label>
-                        <input value="{{AllUser.first_name}}" type="text" class="form-control
-                              rounded-pill" disabled>
-                      </div>
-                      <div class="col-md-6">
-                        <label class="labels" for="email">อีเมล</label>
-                        <input value="{{AllUser.email}}" type="text" class="form-control
-                              rounded-pill" disabled>
-                      </div>
-                    </div>
-                    <div class="row mt-2">
-                      <div class="col-md-6">
-                        <label class="labels" for="status">สถานะ</label>
-                        <select class="form-select rounded-pill" aria-label=".form-select-lg" name="status" id="status">
-                          <option value="ปกติ">ปกติ</option>
-                          <option value="ถูกจำกัดสิทธิ์">ระงับสิทธิ์ชั่วคราว</option>
-                        </select>
-                      </div>
-                      <div class="col-md-6">
-                        <label class="labels text-danger small" for="deadline">เลือกวันที่</label>
-                        <input class="form-select
-                              rounded-pill" name="deadline" id="deadline" type="date">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <label class="labels ps-2" for="reason">เหตุผลการระงับสิทธิ์
-                      </label>
-                      <textarea id="description" name="reason" name="reason" class="form-control rounded-4"
-                        id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
-                  </div>
                   <div class="modal-footer">
                     <button type="button" class="btn
                           btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
                     <button type="submit" class="btn btn-warning
-                          rounded-pill">ยืนยันการแก้ไข</button>
+                          rounded-pill">ยืนยันการคืนค่าสถานะ</button>
                   </div>
                 </div>
             </form>

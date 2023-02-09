@@ -50,17 +50,7 @@
                 <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ </span><br>
                 <span class="small">{{ AllUser.deadline }}</span><br><br>
                 <span class="fw-bold">เหตุผลการระงับสิทธิ์ </span><br>
-                {% if AllUser.reason == None %}
-                <span class="small">ผู้ดูแลระบบไม่ได้ระบุเหตุผล</span><br><br>
-                {% else %}
-                <span class="small">{{ AllUser.reason }}</span><br><br>
-                {% endif %}
-                <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ </span><br>
-                {% if AllUser.reasonfromstaff == None %}
-                <span class="small">เจ้าหน้าที่ไม่ได้ระบุเหตุผล</span>
-                {% else %}
                 <span class="small">{{ AllUser.reasonfromstaff }}</span>
-                {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -99,12 +89,7 @@
                         <span class="fw-bold">อีเมล : </span><span class="small text-black-50">{{ AllUser.email}}</span><br>
                         <span class="fw-bold">สิทธิ์ : </span><span class="small text-black-50">{{ AllUser.right}}</span><br>
                         <span class="fw-bold">สถานะ : </span><span class="small text-black-50">{{ AllUser.status}}</span><br>
-                    {% if AllUser.reason != None %}
-                        <span class="fw-bold">เหตุผลจากผู้ดูแลระบบ : </span><span class="small text-black-50">{{AllUser.reason }}</span><br>
-                    {% endif %}
-                    {% if AllUser.reasonfromstaff != None %}
                         <span class="fw-bold">เหตุผลจากเจ้าหน้าที่ : </span><span class="small text-black-50">{{AllUser.reasonfromstaff }}</span><br>
-                    {% endif %}
                         <span class="fw-bold">ครั้งแรกที่เข้ามายังเว็บไซต์ : </span><span class="small text-black-50">{{AllUser.date_joined }}</span><br>
                         <span class="fw-bold">เข้ามายังเว็บไซต์ครั้งสุดท้าย : </span><span class="small text-black-50">{{ AllUser.last_login }}</span><br>
                     </div>
@@ -147,20 +132,19 @@
                                     <label class="labels" for="status">สถานะ</label>
                                     <select class="form-select rounded-pill" aria-label=".form-select-lg" name="status"
                                         id="status">
-                                        <option value="ปกติ">ปกติ</option>
                                         <option value="ถูกจำกัดสิทธิ์">ระงับสิทธิ์ชั่วคราว</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="labels text-danger small" for="deadline">เลือกวันที่</label>
+                                    <label class="labels text-danger small" for="deadline">ระยะเวลาที่ถูกระงับสิทธิ์</label>
                                     <input class="form-select
                                                 rounded-pill" name="deadline" id="deadline" type="date">
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label class="labels ps-2" for="reason">เหตุผลการระงับสิทธิ์
+                                <label class="labels ps-2" for="reasonfromstaff">เหตุผลการระงับสิทธิ์
                                 </label>
-                                <textarea id="description" name="reason" name="reason" class="form-control rounded-4"
+                                <textarea id="description" name="reasonfromstaff" name="reasonfromstaff" class="form-control rounded-4"
                                     id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                         </div>

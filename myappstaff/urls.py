@@ -31,6 +31,7 @@ urlpatterns = [
     path('staff_admin_user', views.staff_admin_user, name="staff_admin_user"),
     path('staff_admin_user_block', views.staff_admin_user_block, name="staff_admin_user_block"),
     path('staff_user_deadline/<int:id>', views.staff_user_deadline, name="staff_user_deadline"),
+    path('staff_user_return/<int:id>', views.staff_user_return, name="staff_user_return"),
 
     path('staff_max_borrow', views.staff_max_borrow, name='staff_max_borrow'),
     path('staff_max_borrow_durable', views.staff_max_borrow_durable, name='staff_max_borrow_durable'),
