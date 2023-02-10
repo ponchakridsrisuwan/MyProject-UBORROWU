@@ -3,7 +3,7 @@
 <div class=" container">
     <div class="row">
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-6 col-sm-6 col-md-2 mb-4">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -19,7 +19,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-6 col-sm-6 col-md-2 mb-4">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -35,7 +35,7 @@
         </div>
 
         <!-- Tasks Card Example -->
-        <div class="col-6 col-sm-6 col-md-2 mb-4">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -52,7 +52,7 @@
         </div>
 
         <!-- Earnings (Annual) Card Example -->
-        <div class="col-6 col-sm-6 col-md-2 mb-4">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Pending Requests Card Example -->
-        <div class="col-6 col-sm-6 col-md-2 mb-4">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Pending Requests Card Example -->
-        <div class="col-6 col-sm-6 col-md-2 mb-4">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -103,7 +103,7 @@
 
     <div class="row">
         <div class="row container mb-4">
-            <div class="col-xl-8 col-lg-7  ">
+            <div class="col-xl-8 col-lg-7 mb-4 ">
                 <div class="card shadow">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">รายงานภาพรวมในระบบ</h6>
@@ -113,7 +113,7 @@
             </div>
 
             <div class="col-xl-4 col-lg-5  ">
-                <div class="card shadow">
+                <div class="card shadow col-12">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">รายงานภาพรวมของนักศึกษา/สมาชิก</h6>
                     </div>
@@ -188,43 +188,40 @@
     </div>
 
 
-    <div class="bg-white shadow rounded-2 mb-4 px-5 py-3">
+    <div class="bg-white rounded-2 mb-4 ">
+        <div class="px-5 pt-3">
         <div class="d-flex justify-content-between ">
             <div>
                 <h5 class="fw-bold">รายงานภาพรวม</h5>
             </div>
         </div>
         <hr>
-
-
-        <div class="row mt-3  mx-5">
-            <table class="table">
-                <thead>
+        </div>
+        <div class="col-lg-12 px-2">
+            <div class="table-responsive">
+            <table class="table small">
+                <thead class="table bg-warning">
                     <tr>
                         <th class="col-md-8" scope="col">รายการ</th>
                         <th class="col-md-2 text-center" scope="col">จำนวน (รายการ)</th>
-                        <th class="col-md-2 text-center" scope="col"></th>
+                        <th class="col-md-2 text-center" scope="col">รายละเอียด</th>
                     </tr>
                 </thead>
                 <tbody id="xTable">
-                    <tr class="qrow text-center">
+                    <tr class="qrow">
                         <td>
-                            <p class="text-start">จำนวนรายการวัสดุที่คงเหลือในระบบ</p>
+                            <span class="text-start">จำนวนรายการวัสดุที่คงเหลือในระบบ</span>
                         </td>
-                        <td>
-                            <p>{{ AllParcel_report }}</p>
-                        </td>
-                        <td><a class="btn btn-warning rounded-pill badge"
+                        <td class="text-center">{{ AllParcel_report }}</td>
+                        <td class="text-center"><a class="btn btn-warning rounded-pill badge"
                                 href="{% url 'staff_manage_parcel' %}">รายละเอียด</a></td>
                     </tr>
-                    <tr class="qrow text-center">
+                    <tr class="qrow">
                         <td>
-                            <p class="text-start">จำนวนรายการครุภัณฑ์ที่คงเหลือในระบบ</p>
+                            <span class="text-start">จำนวนรายการครุภัณฑ์ที่คงเหลือในระบบ</span>
                         </td>
-                        <td>
-                            <p>{{ AllDurable_report }}</p>
-                        </td>
-                        <td><a class="btn btn-warning rounded-pill badge"
+                        <td class="text-center">{{ AllDurable_report }}</td>
+                        <td class="text-center"><a class="btn btn-warning rounded-pill badge"
                                 href="{% url 'staff_manage_durable' %}">รายละเอียด</a></td>
                     </tr>
                 </tbody>
@@ -232,9 +229,12 @@
             </table>
         </div>
     </div>
+    </div>
+    
 
 
-        <div class="bg-white shadow rounded-2 mb-4 px-5 py-3">
+        <div class="bg-white shadow rounded-2 mb-4 py-3">
+            <div class="px-5">
             <div class="d-flex justify-content-between ">
                 <div>
                     <h5 class="fw-bold">รายงานการยืมวัสดุที่ถูกยืมมากที่สุด 3 ลำดับแรก</h5>
@@ -243,23 +243,25 @@
             </div>
            
             <hr>
-            <div class="row mt-3  mx-5">
-                <table class="table">
+            </div>
+            <div class="col-lg-12 px-2">
+                <div class="table-responsive">
+                <table class="table small">
                     <thead class="table">
                       <tr class="table bg-warning">
-                            <th class="col-md-3" scope="col">รายการ</th>
+                            <th class="col-md-4" scope="col">รายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภทรายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภท</th>
                             <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
-                            <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
+                            <th class="col-md-2 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for MaxLoanParcel in MaxLoanParcel %}
-                        <tr class="qrow text-center">
+                        <tr class="qrow">
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}"><p class="text-start">{{ MaxLoanParcel.name }}</p></a>
+                                <a class="text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanParcel.id %}"><span class="text-start d-inline-block text-truncate" style="max-width: 330px;">{{ MaxLoanParcel.name }}</span></a>
                             </td>
                             <td><a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.nametype }}</a></td>
@@ -283,11 +285,12 @@
 
                 </table>
             </div>
+            </div>
         </div>
-    </div>
 
-    <div class=" container">
-        <div class="bg-white shadow rounded-2 mb-4 px-5 py-3">
+
+        <div class="bg-white shadow rounded-2 mb-4 py-3">
+            <div class="px-5">
             <div class="d-flex justify-content-between ">
                 <div>
                     <h5 class="fw-bold">รายงานการยืมครุภัณฑ์ที่ถูกยืมมากที่สุด 3 ลำดับแรก</h5>
@@ -295,23 +298,26 @@
                 <a class="text-muted" href="{% url 'staff_max_borrow_durable' %}">ดูรายการทั้งหมด</a>
             </div>
             <hr>
-            <div class="row mt-3  mx-5">
-                <table class="table">
+            </div>
+            <div class="col-lg-12 px-2">
+                <div class="table-responsive">
+           
+                <table class="table small">
                     <thead class="table">
                       <tr class="table bg-warning">
-                            <th class="col-md-3" scope="col">รายการ</th>
+                            <th class="col-md-4" scope="col">รายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภทรายการ</th>
                             <th class="col-md-2  text-center" scope="col">ประเภท</th>
                             <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
-                            <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
+                            <th class="col-md-2 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for MaxLoanDurable in MaxLoanDurable %}
-                        <tr class="qrow text-center">
+                        <tr class="qrow">
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}"><p class="text-start">{{ MaxLoanDurable.name }}</p></a>
+                                <a class="text-black" style="text-decoration:none"
+                                    href="{% url 'staff_manage_detail' MaxLoanDurable.id %}"><span class="text-start d-inline-block text-truncate" style="max-width: 330px;">{{ MaxLoanDurable.name }}</span></a>
                             </td>
                             <td><a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' MaxLoanDurable.id %}">{{ MaxLoanDurable.nametype }}</a></td>
@@ -329,6 +335,8 @@
                     </tbody>
 
                 </table>
+            </div>
+                </div>
             </div>
         </div>
     </div>

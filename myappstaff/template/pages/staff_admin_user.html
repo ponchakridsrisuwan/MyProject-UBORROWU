@@ -39,57 +39,46 @@
         </div>
         <div class="col-lg-12 px-2">
             <div class="table-responsive">
-                <table class="table small">
-                    <tr class="table bg-warning">
-                        <th class="col" scope="col">ชื่อ-สกุล</th>
-                        <th class="col" scope="col">อีเมล</th>
-                        <th class="col" scope="col">เบอร์โทร</th>
-                        <th class="col" scope="col">ใช้งานล่าสุด</th>
-                        <th class="col" scope="col">สิทธิ์</th>
-                        <th class="col" scope="col">สถานะ</th>
-                        <th></th>
-                    </tr>
+                <table class="table table-striped small">
+                    <thead class="table bg-warning">
+                        <tr >
+                            <th class="col" scope="col">ชื่อ-สกุล</th>
+                            <th class="col" scope="col">อีเมล</th>
+                            <th class="col" scope="col">เบอร์โทร</th>
+                            <th class="col" scope="col">ใช้งานล่าสุด</th>
+                            <th class="col" scope="col">สิทธิ์</th>
+                            <th class="col" scope="col">สถานะ</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for AllUser in page.object_list %}
                         {% if AllUser.status == "ปกติ" and AllUser.right == "นักศึกษา" %}
-                        <tr class="qrow">
-                            <td>
-                                <p>{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</p>
-                            </td>
-                            <td>
-                                <p>{{ AllUser.email }}</p>
-                            </td>
+                        <tr>
+                            <td>{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</td>
+                            <td>{{ AllUser.email }}</td>
                             <td>
                                 {% if AllUser.phone == None %}
-                                <p> N/A </p>
+                                <span> N/A </span>
                                 {% else %}
-                                <p>{{ AllUser.phone }}</p>
+                                <span>{{ AllUser.phone }}</span>
                                 {% endif %}
                             </td>
-                            <td>
-                                <p>{{ AllUser.last_login|date:"G:i A j F Y" }}</p>
-                            </td>
-                            <td>
-                                <p>{{ AllUser.right }}</p>
-                            </td>
-                            <td>
-                                <p>{{ AllUser.status }}</p>
-                            </td>
+                            <td>{{ AllUser.last_login|date:"G:i A j F Y" }}</td>
+                            <td>{{ AllUser.right }}</td>
+                            <td>{{ AllUser.status }}</td>
                             <td>
                                 <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown"
                                     aria-expanded="false"></i>
                                 <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm text-center">
                                     <li>
-                                        <a class="dropdown-item btn-0
-                                                    btn-sm" data-bs-toggle="modal"
+                                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#manageitemcatecory-{{forloop.counter}}">จัดการการระงับสิทธิ์</a>
                                     </li>
-                                    <li>
-                                        <a class="dropdown-item btn-0
-                                                    btn-sm" data-bs-toggle="modal"
+                                    <!-- <li>
+                                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#detail-{{forloop.counter}}">ข้อมูลส่วนตัว</a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </td>
                         </tr>
@@ -148,7 +137,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         <label class="labels"
                                                             for="deadline">ระยะเวลาที่ถูกระงับสิทธิ์</label>
                                                         <input class="form-select

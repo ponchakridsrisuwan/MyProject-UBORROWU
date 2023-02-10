@@ -33,36 +33,37 @@
                 <table class="table small">
                     <thead class="table">
                     <tr class="table bg-warning">
-                            <th class="text-center"  scope="col">ชื่อ-สกุล</th>
-                            <th class="col">รายการ</th>
-                            <th class="text-center"  scope="col">จำนวน</th>
-                            <th class="text-center"  scope="col">วันที่ทำรายการ</th>
-                            <th class="text-center"  scope="col">วันที่ต้องการยืม </th>
-                            <th class="text-center"  scope="col">สถานะ</th>
-                            <th></th>
+                            <th class="col-md-1 text-center"  scope="col">ลำดับ</th>
+                            <th class="col-md-2 " scope="col">ชื่อ-สกุล</th>
+                            <th class="col-md-3 text-truncate">รายการ</th>
+                            <th class="col-md-1 text-center"  scope="col">จำนวน</th>
+                            <th class="col-md-2 text-center"  scope="col">วันที่ทำรายการ</th>
+                            <th class="col-md-2 text-center"  scope="col">วันที่ต้องการยืม </th>
+                            <th class="col-md-1 text-center"  scope="col">สถานะ</th>
+                            <th class="col-md-1"></th>
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for AllLoanParcel in page.object_list %}
-                        <tr class="qrow text-center card-body">
+                        <tr class="qrow">
                             <td class="text-center">{{forloop.counter}}</td>
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"><p class="text-start">{{ AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</p></a>
+                                <a class="text-black" style="text-decoration:none"><span class="text-start">{{ AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</span></a>
                             </td>
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"><p class="text-start">{{ AllLoanParcel.name }}</p></a>
+                                <a class="text-black" style="text-decoration:none"><span class="text-start">{{ AllLoanParcel.name }}</span></a>
                             </td>
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"><p class="text-start">{{ AllLoanParcel.quantity }}</p></a>
+                                <a class="text-center text-black" style="text-decoration:none"><span class="text-start">{{ AllLoanParcel.quantity }}</span></a>
                             </td>
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"><p class="text-start">{{ AllLoanParcel.date_add }}</p></a>
+                                <a class="text-center text-black" style="text-decoration:none"><span class="text-start">{{ AllLoanParcel.date_add }}</span></a>
                             </td>
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"><p class="text-start">{{ AllLoanParcel.start_date }}</p></a>
+                                <a class="text-center text-black" style="text-decoration:none"><span class="text-start">{{ AllLoanParcel.start_date }}</span></a>
                             </td>
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"><p class="text-start">{{ AllLoanParcel.status }}</p></a>
+                                <a class="text-center text-black" style="text-decoration:none"><span class="text-start">{{ AllLoanParcel.status }}</span></a>
                             </td>
                             <td>
                                 <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>

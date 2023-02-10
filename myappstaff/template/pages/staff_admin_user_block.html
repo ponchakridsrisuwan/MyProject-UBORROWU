@@ -82,10 +82,6 @@
                         <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
                           data-bs-target="#manageitemcatecory-{{forloop.counter}}">คืนค่าสถานะสิทธิ์</a>
                       </li>
-                      <li>
-                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
-                          data-bs-target="#manageitemcatecory-{{forloop.counter}}">รายละเอียดการถูกระงับสิทธิ์</a>
-                      </li>
                     </ul>
                   </td>
                 </tr>
@@ -102,6 +98,20 @@
                           <h5 class="modal-title" id="edititemModal">คืนค่าสถานะสิทธิ์</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <div class="modal-body">
+                          <span class="fw-bold">ชื่อ-สกุล :</span>
+                          <span class="small text-black-50">{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</span><br>
+                          <span class="fw-bold">อีเมล :</span>
+                          <span class="small text-black-50">{{AllUser.email}}</span><br>
+                          <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ :</span>
+                          <span class="small text-black-50">{{ AllUser.datestatus }}</span>
+                          <br>
+                          <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ :</span>
+                          <span class="small text-black-50">{{ AllUser.deadline }}</span>
+                          <br>
+                          <span class="fw-bold">เหตุผลการระงับสิทธิ์ :</span>
+                          <span class="small text-black-50">{{ AllUser.reasonfromstaff }}</span>
+                        </div>
                         <div class="modal-footer">
                           <button type="button" class="btn
                             btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
@@ -109,31 +119,11 @@
                             rounded-pill">คืนค่าสถานะสิทธิ์</button>
                         </div>
                       </div>
-                  </form>
-                  <div class="modal-fullscreen-lg-down">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="detailModal">รายละเอียดการถูกระงับสิทธิ์</h5>
-                      </div>
-                      <div class="modal-body">
-                        <span class="fw-bold">ชื่อ-สกุล :</span>
-                        <span class="small text-black-50">{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</span><br>
-                        <span class="fw-bold">อีเมล :</span>
-                        <span class="small text-black-50">{{AllUser.email}}</span><br>
-                        <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ :</span>
-                        <span class="small text-black-50">{{ AllUser.datestatus }}</span>
-                        <br>
-                        <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ :</span>
-                        <span class="small text-black-50">{{ AllUser.deadline }}</span>
-                        <br>
-                        <span class="fw-bold">เหตุผลการระงับสิทธิ์ :</span>
-                        <span class="small text-black-50">{{ AllUser.reasonfromstaff }}</span>
-                      </div>
                     </div>
-                  </div>
+                  </form>
+                </div>
                   {% empty %}
                   <p class="text-center">ยังไม่มีข้อมูลนักศึกษาที่ถูกระงับสิทธิ์ชั่วคราวในระบบ U Borrow U</p>
-
                   {% endfor %}
               </tbody>
             </table>
