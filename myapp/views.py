@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from myapp.forms import *
 from myappSuper.models import *
 from myappstaff.models import *
+from myapp.associationrules import rules
 import datetime
 from django.contrib import messages
 import requests
@@ -1106,10 +1107,31 @@ def user_detail(req, id):
     Total = TotalParcel + TotalDurable
     AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
-    AllParcel = Add_Parcel.objects.filter(id=id).first()
-    waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
+@login_required
+def user_detail(req, id):
+    if req.user.status == "ถูกจำกัดสิทธิ์":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+    AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
+    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+    Total = TotalParcel + TotalDurable
+    AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
+    AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
+    selected_parcel = Add_Parcel.objects.filter(id=id).first()
+    waiting_qParcel = QueueParcel.objects.filter(queue_item=selected_parcel).count()
+    if selected_parcel:
+        relevant_rules = rules[rules['antecedents'].apply(lambda x: selected_parcel.name in x)]
+        relevant_rules = relevant_rules.sort_values('confidence', ascending=False)
+        N = 5
+        recommended_items = [item for item_set in relevant_rules['consequents'][:N] for item in item_set]
+    else:
+        recommended_items = []
     context = {
-        "AllParcel" : AllParcel,
+        "AllParcel": selected_parcel,
+        "recommended_items": recommended_items,
         "waiting_qParcel" : waiting_qParcel,
         "AllParcelAll" : AllParcelAll,
         "AllDurableAll" : AllDurableAll,
