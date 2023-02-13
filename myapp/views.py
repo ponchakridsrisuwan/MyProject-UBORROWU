@@ -1113,54 +1113,28 @@ def user_detail(req, id):
     TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
     TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
     Total = TotalParcel + TotalDurable
-    AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
-    AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     AllParcel = Add_Parcel.objects.filter(id=id).first()
+    OnlyParcel = Add_Parcel.objects.first()
+    category = OnlyParcel.category
+    AllParcelAll = Add_Parcel.objects.filter(category=category).exclude(id=AllParcel.id)
     waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
-
-    #user_parcels = LoanParcel.objects.filter(user=req.user).values_list('parcel_item__name', flat=True)
-    #te = TransactionEncoder()
-    #te_array = te.fit_transform([user_parcels])
-    #df = pd.DataFrame(te_array, columns=te.columns_)
-    #itemsets = parcel_rule[parcel_rule['antecedents'].apply(lambda x: x.issubset(set(user_parcels)))]
-    #next_parcel = itemsets['consequents'].apply(lambda x: list(x)[0]).mode().values[0]
-    #try:
-    #    next_parcel_item = Add_Parcel.objects.get(name=next_parcel.mode().values[0])
-    #except:
-    #    next_parcel_item = None
-#    loan_parcels = LoanParcel.objects.filter(user=id)
-#    transactions = []
-#    for loan_parcel in loan_parcels:
-#        transactions.append([loan_parcel.parcel_item.name])
-        
-#    association_rules = apriori(transactions, min_support=0.01, metric="confidence", metric_min=0.5, support_only=False)
-#    association_results = list(association_rules)
-    
-#    recommendations = []
-#    for item in association_results:
-#        pair = item[0] 
-#        items = [x for x in pair]
-#        recommendations.append(items)
     df = pd.read_csv('myapp/recommend.csv')
     df = df.drop_duplicates().reset_index(drop=True)
     df = df.pivot(index='item_id', columns='user_id', values='user_id')
     df = df.notnull().astype(int)
-    frequent_itemsets = apriori(df, min_support=0.5, use_colnames=True)
-    rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
-    user_loans = LoanParcel.objects.filter(user=req.user)
-    user_borrowed = [loan.parcel_item.name for loan in user_loans]
-    recommended_items = []
-    for item in rules['antecedents']:
-        if set(item).issubset(set(user_borrowed)):
-            recommended_items.extend(list(Add_Parcel.objects.filter(name__in=rules[rules['antecedents'] == item]['consequents'].tolist()[0])))
+    freq_item = apriori(df, min_support=0.3, use_colnames=True)
+    rules = association_rules(freq_item, metric="confidence", min_threshold=0.6)
+    high_sc = rules[(rules['support'] >= 0.7) & (rules['confidence'] >= 0.7)]
+    items = high_sc[(high_sc['support'] >= 0.7) & (high_sc['confidence'] >= 0.7)]['antecedents'].tolist()
+    item_ids = set([int(i) for i in [item for sublist in items for item in sublist]])
+    rec_parcels = Add_Parcel.objects.filter(id__in=item_ids).exclude(id=AllParcel.id)
 
     context = {
         "AllParcel": AllParcel,
         "waiting_qParcel" : waiting_qParcel,
         "AllParcelAll" : AllParcelAll,
-        "AllDurableAll" : AllDurableAll,
         "Total" : Total,
-        "recommended_items" : recommended_items,
+        "rec_parcels": rec_parcels,
     }
     return render(req,'pages/user_detail.html',context)
 
@@ -1175,10 +1149,21 @@ def user_detail_durable(req, id):
     TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
     TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
     Total = TotalParcel + TotalDurable
-    AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
-    AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     AllDurable = Add_Durable.objects.filter(id=id).first()
+    OnlyDurable = Add_Durable.objects.first()
+    category = OnlyDurable.category
+    AllDurableAll = Add_Durable.objects.filter(category=category).exclude(id=AllDurable.id)
     waiting_qDurable = QueueDurable.objects.filter(queue_item=AllDurable).count()
+    df = pd.read_csv('myapp/recommend.csv')
+    df = df.drop_duplicates().reset_index(drop=True)
+    df = df.pivot(index='item_id', columns='user_id', values='user_id')
+    df = df.notnull().astype(int)
+    freq_item = apriori(df, min_support=0.3, use_colnames=True)
+    rules = association_rules(freq_item, metric="confidence", min_threshold=0.6)
+    high_sc = rules[(rules['support'] >= 0.7) & (rules['confidence'] >= 0.7)]
+    items = high_sc[(high_sc['support'] >= 0.7) & (high_sc['confidence'] >= 0.7)]['antecedents'].tolist()
+    item_ids = set([int(i) for i in [item for sublist in items for item in sublist]])
+    rec_durable = Add_Durable.objects.filter(id__in=item_ids).exclude(id=AllDurable.id)
     if AllDurable is not None:
         waiting_period = waiting_qDurable * AllDurable.numdate
     else:
@@ -1188,8 +1173,8 @@ def user_detail_durable(req, id):
         "waiting_qDurable" : waiting_qDurable,
         "waiting_period": waiting_period,
         "AllDurableAll" : AllDurableAll,
-        "AllParcelAll" : AllParcelAll,
         "Total" : Total,
+        "rec_durable" : rec_durable,
     }
     return render(req,'pages/user_detail_durable.html',context)
 
