@@ -9,7 +9,6 @@ from django.core.paginator import Paginator
 from myapp.forms import *
 from myappSuper.models import *
 from myappstaff.models import *
-from myapp.associationrules import rules
 import datetime
 from django.contrib import messages
 import requests
@@ -17,6 +16,15 @@ from datetime import datetime
 from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
 from datetime import datetime
+import csv
+import pickle
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+import pandas as pd
+
+#with open('myapp/parcel_rule.pickle', 'rb') as file:
+#    parcel_rule = pickle.load(file)
+
 
 
 #หน้าหลัก
@@ -1107,35 +1115,52 @@ def user_detail(req, id):
     Total = TotalParcel + TotalDurable
     AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
     AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
-@login_required
-def user_detail(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์":
-        return redirect('/')
-    if req.user.phone is None or req.user.token is None:
-        return redirect('/phone_add_number')
-    AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-    Total = TotalParcel + TotalDurable
-    AllParcelAll = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
-    AllDurableAll = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
-    selected_parcel = Add_Parcel.objects.filter(id=id).first()
-    waiting_qParcel = QueueParcel.objects.filter(queue_item=selected_parcel).count()
-    if selected_parcel:
-        relevant_rules = rules[rules['antecedents'].apply(lambda x: selected_parcel.name in x)]
-        relevant_rules = relevant_rules.sort_values('confidence', ascending=False)
-        N = 5
-        recommended_items = [item for item_set in relevant_rules['consequents'][:N] for item in item_set]
-    else:
-        recommended_items = []
+    AllParcel = Add_Parcel.objects.filter(id=id).first()
+    waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
+
+    #user_parcels = LoanParcel.objects.filter(user=req.user).values_list('parcel_item__name', flat=True)
+    #te = TransactionEncoder()
+    #te_array = te.fit_transform([user_parcels])
+    #df = pd.DataFrame(te_array, columns=te.columns_)
+    #itemsets = parcel_rule[parcel_rule['antecedents'].apply(lambda x: x.issubset(set(user_parcels)))]
+    #next_parcel = itemsets['consequents'].apply(lambda x: list(x)[0]).mode().values[0]
+    #try:
+    #    next_parcel_item = Add_Parcel.objects.get(name=next_parcel.mode().values[0])
+    #except:
+    #    next_parcel_item = None
+#    loan_parcels = LoanParcel.objects.filter(user=id)
+#    transactions = []
+#    for loan_parcel in loan_parcels:
+#        transactions.append([loan_parcel.parcel_item.name])
+        
+#    association_rules = apriori(transactions, min_support=0.01, metric="confidence", metric_min=0.5, support_only=False)
+#    association_results = list(association_rules)
+    
+#    recommendations = []
+#    for item in association_results:
+#        pair = item[0] 
+#        items = [x for x in pair]
+#        recommendations.append(items)
+    df = pd.read_csv('myapp/recommend.csv')
+    df = df.drop_duplicates().reset_index(drop=True)
+    df = df.pivot(index='item_id', columns='user_id', values='user_id')
+    df = df.notnull().astype(int)
+    frequent_itemsets = apriori(df, min_support=0.5, use_colnames=True)
+    rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.5)
+    user_loans = LoanParcel.objects.filter(user=req.user)
+    user_borrowed = [loan.parcel_item.name for loan in user_loans]
+    recommended_items = []
+    for item in rules['antecedents']:
+        if set(item).issubset(set(user_borrowed)):
+            recommended_items.extend(list(Add_Parcel.objects.filter(name__in=rules[rules['antecedents'] == item]['consequents'].tolist()[0])))
+
     context = {
-        "AllParcel": selected_parcel,
-        "recommended_items": recommended_items,
+        "AllParcel": AllParcel,
         "waiting_qParcel" : waiting_qParcel,
         "AllParcelAll" : AllParcelAll,
         "AllDurableAll" : AllDurableAll,
         "Total" : Total,
+        "recommended_items" : recommended_items,
     }
     return render(req,'pages/user_detail.html',context)
 

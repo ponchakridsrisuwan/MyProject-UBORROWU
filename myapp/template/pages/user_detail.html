@@ -118,7 +118,7 @@
         </div>
         <hr>
         <div class="d-flex flex-row flex-nowrap overflow-auto">
-            {% for AllParcelAll in AllParcelAll %}
+            {% for AllParcelAll in recommended_items %}
             <div class="card border col-6 col-sm-4 col-md-3 col-lg-2 card-block mx-2" >
                 <div class="text-center" data-mdb-ripple-color="light">
                     <img src="{{ AllParcelAll.image.url | safe }}" style=" object-position: center; max-height: 150px; margin-bottom: 1rem;"/>
