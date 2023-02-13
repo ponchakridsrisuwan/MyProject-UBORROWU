@@ -51,29 +51,29 @@
                 {% for AllUser in page.object_list %}
                 <tr class="qrow">
                   <td>
-                    <p>{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</p>
+                    {{AllUser.first_name}}&nbsp{{AllUser.last_name}}
                   </td>
                   <td>
-                    <p>{{ AllUser.email }}</p>
+                    {{ AllUser.email }}
                   </td>
                   <td>
                     {% if AllUser.phone == None %}
-                    <p> N/A </p>
+                    <span> N/A </span>
                     {% else %}
-                    <p>{{ AllUser.phone }}</p>
+                    <span>{{ AllUser.phone }}</span>
                     {% endif %}
                   </td>
                   <td>
-                    <p>{{ AllUser.last_login|date:"G:i A j F Y" }}</p>
+                    {{ AllUser.last_login|date:"G:i A j F Y" }}
                   </td>
                   <td>
-                    <p>{{ AllUser.right }}</p>
+                    {{ AllUser.right }}
                   </td>
                   <td>
-                    <p>{{ AllUser.status }}</p>
+                    {{ AllUser.status }}
                   </td>
                   <td>
-                    <div>{{ AllUser.deadline|timeuntil }}</div>
+                    {{ AllUser.deadline|timeuntil }}
                   </td>
                   <td>
                     <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
