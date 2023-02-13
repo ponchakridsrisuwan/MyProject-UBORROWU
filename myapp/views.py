@@ -1,5 +1,6 @@
 from asyncio import Queue
 from datetime import *
+from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from myapp import forms
@@ -31,7 +32,7 @@ import pandas as pd
 def HomePage(req):
     AllParcel = Add_Parcel.objects.all()
     AllDurable = Add_Durable.objects.all()
-    if req.user.is_anonymous or req.user:
+    if req.user:
         selected_category = req.GET.get('category', None)
         AllCategoryType = CategoryType.objects.all()
         AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -39,6 +40,8 @@ def HomePage(req):
         TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
         TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
         Total = TotalParcel + TotalDurable
+        AllLoanParcel = LoanParcel.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ'), user=req.user)
+        AllLoanDurable = LoanDurable.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ') | Q(status='กำลังยืม')                                       | Q(status='รอยืนยันการคืน')| Q(status='คืนไม่สำเร็จ') , user=req.user)
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')
             if req.GET['sort'] == 'category':
@@ -71,24 +74,8 @@ def HomePage(req):
             "AllDurable" : AllDurable,
             "pageparcel" : pageparcel,
             "pagedurable" : pagedurable,
-        }    
-        return render(req, 'pages/user_index.html', context)
-    else:
-        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-        Total = TotalParcel + TotalDurable
-        AllLoanParcel = LoanParcel.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ'), user=req.user)
-        AllLoanDurable = LoanDurable.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ') | Q(status='กำลังยืม') 
-                                                    | Q(status='รอยืนยันการคืน')| Q(status='คืนไม่สำเร็จ') , user=req.user)
-        context = {
-            "navbar" : "user_index",
-            "Total" : Total,
             "AllLoanParcel" : AllLoanParcel,
             "AllLoanDurable" : AllLoanDurable,
-            "AllParcel" : AllParcel,
-            "AllDurable" : AllDurable,
         }    
         return render(req, 'pages/user_index.html', context)
 
@@ -514,31 +501,10 @@ def add_to_cart(req, id):
     if req.user.phone is None or req.user.token is None:
         return redirect('/phone_add_number')
     parcel_item = Add_Parcel.objects.get(id=id)
-    queue_item = QueueParcel.objects.filter(user=req.user, queue_item=parcel_item).first()
     if parcel_item.quantity > 0 or parcel_item.quantitytype == "∞":
         if parcel_item.quantitytype == "∞":
-            parcel_item.borrow_count += 1  
-            parcel_item.save()
-            queue_item.delete()
-            messages.success(req, 'เพิ่มรายการสำเร็จ!')
-        else :    
-            parcel_item.quantity -= 1
-            parcel_item.borrow_count += 1  
-            parcel_item.save()
-            # queue_item.delete()
-            messages.success(req, 'เพิ่มรายการสำเร็จ!')
-        ex_cart_parcel = CartParcel.objects.filter(parcel_item=parcel_item, user=req.user)
-        if ex_cart_parcel.exists():
-            cart_parcel = ex_cart_parcel.first() 
-            cart_parcel.quantity += 1
-            cart_parcel.name = parcel_item.name
-            cart_parcel.type = parcel_item.nametype
-            cart_parcel.statusParcel = parcel_item.statustype
-            cart_parcel.nameposition = parcel_item.nameposition.nameposition
-            if cart_parcel.quantity < 3:
-                cart_parcel.save()
-        else:
             cart_parcel = CartParcel.objects.create(user=req.user, parcel_item=parcel_item)
+            parcel_item.borrow_count += 1  
             cart_parcel.quantity = 1  
             cart_parcel.name = parcel_item.name
             cart_parcel.type = parcel_item.nametype
@@ -546,45 +512,40 @@ def add_to_cart(req, id):
             cart_parcel.nameposition = parcel_item.nameposition.nameposition
             if cart_parcel.quantity < 3:
                 cart_parcel.save()
-        return redirect('/user_cart')
-    else:
-        if queue_item:
-            if parcel_item.quantity > 0 :    
-                parcel_item.quantity -= 1
-                parcel_item.borrow_count += 1  
-                parcel_item.save()
-                ex_cart_parcel = CartParcel.objects.filter(parcel_item=parcel_item, user=req.user)
-                if ex_cart_parcel.exists():
-                    cart_parcel = ex_cart_parcel.first()
-                    cart_parcel.quantity += 1
-                    cart_parcel.name = parcel_item.name
-                    cart_parcel.type = parcel_item.nametype
-                    cart_parcel.statusParcel = parcel_item.statustype
-                    cart_parcel.nameposition = parcel_item.nameposition.nameposition
-                    if cart_parcel.quantity < 3:
-                        cart_parcel.save()
-                else:
-                    cart_parcel = CartParcel.objects.create(user=req.user, parcel_item=parcel_item)
-                    cart_parcel.quantity = 1
-                    cart_parcel.name = parcel_item.name
-                    cart_parcel.type = parcel_item.nametype
-                    cart_parcel.statusParcel = parcel_item
-                    cart_parcel.statusParcel = parcel_item.statustype
-                    cart_parcel.nameposition = parcel_item.nameposition.nameposition
-                    cart_parcel.borrow_count += 1
-                    if cart_parcel.quantity < 3:
-                        cart_parcel.save()
-                queue_item.delete()
-                return redirect('/user_cart')
+            parcel_item.save()
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')
         else:
-            queue_item = QueueParcel.objects.create(user=req.user, queue_item=parcel_item, name=parcel_item.name, type=parcel_item.nametype)
-            queue_item.name = parcel_item.name
-            queue_item.type = parcel_item.nametype
-            #queue_item.statusParcel = parcel_item.statusParcel
-            queue_item.save()
-            messages.success(req, 'จองคิวสำเร็จ!')
-        return redirect('/user_queue')
-    
+            cart_parcel = CartParcel.objects.create(user=req.user, parcel_item=parcel_item)
+            parcel_item.quantity -= 1
+            parcel_item.borrow_count += 1  
+            cart_parcel.quantity = 1  
+            cart_parcel.name = parcel_item.name
+            cart_parcel.type = parcel_item.nametype
+            cart_parcel.statusDurable = parcel_item.statustype
+            cart_parcel.nameposition = parcel_item.nameposition.nameposition
+            if cart_parcel.quantity < 3:
+                cart_parcel.save()
+            parcel_item.save()
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')
+        queue_parcel = QueueParcel.objects.filter(user=req.user, queue_item=parcel_item).delete()
+    return redirect('/user_cart')
+
+
+@login_required
+def add_to_queue(req, id):
+    if req.user.status == "ถูกจำกัดสิทธิ์":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    parcel_item = Add_Parcel.objects.get(id=id)
+    queue_parcel = QueueParcel.objects.create(user=req.user, queue_item=parcel_item)
+    queue_parcel.name = parcel_item.name
+    queue_parcel.type = parcel_item.nametype
+    queue_parcel.is_borrowed = False
+    queue_parcel.save()
+    messages.success(req, 'จองคิวสำเร็จ!')
+    return redirect('/user_queue')
+
  
 @login_required    
 def cart_update(req, id):
@@ -616,27 +577,6 @@ def cart_notupdate(req, id):
     if parcel_item.quantity > 0 or parcel_item.quantitytype == "∞":
         cart_parcel = CartParcel.objects.get(parcel_item=parcel_item, user=req.user)
         if cart_parcel.quantity > 0 or parcel_item.quantitytype == "∞":
-            parcel_item.quantity += 1
-            cart_parcel.quantity -= 1
-            parcel_item.save()
-            cart_parcel.save()
-        elif cart_parcel.quantity > 0 or parcel_item.quantitytype == "∞":  
-            parcel_item.borrow_count -= 1
-            parcel_item.save()
-        elif cart_parcel.quantity < 1 or parcel_item.quantitytype == "∞":
-            cart_parcel.delete()
-    return redirect('/user_cart')
-
-"""@login_required
-def cart_notupdate(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์":
-        return redirect('/')
-    if req.user.phone is None or req.user.token is None:
-        return redirect('/phone_add_number')
-    parcel_item = Add_Parcel.objects.get(id=id)
-    if parcel_item.quantity > 0 or parcel_item.quantitytype == "∞":
-        cart_parcel = CartParcel.objects.get(parcel_item=parcel_item, user=req.user)
-        if cart_parcel.quantity > 0 or parcel_item.quantitytype == "∞":
             if cart_parcel.quantity > 0 and parcel_item.quantitytype == "∞":
                 parcel_item.borrow_count -= 1
                 cart_parcel.quantity -= 1
@@ -648,9 +588,9 @@ def cart_notupdate(req, id):
                 parcel_item.borrow_count -= 1
                 cart_parcel.save()
                 parcel_item.save()  
-        elif cart_parcel.quantity < 1:
+        if cart_parcel.quantity < 0:
             cart_parcel.delete()
-    return redirect('/user_cart')"""
+    return redirect('/user_cart')
 
 @login_required
 def user_queue(req):
@@ -817,18 +757,15 @@ def add_to_cart_durable(req, id):
     if req.user.phone is None or req.user.token is None:
         return redirect('/phone_add_number')
     durable_item = Add_Durable.objects.get(id=id)
-    queue_item = QueueDurable.objects.filter(user=req.user, queue_item=durable_item).first()
     if durable_item.quantity > 0 or durable_item.quantitytype == "∞":
         if durable_item.quantitytype == "∞":
             durable_item.borrow_count += 1  
             durable_item.save()
-            queue_item.delete()
             messages.success(req, 'เพิ่มรายการสำเร็จ!')
         else:
             durable_item.quantity -= 1
             durable_item.borrow_count += 1  
             durable_item.save()
-            # queue_item.delete()
             messages.success(req, 'เพิ่มรายการสำเร็จ!')
         existing_cart_durable = CartDurable.objects.filter(durable_item=durable_item, user=req.user)
         if existing_cart_durable.exists():
@@ -840,6 +777,7 @@ def add_to_cart_durable(req, id):
             cart_durable.nameposition = durable_item.nameposition.nameposition
             if cart_durable.quantity < 3:
                 cart_durable.save()
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')    
         else:
             cart_durable = CartDurable.objects.create(user=req.user, durable_item=durable_item)
             cart_durable.quantity = 1  
@@ -849,48 +787,55 @@ def add_to_cart_durable(req, id):
             cart_durable.nameposition = durable_item.nameposition.nameposition
             if cart_durable.quantity < 3:
                 cart_durable.save()
-        return redirect('/user_cart')
-    else:
-        if queue_item:
-            if durable_item.quantity > 0 or durable_item.quantitytype == "∞":
-                if durable_item.quantitytype == "∞":
-                    durable_item.borrow_count += 1  
-                    durable_item.save()
-                else:    
-                    durable_item.quantity -= 1
-                    durable_item.borrow_count += 1  
-                    durable_item.save()
-                existing_cart_durable = CartDurable.objects.filter(durable_item=durable_item, user=req.user)
-                if existing_cart_durable.exists():
-                    cart_durable = existing_cart_durable.first()
-                    cart_durable.quantity += 1
-                    cart_durable.name = durable_item.name
-                    cart_durable.type = durable_item.nametype
-                    cart_durable.statusDurable = durable_item.statustype
-                    cart_durable.nameposition = durable_item.nameposition.nameposition
-                    if cart_durable.quantity < 3:
-                        cart_durable.save()
-                else:
-                    cart_durable = CartDurable.objects.create(user=req.user, durable_item=durable_item)
-                    cart_durable.quantity = 1
-                    cart_durable.name = durable_item.name
-                    cart_durable.type = durable_item.nametype
-                    cart_durable.statusDurable = durable_item
-                    cart_durable.statusDurable = durable_item.statustype
-                    cart_durable.nameposition = durable_item.nameposition.nameposition
-                    cart_durable.borrow_count += 1
-                    if cart_durable.quantity < 3:
-                        cart_durable.save()
-                queue_item.delete()
-                return redirect('/user_cart')
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')    
+        queue_durable = QueueParcel.objects.filter(user=req.user, queue_item=durable_item).delete()    
+    return redirect('/user_cart')
+    
+@login_required
+def add_to_queue_durable(req, id):
+    if req.user.status == "ถูกจำกัดสิทธิ์":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    durable_item = Add_Durable.objects.get(id=id)
+    queue_durable = QueueDurable.objects.create(user=req.user, queue_item=durable_item)
+    queue_durable.name = durable_item.name
+    queue_durable.type = durable_item.nametype
+    queue_durable.is_borrowed = False
+    queue_durable.save()
+    messages.success(req, 'จองคิวสำเร็จ!')
+    return redirect('/user_queue_durable')    
+
+def add_to_cart_durable(req, id):
+    durable_item = Add_Durable.objects.get(id=id)
+    if durable_item.quantity > 0 or durable_item.quantitytype == "∞":
+        if durable_item.quantitytype == "∞":
+            cart_durable = CartDurable.objects.create(user=req.user, durable_item=durable_item)
+            durable_item.borrow_count += 1  
+            cart_durable.quantity = 1  
+            cart_durable.name = durable_item.name
+            cart_durable.type = durable_item.nametype
+            cart_durable.statusDurable = durable_item.statustype
+            cart_durable.nameposition = durable_item.nameposition.nameposition
+            if cart_durable.quantity < 3:
+                cart_durable.save()
+            durable_item.save()
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')
         else:
-            queue_item = QueueDurable.objects.create(user=req.user, queue_item=durable_item, name=durable_item.name, type=durable_item.nametype)
-            queue_item.name = durable_item.name
-            queue_item.type = durable_item.nametype
-            # queue_item.statusDurable = durable_item.statusDurable
-            queue_item.save()
-            messages.success(req, 'จองคิวสำเร็จ!')
-        return redirect('/user_queue_durable')
+            cart_durable = CartDurable.objects.create(user=req.user, durable_item=durable_item)
+            durable_item.quantity -= 1
+            durable_item.borrow_count += 1  
+            cart_durable.quantity = 1  
+            cart_durable.name = durable_item.name
+            cart_durable.type = durable_item.nametype
+            cart_durable.statusDurable = durable_item.statustype
+            cart_durable.nameposition = durable_item.nameposition.nameposition
+            if cart_durable.quantity < 3:
+                cart_durable.save()
+            durable_item.save()
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')
+    return redirect('/user_cart')
+    
 
 @login_required
 def cart_update_durable(req, id):
@@ -911,6 +856,7 @@ def cart_update_durable(req, id):
                 durable_item.quantity -= 1
                 durable_item.save()
     return redirect('/user_cart')
+
 
 @login_required
 def cart_notupdate_durable(req, id):
@@ -933,7 +879,7 @@ def cart_notupdate_durable(req, id):
                 durable_item.borrow_count -= 1
                 cart_durable.save()
                 durable_item.save()  
-        elif cart_durable.quantity < 1:
+        if cart_durable.quantity < 1:
             cart_durable.delete()
     return redirect('/user_cart')
 

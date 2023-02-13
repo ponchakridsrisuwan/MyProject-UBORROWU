@@ -21,6 +21,8 @@ urlpatterns = [
     
     path('user_cart',views.user_cart, name="user_cart"), 
     path('add_to_cart/<int:id>',views.add_to_cart, name="add_to_cart"), 
+    path('add_to_queue/<int:id>',views.add_to_queue, name="add_to_queue"),
+    path('add_to_queue_durable/<int:id>',views.add_to_queue_durable, name="add_to_queue_durable"),
     path('cart_update/<int:id>', views.cart_update, name="cart_update"),
     path('cart_notupdate/<int:id>', views.cart_notupdate, name="cart_notupdate"),
     path('cart_update_durable/<int:id>', views.cart_update_durable, name="cart_update_durable"),

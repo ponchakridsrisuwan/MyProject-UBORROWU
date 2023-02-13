@@ -48,6 +48,7 @@ class CartParcel(models.Model):
     
     def __str__(self):
         return self.user    
+
     
 class CartDurable(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
@@ -82,9 +83,9 @@ class QueueParcel(models.Model):
     name = models.CharField(max_length=200, default="", blank=True)
     type = models.CharField(max_length=200, default="", blank=True)    
     is_borrowed = models.BooleanField(default=False)
-
+    
     def __str__(self):
-        return self.name        
+        return self.name  
     
 class LoanParcel(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
