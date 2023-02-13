@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 from django.contrib.messages import constants as messages
+from celery import Celery
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -180,8 +182,8 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'none' #การยืนยันบัญชีอีเมล
 LOGIN_URL = 'login' #เข้าระบบ
-LOGIN_REDIRECT_URL = 'user_index' #การเปลี่ยนเส้นทาง LOGIN
-LOGOUT_REDIRECT_URL = 'login_user_index' #การเปลี่ยนเส้นทาง LOGOUT
+LOGIN_REDIRECT_URL = 'Home' #การเปลี่ยนเส้นทาง LOGIN
+LOGOUT_REDIRECT_URL = '/' #การเปลี่ยนเส้นทาง LOGOUT
 SOCIALACCOUNT_LOGIN_ON_GET = True #เข้าสู่ระบบบัญชีโซเชียล
 #ACCOUNT_USER_MODEL_USERNAME_FIELD = None #ช่องข้อมูล user model ของบัญชี
 #ACCOUNT_EMAIL_REQUIRED = True #ต้องมีบัญชีอีเมล
@@ -204,3 +206,17 @@ MESSAGE_TAGS = {
         messages.WARNING: 'alert-warning',
         messages.ERROR: 'alert-danger',
  }
+
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mywebsite.settings')
+
+app = Celery('mywebsite')
+app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()
+
+CELERY_BEAT_SCHEDULE = {
+    'remove_expired_cart_items': {
+        'task': 'your_app_name.tasks.remove_expired_cart_items',
+        'schedule': timedelta(minutes=1),  # run every minute
+    },
+}

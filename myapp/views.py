@@ -22,64 +22,12 @@ import pickle
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
 import pandas as pd
+#from sqlalchemy import create_engine
 
-#with open('myapp/parcel_rule.pickle', 'rb') as file:
-#    parcel_rule = pickle.load(file)
-
-
+#engine = create_engine("mysql+mariadbconnector://user:password@host:port/database_name")
 
 #หน้าหลัก
 def HomePage(req):
-    AllParcel = Add_Parcel.objects.all()
-    AllDurable = Add_Durable.objects.all()
-    if req.user:
-        selected_category = req.GET.get('category', None)
-        AllCategoryType = CategoryType.objects.all()
-        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-        Total = TotalParcel + TotalDurable
-        AllLoanParcel = LoanParcel.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ'), user=req.user)
-        AllLoanDurable = LoanDurable.objects.filter(Q(status='รออนุมัติ') | Q(status='รอยืนยันการรับ') | Q(status='กำลังยืม')                                       | Q(status='รอยืนยันการคืน')| Q(status='คืนไม่สำเร็จ') , user=req.user)
-        if 'sort' in req.GET:
-            last_sort = req.GET.get('sort', 'default')
-            if req.GET['sort'] == 'category':
-                AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
-                AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
-            else:
-                last_sort = 'default'
-                AllDurable = Add_Durable.objects.all()
-                AllParcel = Add_Parcel.objects.all()
-        else:
-            last_sort = 'default'
-            AllDurable = Add_Durable.objects.all()
-            AllParcel = Add_Parcel.objects.all() 
-        p_listparcel = Paginator(AllParcel, 8)
-        p_listdurable = Paginator(AllDurable, 8)
-        page_num = req.GET.get('page', 1)
-        try:
-            pageparcel = p_listparcel.page(page_num)
-            pagedurable = p_listdurable.page(page_num)
-        except:
-            pageparcel = p_listparcel.page(1)  
-            pagedurable = p_listdurable.page(1)      
-        context = {
-            "navbar" : "user_index",
-            "Total" : Total,
-            "last_sort" : last_sort,
-            "selected_category" : selected_category,
-            "AllCategoryType" : AllCategoryType,
-            "AllParcel" : AllParcel,
-            "AllDurable" : AllDurable,
-            "pageparcel" : pageparcel,
-            "pagedurable" : pagedurable,
-            "AllLoanParcel" : AllLoanParcel,
-            "AllLoanDurable" : AllLoanDurable,
-        }    
-        return render(req, 'pages/user_index.html', context)
-
-def login_user_index(req):
     AllParcel = Add_Parcel.objects.all()
     AllDurable = Add_Durable.objects.all()
     selected_category = req.GET.get('category', None)
@@ -115,8 +63,54 @@ def login_user_index(req):
             "AllDurable" : AllDurable,
             "pageparcel" : pageparcel,
             "pagedurable" : pagedurable,
-            }    
-    return render(req, 'pages/login_user_index.html', context)
+            }     
+    return render(req, 'pages/user_index.html', context)
+
+def Home(req):
+    AllParcel = Add_Parcel.objects.all()
+    AllDurable = Add_Durable.objects.all()
+    AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+    AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
+    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+    Total = TotalParcel + TotalDurable
+    if req.user:
+        selected_category = req.GET.get('category', None)
+        AllCategoryType = CategoryType.objects.all()   
+        if 'sort' in req.GET:
+            last_sort = req.GET.get('sort', 'default')
+            if req.GET['sort'] == 'category':
+                AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+                AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+            else:
+                last_sort = 'default'
+                AllDurable = Add_Durable.objects.all()
+                AllParcel = Add_Parcel.objects.all()
+        else:
+            last_sort = 'default'
+            AllDurable = Add_Durable.objects.all()
+            AllParcel = Add_Parcel.objects.all() 
+        p_listparcel = Paginator(AllParcel, 8)
+        p_listdurable = Paginator(AllDurable, 8)
+        page_num = req.GET.get('page', 1)
+        try:
+            pageparcel = p_listparcel.page(page_num)
+            pagedurable = p_listdurable.page(page_num)
+        except:
+            pageparcel = p_listparcel.page(1)  
+            pagedurable = p_listdurable.page(1)      
+    context = {
+            "navbar" : "Home",
+            "last_sort" : last_sort,
+            "Total" : Total,
+            "selected_category" : selected_category,
+            "AllCategoryType" : AllCategoryType,
+            "AllParcel" : AllParcel,
+            "AllDurable" : AllDurable,
+            "pageparcel" : pageparcel,
+            "pagedurable" : pagedurable,
+        }    
+    return render(req, 'pages/Home.html', context)
 
 def phone_add_number(req):
     if req.method == 'POST':
@@ -1064,6 +1058,10 @@ def user_detail(req, id):
     category = OnlyParcel.category
     AllParcelAll = Add_Parcel.objects.filter(category=category).exclude(id=AllParcel.id)
     waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
+    #QLoanParcel = "SELECT * FROM LoanParcel"
+    #dfParcel = pd.read_sql(QLoanParcel, engine)
+    #dfParcel = dfParcel.drop(["id", "date_add", "start_date", "description", "reasonfromstaff", "status", 
+    #                      "type", "quantity", "statusParcel", "quantitytype", "nameposition", "parcel_item_id"], axis = 1)
     df = pd.read_csv('myapp/recommend.csv')
     df = df.drop_duplicates().reset_index(drop=True)
     df = df.pivot(index='item_id', columns='user_id', values='user_id')
@@ -1100,6 +1098,10 @@ def user_detail_durable(req, id):
     category = OnlyDurable.category
     AllDurableAll = Add_Durable.objects.filter(category=category).exclude(id=AllDurable.id)
     waiting_qDurable = QueueDurable.objects.filter(queue_item=AllDurable).count()
+    #QLoanDurable = "SELECT * FROM LoanDurable"
+    #dfDurable = pd.read_sql(QLoanDurable, engine)
+    #dfDurable = dfDurable.drop(["id", "date_add", "start_date", "end_date", "description", "reasonfromstaff", "status", 
+    #                      "type", "quantity", "statusDurable", "quantitytype", "nameposition", "durable_item_id"], axis = 1)
     df = pd.read_csv('myapp/recommend.csv')
     df = df.drop_duplicates().reset_index(drop=True)
     df = df.pivot(index='item_id', columns='user_id', values='user_id')

@@ -6,7 +6,9 @@ urlpatterns = [
     # staff
     
     path('staff_index_borrow', views.staff_index_borrow, name="staff_index_borrow"),
+    path('staff_index_borrow_wait', views.staff_index_borrow_wait, name="staff_index_borrow_wait"),
     path('staff_index_borrow_durable', views.staff_index_borrow_durable, name="staff_index_borrow_durable"),
+    path('staff_index_borrow_durable_wait', views.staff_index_borrow_durable_wait, name="staff_index_borrow_durable_wait"),
     path('staff_index_borrownow', views.staff_index_borrownow, name="staff_index_borrownow"),
         
         

@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-lg ">
     <div class="container-fluid">
         {% if user.right == "นักศึกษา" or user.right == "เจ้าหน้าที่" or user.right == "ผู้ดูแลระบบ" %}
-        <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'user_index' %}">U BORROW U</a>
+        <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'Home' %}">U BORROW U</a>
         {% else %}
-        <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'login_user_index' %}">U BORROW U</a>
+        <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'user_index' %}">U BORROW U</a>
         {% endif %}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
             aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,11 +13,11 @@
             <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                 <li class="nav-item ">
                     {% if user.right == "นักศึกษา" or user.right == "เจ้าหน้าที่" or user.right == "ผู้ดูแลระบบ" %}
+                    <a class="nav-link fs-6 {% if navbar == 'Home' %} active {% endif %}" aria-current="page"
+                    href="{% url 'Home' %}">หน้าหลัก</a>
+                    {% else %}
                     <a class="nav-link fs-6 {% if navbar == 'user_index' %} active {% endif %}" aria-current="page"
                     href="{% url 'user_index' %}">หน้าหลัก</a>
-                    {% else %}
-                    <a class="nav-link fs-6 {% if navbar == 'login_user_index' %} active {% endif %}" aria-current="page"
-                    href="{% url 'login_user_index' %}">หน้าหลัก</a>
                     {% endif %}
                 </li>
                 {% if user.right == "นักศึกษา" and user.status == "ปกติ" %}

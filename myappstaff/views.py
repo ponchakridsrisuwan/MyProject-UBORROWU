@@ -453,6 +453,50 @@ def staff_index_borrow(req):
     return render(req,'pages/staff_index_borrow.html', context)
 
 @login_required
+def staff_index_borrow_wait(req):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    AllLoanParcel = LoanParcel.objects.filter(status='รอยืนยันการรับ').order_by('name', 'date_add')
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'latest':
+            AllLoanParcel = AllLoanParcel.order_by('-date_add')
+        elif req.GET['sort'] == 'start_date':
+            AllLoanParcel = AllLoanParcel.order_by('start_date')    
+        elif req.GET['sort'] == 'name':
+            AllLoanParcel = AllLoanParcel.order_by('name')      
+        elif req.GET['sort'] == 'quantity':
+            AllLoanParcel = AllLoanParcel.order_by('-quantity')   
+        elif req.GET['sort'] == 'default':
+             AllLoanParcel = LoanParcel.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
+        else:
+            last_sort = 'default'
+            AllLoanParcel = LoanParcel.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
+    else:
+        last_sort = 'default'
+        AllLoanParcel = LoanParcel.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
+    search_parcel = ""
+    if 'search_parcel' in req.GET:
+        search_parcel = req.GET['search_parcel']
+        AllLoanParcel = AllLoanParcel.filter(Q(name__contains=search_parcel))
+    page_num = req.GET.get('page', 1)
+    p = Paginator(AllLoanParcel, 10)
+    try:
+        page = p.page(page_num)
+    except:
+        page = p.page(1)    
+    context = {
+        "navbar" : "staff_index_borrow",
+        "AllLoanParcel" : AllLoanParcel,
+        "page" : page,
+        "last_sort" : last_sort,
+        "search_parcel" : search_parcel,
+    }
+    return render(req,'pages/staff_index_borrow_wait.html', context)
+
+@login_required
 def staff_index_borrow_durable(req):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
@@ -495,6 +539,50 @@ def staff_index_borrow_durable(req):
         "search_durable" : search_durable,
     }
     return render(req,'pages/staff_index_borrow_durable.html', context)
+
+@login_required
+def staff_index_borrow_durable_wait(req):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    AllLoanDurable = LoanDurable.objects.filter(status='รอยืนยันการรับ').order_by('name', 'date_add')
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'latest':
+            AllLoanDurable = AllLoanDurable.order_by('-date_add')
+        elif req.GET['sort'] == 'start_date':
+            AllLoanDurable = AllLoanDurable.order_by('start_date')    
+        elif req.GET['sort'] == 'name':
+            AllLoanDurable = AllLoanDurable.order_by('name')      
+        elif req.GET['sort'] == 'quantity':
+            AllLoanDurable = AllLoanDurable.order_by('-quantity')   
+        elif req.GET['sort'] == 'default':
+            AllLoanDurable = LoanDurable.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
+        else:
+            last_sort = 'default'
+            AllLoanDurable = LoanDurable.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
+    else:
+        last_sort = 'default'
+        AllLoanDurable = LoanDurable.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
+    search_durable = ""
+    if 'search_durable' in req.GET:
+        search_durable = req.GET['search_durable']
+        AllLoanDurable = AllLoanDurable.filter(Q(name__contains=search_durable))
+    page_num = req.GET.get('page', 1)
+    p = Paginator(AllLoanDurable, 10)
+    try:
+        page = p.page(page_num)
+    except:
+        page = p.page(1) 
+    context =  {
+        "navbar" : "staff_index_borrow_durable",
+        "AllLoanDurable" : AllLoanDurable,
+        "page" : page,
+        "last_sort" : last_sort,
+        "search_durable" : search_durable,
+    }
+    return render(req,'pages/staff_index_borrow_durable_wait.html', context)
 
 # จัดการรายการยืม
 @login_required
