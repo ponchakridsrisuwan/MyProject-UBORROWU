@@ -28,7 +28,7 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <h5 class="card-title text-dark">{{ AllParcel.name }}</h5>
+                        <h5 class="card-title text-dark text-truncate">{{ AllParcel.name }}</h5>
                         <span class="mb-4 text">{{ AllParcel.status }}</span>
                         <a href="{% url 'user_detail' AllParcel.id %}" class="stretched-link"></a>
                     </div>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <h5 class="card-title text-dark">{{ AllDurable.name }}</h5>
+                        <h5 class="card-title text-dark text-truncate">{{ AllDurable.name }}</h5>
                         <span class="mb-4">{{ AllDurable.status }}</span>
                         <a href="{% url 'user_detail_durable' AllDurable.id %}" class="stretched-link"></a>
                     </div>
@@ -75,7 +75,7 @@
             <h5 class="fw-bold">รายการวัสดุ</h5>
         </div>
         <div>
-            <a class="text-muted" href="{% url 'login_user_durable_articles' %}">ดูรายการทั้งหมด</a>
+            <a class="text-muted" href=" user_durable_articles?sort=nametype&nametype=วัสดุ ">ดูรายการทั้งหมด</a>
         </div>
     </div>
 
@@ -88,7 +88,7 @@
                 </div>
                 <div class="card-body small">
                     <div class="text-center">
-                        <h5 class="card-title">{{ AllParcel.name }}</h5>
+                        <h5 class="card-title text-truncate">{{ AllParcel.name }}</h5>
                     </div>
                     <div>
                         <div class="d-flex justify-content-between">
@@ -123,7 +123,7 @@
                     <h5 class="fw-bold">รายการครุภัณฑ์</h5>
                 </div>
                 <div>
-                    <a class="text-muted" href="{% url 'login_user_durable_articles' %}">ดูรายการทั้งหมด</a>
+                    <a class="text-muted" href=" user_durable_articles?sort=nametype&nametype=ครุภัณฑ์ ">ดูรายการทั้งหมด</a>
                 </div>
             </div>
             
@@ -136,7 +136,7 @@
                         </div>
                         <div class="card-body small">
                             <div class="text-center">
-                                <h5 class="card-title">{{ AllDurable.name }}</h5>
+                                <h5 class="card-title text-truncate">{{ AllDurable.name }}</h5>
                             </div>
                             <div>
                                 <div class="d-flex justify-content-between">

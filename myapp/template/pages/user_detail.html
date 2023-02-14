@@ -122,7 +122,7 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <h5 class="card-title text-dark">{{ rec_parcels.name }}</h5>
+                        <h5 class="card-title text-dark text-truncate">{{ rec_parcels.name }}</h5>
                         <span class="mb-4 text">{{ rec_parcels.status }}</span>
                         <a href="{% url 'user_detail' rec_parcels.id %}" class="stretched-link"></a>
                     </div>
@@ -136,7 +136,7 @@
         <div>
             <h5 class="fw-bold">รายการที่เกี่ยวข้อง</h5>
         </div>
-        {% for AllParcelAll in AllParcelAll %}
+        {% for AllParcelAll in pageparcel.object_list %}
             <div class="col-6 col-sm-4 col-md-3 mb-4">
                 <div class=" card ">
                     <div class="text-center thumbnailey w-100" data-mdb-ripple-color="light">
@@ -144,7 +144,7 @@
                     </div>
                     <div class="card-body small">
                         <div class="text-center">
-                            <h5 class="card-title">{{ AllParcelAll.name }}</h5>
+                            <h5 class="card-title text-truncate">{{ AllParcelAll.name }}</h5>
                             <span class="mb-4 text-success">{{ AllParcelAll.status }}</span>
                         </div>
                         <div>

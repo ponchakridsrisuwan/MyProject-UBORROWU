@@ -74,6 +74,8 @@ def Home(req):
     TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
     TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
     Total = TotalParcel + TotalDurable
+    AllLoanParcel = LoanParcel.objects.filter(Q(status='รอยืนยันการรับ'), user=req.user)
+    AllLoanDurable = LoanDurable.objects.filter(Q(status='รอยืนยันการรับ') , user=req.user)
     if req.user:
         selected_category = req.GET.get('category', None)
         AllCategoryType = CategoryType.objects.all()   
@@ -109,6 +111,8 @@ def Home(req):
             "AllDurable" : AllDurable,
             "pageparcel" : pageparcel,
             "pagedurable" : pagedurable,
+            "AllLoanParcel" : AllLoanParcel,
+            "AllLoanDurable" : AllLoanDurable,
         }    
     return render(req, 'pages/Home.html', context)
 
@@ -1072,13 +1076,21 @@ def user_detail(req, id):
     items = high_sc[(high_sc['support'] >= 0.7) & (high_sc['confidence'] >= 0.7)]['antecedents'].tolist()
     item_ids = set([int(i) for i in [item for sublist in items for item in sublist]])
     rec_parcels = Add_Parcel.objects.filter(id__in=item_ids).exclude(id=AllParcel.id)
-
+    
+    p_listparcel = Paginator(AllParcelAll, 8)
+    page_num = req.GET.get('page', 1)
+    try:
+        pageparcel = p_listparcel.page(page_num)
+    except:
+        pageparcel = p_listparcel.page(1)     
+        
     context = {
         "AllParcel": AllParcel,
         "waiting_qParcel" : waiting_qParcel,
         "AllParcelAll" : AllParcelAll,
         "Total" : Total,
         "rec_parcels": rec_parcels,
+        "pageparcel" : pageparcel,
     }
     return render(req,'pages/user_detail.html',context)
 
@@ -1116,6 +1128,13 @@ def user_detail_durable(req, id):
         waiting_period = waiting_qDurable * AllDurable.numdate
     else:
         waiting_period = None
+        
+    p_listparcel = Paginator(AllDurableAll, 8)
+    page_num = req.GET.get('page', 1)
+    try:
+        pagedurable = p_listparcel.page(page_num)
+    except:
+        pagedurable = p_listparcel.page(1)             
     context = {
         "AllDurable" : AllDurable,
         "waiting_qDurable" : waiting_qDurable,
@@ -1123,6 +1142,7 @@ def user_detail_durable(req, id):
         "AllDurableAll" : AllDurableAll,
         "Total" : Total,
         "rec_durable" : rec_durable,
+        "pagedurable" : pagedurable,
     }
     return render(req,'pages/user_detail_durable.html',context)
 
@@ -1198,6 +1218,8 @@ def login_user_durable_articles(req):
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
         AllCategoryType = CategoryType.objects.all()
+        statustype_list = [i[0] for i in STATUSTYPE]
+        nametype_list = [i[0] for i in NAMETYPE] 
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')
             if req.GET['sort'] == 'name':
@@ -1239,6 +1261,8 @@ def login_user_durable_articles(req):
             "search_query" : search_query,
             "AllCategoryType" : AllCategoryType,
             "selected_category" : selected_category,
+            "statustype": statustype_list,
+            "nametype": nametype_list,
         }
         return render(req, 'pages/login_user_durable_articles.html', context)   
 

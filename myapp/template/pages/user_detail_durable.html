@@ -135,7 +135,7 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <h5 class="card-title text-dark">{{ rec_durable.name }}</h5>
+                        <h5 class="card-title text-dark text-truncate">{{ rec_durable.name }}</h5>
                         <span class="mb-4 text">{{ rec_durable.status }}</span>
                         <a href="{% url 'user_detail_durable' rec_durable.id %}" class="stretched-link"></a>
                     </div>
@@ -149,7 +149,7 @@
         <div>
             <h5 class="fw-bold">รายการที่เกี่ยวข้อง</h5>
         </div>
-        {% for AllDurableAll in AllDurableAll %}
+        {% for AllDurableAll in pagedurable.object_list %}
         <div class="col-6 col-sm-4 col-md-3 mb-4">
             <div class=" card ">
                 <div class="text-center" data-mdb-ripple-color="light">
@@ -158,7 +158,7 @@
                 </div>
                 <div class="card-body small">
                     <div class="text-center">
-                        <h5 class="card-title">{{ AllDurableAll.name }}</h5>
+                        <h5 class="card-title text-truncate">{{ AllDurableAll.name }}</h5>
                         <span class="mb-4 text-success">{{ AllDurableAll.status }}</span>
                     </div>
                     <div>

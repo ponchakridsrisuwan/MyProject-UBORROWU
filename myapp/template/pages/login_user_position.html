@@ -58,42 +58,42 @@
                     </thead>
                     <tbody id="xTable">
                         {% for items in items %}
-                        <tr class="qrow text-center card-body">
+                        <tr class="qrow">
                             <td class="text-center">{{forloop.counter}}</td>
                             <td>
-                                <a class="text-center text-black" style="text-decoration:none"
+                                <a class="text-black " style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' items.id %}">
-                                    <p class="text-start">{{ items.name }}</p>
+                                    <span class="text-start d-inline-block text-truncate" style="max-width: 500px;">{{ items.name }}</span>
                                 </a>
                             </td>
                             <td>
                                 <a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' items.id %}">
-                                    <p class="text-center">{{ items.statustype }}</p>
+                                    <span>{{ items.statustype }}</span>
                                 </a>
                             </td>
                             <td>
                                 <a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' items.id %}">
-                                    <p class="text-center">{{ items.category }}</p>
+                                    <span>{{ items.category }}</span>
                                 </a>
                             </td>
                             <td>
                                 <a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' items.id %}">
-                                    <p class="text-center">{{ items.status }}</p>
+                                    <span>{{ items.status }}</span>
                                 </a>
                             </td>
                             <td>
                                 <a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' items.id %}">
-                                    <p class="text-center">{{ items.quantity }}</p>
+                                    <span>{{ items.quantity }}</span>
                                 </a>
                             </td>
                             <td>
                                 <a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' items.id %}">
-                                    <p class="text-center">{{ items.borrow_count }}</p>
+                                    <span>{{ items.borrow_count }}</span>
                                 </a>
                             </td>
                         </tr>

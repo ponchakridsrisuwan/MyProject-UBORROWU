@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-lg ">
     <div class="container-fluid">
-        {% if user.right == "นักศึกษา" or user.right == "เจ้าหน้าที่" or user.right == "ผู้ดูแลระบบ" %}
+        {% if user.right == "นักศึกษา" or user.right == "เจ้าหน้าที่" or user.right == "ผู้ดูแลระบบ" or user.is_superuser %}
         <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'Home' %}">U BORROW U</a>
         {% else %}
         <a class="navbar-brand text-black fw-bold fs-4 px-5" href="{% url 'user_index' %}">U BORROW U</a>

@@ -94,9 +94,9 @@
                 <ul class="dropdown-menu dropdown-menu-lg-end my-2">
                     <li><a class="dropdown-item" href="{% url 'staff_personal_info' %}" >ข้อมูลส่วนตัว</a></li>
                     {% if user.right == "เจ้าหน้าที่" %}
-                    <li><a class="dropdown-item" href="{% url 'user_index' %}">ระบบสำหรับผู้ใช้ทั่วไป</a></li>
+                    <li><a class="dropdown-item" href="{% url 'Home' %}">ระบบสำหรับผู้ใช้ทั่วไป</a></li>
                     {% elif user.right == "ผู้ดูแลระบบ" or user.is_superuser %}
-                    <li><a class="dropdown-item" href="{% url 'user_index' %}">ระบบสำหรับผู้ใช้ทั่วไป</a></li>
+                    <li><a class="dropdown-item" href="{% url 'Home' %}">ระบบสำหรับผู้ใช้ทั่วไป</a></li>
                     <li><a class="dropdown-item" href="{% url 'admin_user' %}">ระบบสำหรับผู้ดูแลระบบ</a></li>
                     {% endif %}
                     <li>
