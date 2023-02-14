@@ -126,10 +126,14 @@
     </div>
     <div class="page-links">
         {% if pageparcel.has_previous %}
+        <div class="ps-5 pb-3">
         <a  href="?page={{ pageparcel.previous_page_number }}">หน้าก่อนหน้า</a>
+      </div>
         {% endif %}
         {% if pageparcel.has_next %}
+        <div class="ps-5 pb-3">
         <a  class="ms-5"  href="?page={{ pageparcel.next_page_number }}">หน้าถัดไป</a>
+      </div>
         {% endif %}
       </div>
 </div>

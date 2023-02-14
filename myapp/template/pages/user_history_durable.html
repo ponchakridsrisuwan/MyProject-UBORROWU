@@ -72,10 +72,14 @@
           </tbody>
           <div class="page-links">
             {% if pagedurable.has_previous %}
+            <div class="ps-5 pb-3">
             <a href="?page={{ pagedurable.previous_page_number }}">หน้าก่อนหน้า</a>
+            </div>
             {% endif %}
             {% if pagedurable.has_next %}
+            <div class="ps-5 pb-3">
             <a class="ms-5"  href="?page={{ pagedurable.next_page_number }}">หน้าถัดไป</a>
+            </div>
             {% endif %}
           </div>
         </table>

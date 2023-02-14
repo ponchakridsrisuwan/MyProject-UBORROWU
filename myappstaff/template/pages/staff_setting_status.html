@@ -108,10 +108,14 @@
             </div>
             <div class="page-links">
                 {% if page.has_previous %}
+                <div class="ps-5 pb-3">
                 <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+                </div>
                 {% endif %}
                 {% if page.has_next %}
+                <div class="ps-5 pb-3">
                 <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+                </div>
                 {% endif %}
             </div>
             <!-- moal เพิ่มรายการ -->

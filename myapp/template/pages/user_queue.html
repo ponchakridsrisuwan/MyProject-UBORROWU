@@ -106,10 +106,14 @@
                     </tbody>
                     <div class="page-links">
                         {% if pagequeue.has_previous %}
+                        <div class="ps-5 pb-3">
                         <a href="?page={{ pagequeue.previous_page_number }}">หน้าก่อนหน้า</a>
+                        </div>
                         {% endif %}
                         {% if pagequeue.has_next %}
+                        <div class="ps-5 pb-3"></div>
                         <a class="ms-5" href="?page={{ pagequeue.next_page_number }}">หน้าถัดไป</a>
+                        </div>
                         {% endif %}
                     </div>
                 </table>
