@@ -77,11 +77,6 @@
                                     <li>
                                         <a class="dropdown-item btn-0
                                             btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#approved-{{forloop.counter}}">อนุมัติ</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item btn-0
-                                            btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#disapproved-{{forloop.counter}}">ไม่อนุมัติ</a>
                                     </li>
                                 </ul>
@@ -116,49 +111,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- อนุมัติ -->
-                        <div class="modal fade" id="approved-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
-                            aria-hidden="true">
-                            <form method="post" action="/staff_borrow_parcel/{{AllLoanParcel.id }}"
-                                enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="modal-dialog modal-lg
-                                    modal-fullscreen-lg-down">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="approvedModal">ยืนยันการอนุมัติการยืมของ
-                                                {{AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <span class="fw-bold">จำนวน :
-                                            </span><span class="small text-black-50">{{AllLoanParcel.quantity }}</span>&nbsp
-                                            <span class="fw-bold">เหตุผลการยืม :
-                                            </span><span class="small text-black-50">{{AllLoanParcel.description }}</span><br>
-                                            <span class="fw-bold">วันที่ทำรายการ :
-                                            </span><span class="small text-black-50">{{AllLoanParcel.date_add }}</span>&nbsp
-                                            <span class="fw-bold">วันที่ต้องการยืม :
-                                            </span><span class="small text-black-50">{{AllLoanParcel.start_date }}</span>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-floating">
-                                                <textarea class="form-control" id="reasonfromstaff" style="height:
-                                                    100px" type="text" name="reasonfromstaff"></textarea>
-                                                <label for="floatingTextarea2">รายละเอียดเพิ่มเติม</label>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn
-                                                btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                            <button type="submit" class="btn btn-warning
-                                                rounded-pill">ยืนยัน</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
 
                         <!-- ไม่อนุมัติ -->

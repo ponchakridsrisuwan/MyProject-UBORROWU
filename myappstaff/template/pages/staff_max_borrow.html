@@ -2,7 +2,8 @@
 {% block main %}
 
 <div class=" container">
-    <div class="bg-white rounded-2 mb-4 px-5 py-3">
+    <div class="bg-white shadow rounded-2 mb-4 py-3">
+        <div class="px-5">
         <div class="d-flex justify-content-between ">
             <div>
                 <h5 class="fw-bold">รายงานจำนวนการยืมวัสดุทั้งหมด</h5>
@@ -31,35 +32,34 @@
                 </form>
             </div>
         </div>
-        <hr>
-        <div class="row mt-3  mx-5">
-            <table class="table">
+    </div>
+    <div class="col-lg-12 px-2">
+        <div class="table-responsive">
+            <table class="table small">
                 <thead class="table">
                   <tr class="table bg-warning">
-                        <th class="col-md-3" scope="col">รายการ</th>
-                        <th class="col-md-2  text-center" scope="col">ประเภทรายการ</th>
-                        <th class="col-md-2  text-center" scope="col">ประเภท</th>
-                        <th class="col-md-2 text-center" scope="col">จำนวนคงเหลือ</th>
-                        <th class="col-md-3 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
-                        <th class="col-md-2 text-center" scope="col"></th>
-                        <th class="col-md-2 text-center" scope="col"></th>
+                        <th class="col-md-7" scope="col">รายการ</th>
+                        <th class="col-md-1  text-center" scope="col">ประเภทรายการ</th>
+                        <th class="col-md-1  text-center" scope="col">ประเภท</th>
+                        <th class="col-md-1 text-center" scope="col">จำนวนคงเหลือ</th>
+                        <th class="col-md-1 text-center" scope="col">จำนวนครั้งที่ถูกยืม</th>
+                        <th class="col-md-1 text-center" scope="col"></th>
                     </tr>
                 </thead>
                 <tbody id="xTable">
                     {% for MaxLoanParcel in MaxLoanParcel %}
-                    <tr class="qrow text-center">
-                        <td>
-                            <p class="text-start">{{ MaxLoanParcel.name }}</p>
+                    <tr class="qrow ">
+                        <td class="text-start text-truncate"  style="max-width: 330px;">{{ MaxLoanParcel.name }}
                         </td>
-                        <td>{{ MaxLoanParcel.nametype }}</td>
-                        <td>{{ MaxLoanParcel.statustype }}</td>
+                        <td class="text-center">{{ MaxLoanParcel.nametype }}</td>
+                        <td class="text-center">{{ MaxLoanParcel.statustype }}</td>
                         {% if MaxLoanParcel.quantitytype == "∞" %}
-                        <td>{{ MaxLoanParcel.quantitytype }}</td>
+                        <td class="text-center">{{ MaxLoanParcel.quantitytype }}</td>
                         {% else %}
-                        <td>{{ MaxLoanParcel.quantity }}</td>
+                        <td class="text-center">{{ MaxLoanParcel.quantity }}</td>
                         {% endif %}
-                        <td>{{ MaxLoanParcel.borrow_count }}</td>
-                        <td>
+                        <td class="text-center">{{ MaxLoanParcel.borrow_count }}</td>
+                        <td class="text-center">
                             <a type="button" href="{% url 'staff_manage_parcel' %}"
                                 class="text-center btn btn-success rounded-pill badge">ข้อมูลรายการ</a>
                         </td>
@@ -73,4 +73,6 @@
             </table>
         </div>
     </div>
+    </div>
+</div>
     {% endblock %}

@@ -267,7 +267,7 @@
                                     href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.nametype }}</a></td>
                             <td><a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.statustype }}</a></td>
-                            {% if MaxLoanParcel.quantitytype != "ต้องการระบุจำนวน" %}
+                            {% if MaxLoanParcel.quantitytype == "∞" %}
                             <td><a class="text-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' MaxLoanParcel.id %}">{{ MaxLoanParcel.quantitytype }}</a></td>
                             {% else %}
