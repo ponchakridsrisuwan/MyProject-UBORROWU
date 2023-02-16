@@ -22,9 +22,6 @@ import pickle
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
 import pandas as pd
-#from sqlalchemy import create_engine
-
-#engine = create_engine("mysql+mariadbconnector://user:password@host:port/database_name")
 
 #หน้าหลัก
 def HomePage(req):
@@ -1062,18 +1059,16 @@ def user_detail(req, id):
     category = OnlyParcel.category
     AllParcelAll = Add_Parcel.objects.filter(category=category).exclude(id=AllParcel.id)
     waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
-    #QLoanParcel = "SELECT * FROM LoanParcel"
-    #dfParcel = pd.read_sql(QLoanParcel, engine)
-    #dfParcel = dfParcel.drop(["id", "date_add", "start_date", "description", "reasonfromstaff", "status", 
-    #                      "type", "quantity", "statusParcel", "quantitytype", "nameposition", "parcel_item_id"], axis = 1)
-    df = pd.read_csv('myapp/recommend.csv')
+    df = pd.read_csv('myapp/myapp_loanparcel.csv')
+    df = df.drop(["id","date_add","start_date","description","reasonfromstaff","status","name"
+                  ,"type","quantity","statusParcel","quantitytype","nameposition"], axis = 1)
     df = df.drop_duplicates().reset_index(drop=True)
-    df = df.pivot(index='item_id', columns='user_id', values='user_id')
+    df = df.pivot(index='parcel_item_id', columns='user_id', values='user_id')
     df = df.notnull().astype(int)
-    freq_item = apriori(df, min_support=0.3, use_colnames=True)
-    rules = association_rules(freq_item, metric="confidence", min_threshold=0.6)
-    high_sc = rules[(rules['support'] >= 0.7) & (rules['confidence'] >= 0.7)]
-    items = high_sc[(high_sc['support'] >= 0.7) & (high_sc['confidence'] >= 0.7)]['antecedents'].tolist()
+    freq_item = apriori(df, min_support=0.03, use_colnames=True)
+    rules = association_rules(freq_item, metric="confidence", min_threshold=0.03)
+    high_sc = rules[(rules['support'] >= 0.03) & (rules['confidence'] >= 0.03)]
+    items = high_sc[(high_sc['support'] >= 0.03) & (high_sc['confidence'] >= 0.03)]['antecedents'].tolist()
     item_ids = set([int(i) for i in [item for sublist in items for item in sublist]])
     rec_parcels = Add_Parcel.objects.filter(id__in=item_ids).exclude(id=AllParcel.id)
     
@@ -1110,13 +1105,11 @@ def user_detail_durable(req, id):
     category = OnlyDurable.category
     AllDurableAll = Add_Durable.objects.filter(category=category).exclude(id=AllDurable.id)
     waiting_qDurable = QueueDurable.objects.filter(queue_item=AllDurable).count()
-    #QLoanDurable = "SELECT * FROM LoanDurable"
-    #dfDurable = pd.read_sql(QLoanDurable, engine)
-    #dfDurable = dfDurable.drop(["id", "date_add", "start_date", "end_date", "description", "reasonfromstaff", "status", 
-    #                      "type", "quantity", "statusDurable", "quantitytype", "nameposition", "durable_item_id"], axis = 1)
-    df = pd.read_csv('myapp/recommend.csv')
+    df = pd.read_csv('myapp/myapp_loandurable.csv')
+    df = df.drop(["id","date_add","start_date","end_date","description","reasonfromstaff","status"
+                  ,"name","type","quantity","statusDurable","quantitytype","nameposition"], axis = 1)
     df = df.drop_duplicates().reset_index(drop=True)
-    df = df.pivot(index='item_id', columns='user_id', values='user_id')
+    df = df.pivot(index='durable_item_id', columns='user_id', values='user_id')
     df = df.notnull().astype(int)
     freq_item = apriori(df, min_support=0.3, use_colnames=True)
     rules = association_rules(freq_item, metric="confidence", min_threshold=0.6)
