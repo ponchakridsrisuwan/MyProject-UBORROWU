@@ -57,9 +57,9 @@
                             <td>{{ AllLoanDurable.user.first_name }}&nbsp{{AllLoanDurable.user.last_name }}</td>
                             <td class="text-truncate">{{ AllLoanDurable.name }}</td>
                             <td class="text-center">{{ AllLoanDurable.quantity }}</td>
-                            <td>{{ AllLoanDurable.date_add }}</td>
-                            <td>{{ AllLoanDurable.start_date }}</td>
-                            <td>
+                            <td class="text-center">{{ AllLoanDurable.date_add }}</td>
+                            <td class="text-center">{{ AllLoanDurable.start_date }}</td>
+                            <td class="text-center">
                                 <span class="text-warning">{{ AllLoanDurable.status }}</span>
                             </td>
                             <td>
@@ -69,29 +69,25 @@
                                     <li>
                                         <a class="dropdown-item btn-0
                                     btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#detail-{{forloop.counter}}">รายละเอียด</a>
+                                            data-bs-target="#detaily-{{forloop.counter}}">รายละเอียด</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item btn-0
                                     btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#approved-{{forloop.counter}}">อนุมัติ</a>
+                                            data-bs-target="#approvedy-{{forloop.counter}}">อนุมัติ</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item btn-0
                                     btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#disapproved-{{forloop.counter}}">ไม่อนุมัติ</a>
+                                            data-bs-target="#disapprovedy-{{forloop.counter}}">ไม่อนุมัติ</a>
                                     </li>
                                 </ul>
                             </td>
-                            {% empty %}
-                            <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
-                            {% endfor %}
                         </tr>
-                    </tbody>
-                </table>
+                    
 
                 <!-- รายละเอียด -->
-                <div class="modal fade" id="detail-{{forloop.counter}}" tabindex="-1" aria-labelledby="detailModal"
+                <div class="modal fade" id="detaily-{{forloop.counter}}" tabindex="-1" aria-labelledby="detailModal"
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
                         <div class="modal-content">
@@ -122,7 +118,7 @@
                 </div>
 
                 <!-- อนุมัติ -->
-                <div class="modal fade" id="approved-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
+                <div class="modal fade" id="approvedy-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
                     aria-hidden="true">
                     <form method="post" action="/staff_borrow_durable/{{ AllLoanDurable.id }}"
                         enctype="multipart/form-data">
@@ -163,7 +159,7 @@
                 </div>
 
                 <!-- ไม่อนุมัติ -->
-                <div class="modal fade" id="disapproved-{{forloop.counter}}" tabindex="-1"
+                <div class="modal fade" id="disapprovedy-{{forloop.counter}}" tabindex="-1"
                     aria-labelledby="disapprovedModal" aria-hidden="true">
                     <form method="post" action="/staff_unborrow_durable/{{ AllLoanDurable.id }}"
                         enctype="multipart/form-data">
@@ -202,7 +198,11 @@
                         </div>
                     </form>
                 </div>
-                
+                {% empty %}
+                <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
+                {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="page-links">
