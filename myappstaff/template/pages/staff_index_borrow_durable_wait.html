@@ -6,7 +6,7 @@
         <div class="px-5 pt-3">
             <div class="d-flex justify-content-between ">
                 <div>
-                    <h5 class="fw-bold">รายการอนุมัติการยืมครุภัณฑ์</h5>
+                    <h5 class="fw-bold">รายการรอยืนยันการรับครุภัณฑ์</h5>
                 </div>
             </div>
             <div class="d-flex row rounded-2 small fw-bold justify-content-between">
@@ -83,12 +83,8 @@
                                     </li>
                                 </ul>
                             </td>
-                            {% empty %}
-                            <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
-                            {% endfor %}
                         </tr>
-                    </tbody>
-                </table>
+                    
 
                 <!-- รายละเอียด -->
                 <div class="modal fade" id="detail-{{forloop.counter}}" tabindex="-1" aria-labelledby="detailModal"
@@ -202,7 +198,11 @@
                         </div>
                     </form>
                 </div>
-                
+                {% empty %}
+                            <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
+                            {% endfor %}
+                        </tbody>
+                    </table>
             </div>
         </div>
         <div class="page-links">
