@@ -801,37 +801,6 @@ def add_to_queue_durable(req, id):
     messages.success(req, 'จองคิวสำเร็จ!')
     return redirect('/user_queue_durable')    
 
-def add_to_cart_durable(req, id):
-    durable_item = Add_Durable.objects.get(id=id)
-    if durable_item.quantity > 0 or durable_item.quantitytype == "∞":
-        if durable_item.quantitytype == "∞":
-            cart_durable = CartDurable.objects.create(user=req.user, durable_item=durable_item)
-            durable_item.borrow_count += 1  
-            cart_durable.quantity = 1  
-            cart_durable.name = durable_item.name
-            cart_durable.type = durable_item.nametype
-            cart_durable.statusDurable = durable_item.statustype
-            cart_durable.nameposition = durable_item.nameposition.nameposition
-            if cart_durable.quantity < 3:
-                cart_durable.save()
-            durable_item.save()
-            messages.success(req, 'เพิ่มรายการสำเร็จ!')
-        else:
-            cart_durable = CartDurable.objects.create(user=req.user, durable_item=durable_item)
-            durable_item.quantity -= 1
-            durable_item.borrow_count += 1  
-            cart_durable.quantity = 1  
-            cart_durable.name = durable_item.name
-            cart_durable.type = durable_item.nametype
-            cart_durable.statusDurable = durable_item.statustype
-            cart_durable.nameposition = durable_item.nameposition.nameposition
-            if cart_durable.quantity < 3:
-                cart_durable.save()
-            durable_item.save()
-            messages.success(req, 'เพิ่มรายการสำเร็จ!')
-    return redirect('/user_cart')
-    
-
 @login_required
 def cart_update_durable(req, id):
     if req.user.status == "ถูกจำกัดสิทธิ์":

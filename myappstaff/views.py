@@ -940,17 +940,6 @@ def staff_manage_parcel(req):
     }    
     return render(req, 'pages/staff_manage_parcel.html', context)
 
-
-"""@login_required
-def delete_staff_manage_detail(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-        return redirect('/')
-    if req.user.phone is None or req.user.token is None:
-        return redirect('/phone_add_number')
-    obj = Add_Parcel.objects.get(id=id)
-    obj.delete()
-    return redirect('staff_manage_parcel')"""
-
 @login_required
 def edit_staff_manage_parcel(req, id):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
@@ -1285,22 +1274,6 @@ def staff_admin_user_block(req):
         "search_user" : search_user,
     }    
     return render(req, "pages/staff_admin_user_block.html", context)
-
-"""@login_required
-def staff_user_deadline(req, id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
-        return redirect('/')
-    obj = User.objects.get(id=id)
-    obj.status = req.POST['status']
-    obj.reasonfromstaff = req.POST['reasonfromstaff']
-    deadline_str = req.POST['deadline']
-    if deadline_str == '':
-        obj.deadline = datetime.now() + timedelta(days=7)
-    else:
-        obj.deadline = datetime.strptime(deadline_str, '%Y-%m-%d %H:%M:%S')
-    obj.save()
-    messages.success(req, 'จำกัดสิทธิ์!')
-    return redirect('/staff_admin_user_block')"""
 
 @login_required
 def staff_user_deadline(req, id):
