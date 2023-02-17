@@ -220,3 +220,5 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timedelta(minutes=1),  # run every minute
     },
 }
+
+SESSION_COOKIE_AGE = 600 # ออกจากระบบหลังจากไม่มีการตอบสนอง 10 นาที
