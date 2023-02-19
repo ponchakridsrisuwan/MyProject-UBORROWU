@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import * 
 from myapp import views
+from django.conf.urls import handler404
 
 urlpatterns = [
     path('',views.HomePage, name="user_index"),
@@ -60,3 +61,5 @@ urlpatterns = [
     
     
 ]
+
+handler404 = 'myapp.views.handler404'
