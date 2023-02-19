@@ -122,7 +122,7 @@ def phone_add_number(req):
             req.user.token = token
             req.user.save()
             messages.success(req, 'เพิ่มเบอร์โทรศัพท์และเชื่อมต่อไลน์สำเร็จ!')
-            return redirect('/')
+            return redirect('Home')
         else: 
             return redirect('/phone_add_number')
     else:

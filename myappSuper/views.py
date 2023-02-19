@@ -68,7 +68,7 @@ def admin_user_deadline(req, id):
     obj.status = "ถูกจำกัดสิทธิ์"
     obj.save()
     messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-    users = User.objects.filter(Q(right="นักศึกษา")|Q(right="เจ้าหน้าที่")|Q(right="ผู้ดูแลระบบ"))
+    users = User.objects.filter(Q(status="ถูกจำกัดสิทธิ์"))
     datetime_th = th_tz.localize(datetime.now())
     for user in users:
         if user.token:

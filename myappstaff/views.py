@@ -1291,7 +1291,7 @@ def staff_user_deadline(req, id):
     obj.status = "ถูกจำกัดสิทธิ์"
     obj.save()
     messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-    users = User.objects.filter(right="นักศึกษา")
+    users = User.objects.filter(status="ถูกจำกัดสิทธิ์")
     datetime_th = th_tz.localize(datetime.now())
     for user in users:
         if user.token:

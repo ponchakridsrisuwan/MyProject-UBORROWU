@@ -185,6 +185,7 @@ LOGIN_URL = 'login' #เข้าระบบ
 LOGIN_REDIRECT_URL = 'Home' #การเปลี่ยนเส้นทาง LOGIN
 LOGOUT_REDIRECT_URL = '/' #การเปลี่ยนเส้นทาง LOGOUT
 SOCIALACCOUNT_LOGIN_ON_GET = True #เข้าสู่ระบบบัญชีโซเชียล
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 #ACCOUNT_USER_MODEL_USERNAME_FIELD = None #ช่องข้อมูล user model ของบัญชี
 #ACCOUNT_EMAIL_REQUIRED = True #ต้องมีบัญชีอีเมล
 #ACCOUNT_USERNAME_REQUIRED = False #ต้องการชื่อผู้ใช้บัญชี
