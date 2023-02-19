@@ -1,6 +1,7 @@
 from datetime import *
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
+from myapp.task import admin_user_return_task
 from myappSuper.forms import *
 from django.contrib.auth.decorators import login_required, user_passes_test
 from allauth.socialaccount.models import SocialAccount
@@ -15,6 +16,7 @@ import requests
 from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
 from datetime import datetime
+from celery.task import periodic_task
 
 
 @login_required
@@ -68,6 +70,7 @@ def admin_user_deadline(req, id):
     obj.status = "ถูกจำกัดสิทธิ์"
     obj.save()
     messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
+    admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
     users = User.objects.filter(Q(status="ถูกจำกัดสิทธิ์"))
     datetime_th = th_tz.localize(datetime.now())
     for user in users:

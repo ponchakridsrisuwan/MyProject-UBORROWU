@@ -2,6 +2,7 @@ from datetime import *
 from django.http import HttpResponse
 from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.contrib.auth.decorators import login_required
+from myapp.task import admin_user_return_task
 from myappstaff.forms import *
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -18,6 +19,8 @@ import requests
 from datetime import datetime
 from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
+from celery.schedules import crontab
+from celery.task import periodic_task
 
 @login_required
 def staff_setting_position(req):
@@ -1291,6 +1294,7 @@ def staff_user_deadline(req, id):
     obj.status = "ถูกจำกัดสิทธิ์"
     obj.save()
     messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
+    admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
     users = User.objects.filter(status="ถูกจำกัดสิทธิ์")
     datetime_th = th_tz.localize(datetime.now())
     for user in users:
