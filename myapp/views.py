@@ -23,6 +23,10 @@ from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
 import pandas as pd
 
+
+def handler404(req, exception):
+    return render(req, 'pages/404_Error_Page.html', status=404)
+    
 #หน้าหลัก
 def HomePage(req):
     AllParcel = Add_Parcel.objects.all()
