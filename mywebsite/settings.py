@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'path.to.SessionTimeoutMiddleware', # Reload หน้าหลังจากหมดเวลา cookie
+    #'path.to.SessionTimeoutMiddleware', # Reload หน้าหลังจากหมดเวลา cookie
 ]
 
 ROOT_URLCONF = 'mywebsite.urls'
@@ -218,7 +218,7 @@ app.autodiscover_tasks()
 
 CELERY_BEAT_SCHEDULE = {
     'remove_expired_cart_items': {
-        'task': 'your_app_name.tasks.remove_expired_cart_items',
+        'task': 'myapp.tasks.remove_expired_cart_items',
         'schedule': timedelta(minutes=1),  # run every minute
     },
 }
