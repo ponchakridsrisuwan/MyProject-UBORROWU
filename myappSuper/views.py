@@ -22,6 +22,7 @@ from django.shortcuts import render
 from django.contrib import messages
 
 
+
 @login_required
 def admin_detail(req, id):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
@@ -249,30 +250,72 @@ def person_upload(req):
         return redirect('/')
     if req.user.phone is None or req.user.token is None:
         return redirect('/phone_add_number')
-    data = Profile.objects.all()
+    data = Profile.objects.all()    
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'firstname':
+            data = Profile.objects.order_by('firstname')
+        elif req.GET['sort'] == 'lastname':
+            data = Profile.objects.order_by('-lastname')      
+        elif req.GET['sort'] == 'email':
+            data = Profile.objects.order_by('email')       
+        elif req.GET['sort'] == 'default':
+            data = Profile.objects.all()
+        else:
+            last_sort = 'default'
+            data = Profile.objects.all()
+    else:
+        last_sort = 'default'
+        data = Profile.objects.all()
+    search_rec = ""
+    if 'search_rec' in req.GET:
+        search_rec = req.GET['search_rec']
+        data = Profile.objects.filter(Q(firstname=search_rec)|Q(lastname=search_rec)
+                                             |Q(email=search_rec))    
+
     context = {
         "navbar" : "person_upload",
-        'profiles': data 
+        'profiles': data,
+        "search_rec" : search_rec,
+        "last_sort" : last_sort, 
     }
+
     if req.method == "GET":
         return render(req, "pages/person_upload.html", context)    
+    
     csv_file = req.FILES['file'] 
     if not csv_file.name.endswith('.csv'):
         messages.error(req, 'THIS IS NOT A CSV FILE')    
     data_set = csv_file.read().decode('UTF-8') 
+    data_set = data_set.replace('"', '') 
     io_string = io.StringIO(data_set)
     next(io_string)
     for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-        _, created = Profile.objects.update_or_create(
+        Profile.objects.create(
             firstname=column[0],
             lastname=column[1],
             email=column[2],
         )
-    data = Profile.objects.all()
-    context = {
-        "navbar" : "person_upload",
-        'profiles': data 
-    }
-    return render(req, "pages/person_upload.html", context)
+
+    return redirect('person_upload')
+
+@login_required
+def deleteProfile(req, id):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    obj = Profile.objects.get(id=id)
+    obj.delete()
+    messages.success(req, 'ลบสำเร็จ!')
+    return redirect("person_upload")
+
+
+def delete_profiles(req):
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        Profile.objects.filter(id__in=ids).delete()
+        return redirect('person_upload')
+
 
 
