@@ -14,5 +14,5 @@ urlpatterns = [
     path('admin_block',views.admin_block, name="admin_block"),
     
     #path('admin_user_setting_detail/<int:id>',views.admin_user_setting_detail, name="admin_user_setting_detail"),
-    
+    path('person_upload',views.person_upload, name="person_upload"),
 ]

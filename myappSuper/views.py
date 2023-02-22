@@ -17,6 +17,9 @@ from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
 from datetime import datetime
 #from celery.task import periodic_task
+import csv, io
+from django.shortcuts import render
+from django.contrib import messages
 
 
 @login_required
@@ -240,3 +243,36 @@ def admin_block(req):
         "search_user" : search_user,
     }
     return render(req, "pages/admin_block.html", context)
+
+def person_upload(req):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    data = Profile.objects.all()
+    context = {
+        "navbar" : "person_upload",
+        'profiles': data 
+    }
+    if req.method == "GET":
+        return render(req, "pages/person_upload.html", context)    
+    csv_file = req.FILES['file'] 
+    if not csv_file.name.endswith('.csv'):
+        messages.error(req, 'THIS IS NOT A CSV FILE')    
+    data_set = csv_file.read().decode('UTF-8') 
+    io_string = io.StringIO(data_set)
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+        _, created = Profile.objects.update_or_create(
+            firstname=column[0],
+            lastname=column[1],
+            email=column[2],
+        )
+    data = Profile.objects.all()
+    context = {
+        "navbar" : "person_upload",
+        'profiles': data 
+    }
+    return render(req, "pages/person_upload.html", context)
+
+
