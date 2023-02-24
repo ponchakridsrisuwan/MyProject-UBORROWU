@@ -35,7 +35,7 @@ def login(req):
             if req.user.phone is None:
                 return redirect('/phone_add_number')
             else:
-                return redirect('/') 
+                return redirect('Home') 
         else:
             return redirect('/login')
     else:

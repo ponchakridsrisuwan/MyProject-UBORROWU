@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django import forms
 
 from django import forms
-from .models import Profile
+from myappSuper.models import Profile
 
 class ProfileForm(forms.ModelForm):
     class Meta:

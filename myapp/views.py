@@ -25,7 +25,7 @@ import pandas as pd
 
 
 def handler404(req, exception):
-    return render(req, 'pages/404_Error_Page.html', status=404)
+    return render(req, '404_Error_Page.html', status=404)
     
 #หน้าหลัก
 def HomePage(req):
@@ -130,7 +130,7 @@ def phone_add_number(req):
         else: 
             return redirect('/phone_add_number')
     else:
-        return render(req, 'pages/phone_add_number.html') 
+        return render(req, 'phone_add_number.html') 
 
 @login_required    
 def user_personal_info(req):

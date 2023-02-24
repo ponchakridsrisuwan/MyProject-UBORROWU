@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'myapp',
     'myappstaff',
     'myappSuper',
-    #'qrcode'
+    'qr_code'
 ]
 
 MIDDLEWARE = [

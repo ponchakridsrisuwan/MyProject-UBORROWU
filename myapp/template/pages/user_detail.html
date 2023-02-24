@@ -2,9 +2,7 @@
 {% block main %}
 
 <!-- qr code -->
-{% comment %}
 {% load qr_code %}
-{% endcomment %}
 
 {% if AllParcel %}
 <div class="container-lg mt-1 mb-5">
@@ -101,9 +99,7 @@
         </p>
         
          <!-- qr code  -->
-         {% comment %}
          {% qr_from_text request.build_absolute_uri size="T" image_format="png" error_correction="T" %}
-         {% endcomment %}
          
     </div>
     <!-- รายการยืมบ่อยที่สุด -->

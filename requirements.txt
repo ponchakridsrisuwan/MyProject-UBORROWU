@@ -39,6 +39,7 @@ django-allauth==0.51.0
 django-crispy-forms==1.14.0
 django-model-utils==4.3.1
 django-qrcode==0.3
+django-qr-code==3.1.1
 django-storages==1.13.2
 dropbox==11.36.0
 entrypoints==0.4
@@ -61,7 +62,7 @@ google-auth-oauthlib==0.4.6
 google-pasta==0.2.0
 googleapis-common-protos==1.56.4
 grpcio==1.47.0
-h5py==3.7.0
+#h5py==3.7.0
 humanfriendly==10.0
 idna==3.3
 importlib-metadata==6.0.0
@@ -136,7 +137,7 @@ rich==13.3.1
 rsa==4.9
 scikit-learn==1.1.2
 scipy==1.9.2
-scylla-driver==3.25.11
+#scylla-driver==3.25.11
 seaborn==0.12.0
 segno==1.5.2
 selenium==4.6.0
