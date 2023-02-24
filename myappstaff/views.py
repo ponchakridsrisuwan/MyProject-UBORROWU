@@ -21,6 +21,10 @@ from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
 #from celery.schedules import crontab
 #from celery.task import periodic_task
+import pandas as pd
+import csv
+from django.utils.datastructures import MultiValueDictKeyError
+from io import StringIO
 
 @login_required
 def staff_setting_position(req):
@@ -61,6 +65,14 @@ def deletePosition(req, id):
     obj.delete()
     messages.success(req, 'ลบสำเร็จ!')
     return redirect('/staff_setting_position')
+
+@login_required
+def delete_multi_Position(req):
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        SettingPosition.objects.filter(id__in=ids).delete()
+        messages.success(req, 'ลบสำเร็จ!')
+        return redirect('/staff_setting_position')
 
 @login_required
 def edit_position(req,id):
@@ -116,6 +128,14 @@ def deleteCategoryType(req, id):
     return redirect('/staff_setting')
 
 @login_required
+def delete_multi_CategoryType(req):
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        CategoryType.objects.filter(id__in=ids).delete()
+        messages.success(req, 'ลบสำเร็จ!')
+        return redirect('staff_setting')
+
+@login_required
 def edit_staff_setting(req,id):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
@@ -167,6 +187,14 @@ def DeleteCategoryStatus(req, id):
     obj.delete()
     messages.success(req, 'ลบสำเร็จ!')
     return redirect('/staff_setting_status')
+
+@login_required
+def Delete_multi_CategoryStatus(req):
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        CategoryStatus.objects.filter(id__in=ids).delete()
+        messages.success(req, 'ลบสำเร็จ!')
+        return redirect('/staff_setting_status')
 
 @login_required
 def edit_staff_setting_status(req,id):
@@ -762,6 +790,74 @@ def staff_borrow_parcel(req,id):
             msg = ' '.join(map(str, msg)) 
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_borrow')
+@login_required
+def staff_multi_borrow_parcel(req):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        AllLoanParcel = LoanParcel.objects.filter(id__in=ids)
+        if not AllLoanParcel:
+            return redirect('/staff_index_borrow')
+        for loan_parcel in AllLoanParcel:
+            loan_parcel.reasonfromstaff = req.POST['reasonfromstaff']
+            loan_parcel.status = 'รอยืนยันการรับ'
+            loan_parcel.save()
+        users = User.objects.filter(right="นักศึกษา")
+        datetime_th = th_tz.localize(datetime.now())
+        for user in users:
+            if user.token:
+                url = 'https://notify-api.line.me/api/notify'
+                token = user.token 
+                headers = {
+                        'content-type': 'application/x-www-form-urlencoded',
+                        'Authorization': 'Bearer ' + token 
+                    }
+                msg = ['รายการ : ']
+                for loan_parcel in AllLoanParcel:
+                    msg.append(loan_parcel.name)
+                msg.append('สถานะ : ')
+                msg.append(AllLoanParcel.first().status)
+                msg.append(AllLoanParcel.first().reasonfromstaff)
+                msg.append('วันที่อนุมัติ : ')
+                msg.append(datetime_th.strftime("%Y-%m-%d %H:%M"))
+                msg = ' '.join(map(str, msg)) 
+                requests.post(url, headers=headers, data={'message': msg})
+    return redirect('/staff_index_borrow')
+
+
+@login_required
+def staff_multi_borrow_durable(req):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        AllLoanDurable = LoanDurable.objects.filter(id__in=ids)
+        if AllLoanDurable is None:
+            return redirect('/staff_index_borrow_durable')
+        for loan_durable in AllLoanDurable:
+            loan_durable.reasonfromstaff = req.POST['reasonfromstaff']
+            loan_durable.status = 'รอยืนยันการรับ'
+            loan_durable.save()
+        messages.success(req, 'รอยืนยันการรับ!')
+        users = User.objects.filter(right="นักศึกษา")
+        datetime_th = th_tz.localize(datetime.now())
+        for user in users:
+            if user.token:
+                url = 'https://notify-api.line.me/api/notify'
+                token = user.token 
+                headers = {
+                        'content-type': 'application/x-www-form-urlencoded',
+                        'Authorization': 'Bearer ' + token 
+                    }
+                msg = ['รายการ : ', AllLoanDurable.name, "สถานะ : ", AllLoanDurable.status, AllLoanDurable.reasonfromstaff,'วันที่อนุมัติ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ' '.join(map(str, msg)) 
+                requests.post(url, headers=headers, data={'message': msg})
+    return redirect('/staff_index_borrow_durable')
 
 @login_required
 def staff_borrow_durable(req,id):
@@ -968,6 +1064,14 @@ def delete_staff_manage_parcel(req, id):
     messages.success(req, 'ลบรายการวัสดุสำเร็จ!')
     return redirect('staff_manage_parcel')
 
+@login_required
+def delete_multi_staff_manage_parcel(req):
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        Add_Parcel.objects.filter(id__in=ids).delete()
+        messages.success(req, 'ลบรายการวัสดุสำเร็จ!')
+        return redirect('staff_manage_parcel')
+
 # จัดการครุภัณฑ์
 @login_required
 def staff_manage_durable(req):
@@ -1044,6 +1148,14 @@ def delete_staff_manage_durable(req, id):
     obj.delete()
     messages.success(req, 'ลบรายการครุภัณฑ์สำเร็จ!')
     return redirect('staff_manage_durable') 
+
+@login_required
+def delete_multi_staff_manage_durable(req):
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        Add_Durable.objects.filter(id__in=ids).delete()
+        messages.success(req, 'ลบรายการวัสดุสำเร็จ!')
+        return redirect('staff_manage_durable')
 
 @login_required
 def edit_staff_manage_durable(req,id):
@@ -1309,6 +1421,41 @@ def staff_user_deadline(req, id):
             msg = ' '.join(map(str, msg)) 
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_admin_user_block') 
+
+@login_required
+def staff_user_deadline_multi(req):
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        objs = User.objects.filter(id__in=ids)
+        deadline_str = req.POST['deadline']
+        if deadline_str == '':
+            deadline = datetime.now() + timedelta(days=7)
+        else:
+            deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
+        reasonfromstaff = req.POST['reasonfromstaff']
+        for obj in objs:
+            if obj.phone is None or obj.token is None:
+                continue
+            if obj.status == "ถูกจำกัดสิทธิ์" or obj.right == "นักศึกษา":
+                continue
+            obj.deadline = deadline
+            obj.reasonfromstaff = reasonfromstaff
+            obj.status = "ถูกจำกัดสิทธิ์"
+            obj.save()
+            #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
+            datetime_th = th_tz.localize(datetime.now())
+            if obj.token:
+                url = 'https://notify-api.line.me/api/notify'
+                token = obj.token 
+                headers = {
+                                'content-type': 'application/x-www-form-urlencoded',
+                                'Authorization': 'Bearer ' + token 
+                                }
+                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reason, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ' '.join(map(str, msg)) 
+                requests.post(url, headers=headers, data={'message': msg})
+        messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
+    return redirect('/staff_admin_user_block')
 
 @login_required
 def staff_user_return(req, id):
@@ -1589,3 +1736,105 @@ def staff_position(req):
         "search_query" : search_query,
     }
     return render(req, 'pages/staff_position.html', context)
+
+# @login_required
+# def create_db(file):
+#     with open(file.file.path, 'r', encoding='latin1') as f:
+#         df = pd.read_csv(f, delimiter=',')
+#     list_of_csv = [list(row) for row in df.values]
+
+#     for l in list_of_csv:
+#         if len(l) < 4:
+#             # Skip over incomplete rows
+#             continue
+#         try:
+#             Person.objects.create(
+#                 firstName=l[1],
+#                 lastName=l[2],
+#                 email=l[3],
+#                 file=file,
+#                 user=file.user
+#             )
+#         except Exception as e:
+#             # Handle any errors that occur when creating Person objects
+#             print(f"Error creating Person object: {e}")
+
+# def staff_add_csv(req):
+#     if req.method == "POST":
+#         file = req.FILES['file']
+#         obj = File.objects.create(file=file, user=req.user)
+#         create_db(obj)
+
+#     person = Person.objects.all()
+#     context ={
+#         "person" : person,
+#      }
+#     return render(req, 'pages/staff_add_csv.html',context)
+
+
+
+# def run():
+#     with open('films/pixar.csv') as file:
+#         reader = csv.reader(file)
+#         next(reader)  # Advance past the header
+
+#         Film.objects.all().delete()
+#         Genre.objects.all().delete()
+
+#         for row in reader:
+#             print(row)
+
+#             genre, _ = Genre.objects.get_or_create(name=row[-1])
+
+#             film = Film(title=row[0],
+#                         year=row[2],
+#                         genre=genre)
+# film.save()
+
+
+# def staff_add_csv(request):
+#     if request.method == "POST":
+#         try:
+#             file = request.FILES['file']
+#             obj = File.objects.create(file=file, user=request.user)
+#             create_db(obj)
+#             messages.success(request, "CSV file uploaded successfully.")
+#         except MultiValueDictKeyError:
+#             messages.error(request, "No file selected.")
+#         except Exception as e:
+#             messages.error(request, f"Error uploading file: {str(e)}")
+
+#     person = Person.objects.all()
+#     context ={
+#         "person" : person,
+#      }
+#     return render(request, 'pages/staff_add_csv.html', context)
+
+
+import csv, io
+from django.shortcuts import render
+from django.contrib import messages
+def staff_add_csv(request):
+    data = Profile.objects.all()
+    context = {
+        'profiles': data 
+    }
+    if request.method == "GET":
+        return render(request, "pages/staff_add_csv.html", context)    
+    csv_file = request.FILES['file'] 
+    if not csv_file.name.endswith('.csv'):
+        messages.error(request, 'THIS IS NOT A CSV FILE')    
+    data_set = csv_file.read().decode('UTF-8') 
+    io_string = io.StringIO(data_set)
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+        _, created = Profile.objects.update_or_create(
+            firstname=column[0],
+            lastname=column[1],
+            email=column[2],
+        )
+    data = Profile.objects.all()
+    context = {
+        'profiles': data 
+    }
+    return render(request, "pages/staff_add_csv.html", context)

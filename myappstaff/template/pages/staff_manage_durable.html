@@ -67,9 +67,12 @@
     </div>
         <div class="col-lg-12 px-2">
             <div class="table-responsive">
+                <form method="post" action="{% url 'delete_multi_staff_manage_durable' %}">
+                    {% csrf_token %}
                 <table class="table small">
                     <thead class="table">
                         <tr class="table bg-warning">
+                            <th></th>
                             <th class="col-md-5" scope="col">รายการ</th>
                             <th class="col-md-1 text-center" scope="col">จำนวนที่ยืม</th>
                             <th class="col-md-1 text-center" scope="col">เหลือ</th>
@@ -82,6 +85,7 @@
                     <tbody id="xTable">
                         {% for AllDurable in page.object_list %}
                         <tr class="qrow">
+                            <td><input type="checkbox" name="id" value="{{ AllDurable.id }}"></td>
                             <td>
                                 <a class="d-flex align-items-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' AllDurable.id %}">
@@ -287,6 +291,28 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i class=" fa fa-trash "></i> ลบที่เลือก</a>
+                <!-- อนุมัติ -->
+                <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"
+                aria-hidden="true">
+                    <div class="modal-dialog modal-lg
+                        modal-fullscreen-lg-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="approvedModal">ยืนยันการลบที่เลือก</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn
+                                    btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-warning
+                                    rounded-pill">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
                 <div class="page-links">
                     {% if page.has_previous %}
                     <div class="ps-5 pb-3">

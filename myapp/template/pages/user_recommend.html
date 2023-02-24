@@ -86,9 +86,12 @@
     </div>
   </div>
   <div class="row mt-3">
+    <form method="post" action="{% url 'delete_Multi_RecList' %}">
+      {% csrf_token %}
     <table class="table table-striped">
       <thead class="table-dark">
         <tr>
+          <td></td>
           <td></td>
           <td></td>
           <th class="col-md-3" scope="col">ผู้แนะนำ</th>
@@ -103,6 +106,7 @@
       <tbody id="xTable">
         {% for AllRecList in page.object_list %}
         <tr class="qrow text-center">
+          <td><input type="checkbox" name="id" value="{{ AllRecList.id }}"></td>
           <td>
             <a data-bs-toggle="modal" data-bs-target="#Delete-{{forloop.counter}}">
               <i class="fa fa-trash" value="DeleteRecList"></i>
@@ -250,7 +254,10 @@
         </div>
         {% endif %}
       </div>
-    </table><br><br>
+    </table>
+    <button type="submit" class="btn btn-sm btn-dark" ><i class=" fa fa-trash text-white "></i></button>
+  </form>
+    <br><br>
   </div>
 </div>
 {% endblock %}

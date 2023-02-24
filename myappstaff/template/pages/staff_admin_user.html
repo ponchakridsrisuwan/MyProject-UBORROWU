@@ -39,152 +39,171 @@
         </div>
         <div class="col-lg-12 px-2">
             <div class="table-responsive">
-                <table class="table table-striped small">
-                    <thead class="table bg-warning">
-                        <tr >
-                            <th class="col" scope="col">ชื่อ-สกุล</th>
-                            <th class="col" scope="col">อีเมล</th>
-                            <th class="col" scope="col">เบอร์โทร</th>
-                            <th class="col" scope="col">ใช้งานล่าสุด</th>
-                            <th class="col" scope="col">สิทธิ์</th>
-                            <th class="col" scope="col">สถานะ</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="xTable">
-                        {% for AllUser in page.object_list %}
-                        {% if AllUser.status == "ปกติ" and AllUser.right == "นักศึกษา" %}
-                        <tr>
-                            <td>{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</td>
-                            <td>{{ AllUser.email }}</td>
-                            <td>
-                                {% if AllUser.phone == None %}
-                                <span> N/A </span>
-                                {% else %}
-                                <span>{{ AllUser.phone }}</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ AllUser.last_login|date:"G:i A j F Y" }}</td>
-                            <td>{{ AllUser.right }}</td>
-                            <td>{{ AllUser.status }}</td>
-                            <td>
-                                <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown"
-                                    aria-expanded="false"></i>
-                                <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm text-center">
-                                    <li>
-                                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#manageitemcatecory-{{forloop.counter}}">จัดการการระงับสิทธิ์</a>
-                                    </li>
-                                    <!-- <li>
-                                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#detail-{{forloop.counter}}">ข้อมูลส่วนตัว</a>
-                                    </li> -->
-                                </ul>
-                            </td>
-                        </tr>
-                        <!-- รายละเอียดการถูกระงับสิทธิ์ -->
-                        <div class="modal fade" id="detail-{{forloop.counter}}" tabindex="-1"
-                            aria-labelledby="detailModal" aria-hidden="true">
-                            <div class="modal-dialog modal-lg
-                     modal-fullscreen-lg-down">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="detailModal">ข้อมูลส่วนตัว</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <span class="fw-bold">ชื่อ-สกุล :</span>
-                                        <span
-                                            class="small text-black-50">{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</span><br>
-                                        <span class="fw-bold">อีเมล :</span>
-                                        <span class="small text-black-50">{{AllUser.email}}</span><br>
-                                        <span class="fw-bold">เบอร์โทรศัพท์ :</span>
-                                        <span class="small text-black-50">{{ AllUser.phone }}</span><br>
-                                        <span class="fw-bold">ใช้งานล่าสุด :</span>
-                                        <span class="small text-black-50">{{ AllUser.last_login }}</span><br>
+                <form method="post" action="{% url 'staff_user_deadline_multi' %}">
+                    {% csrf_token %}
+                    <table class="table table-striped small">
+                        <thead class="table bg-warning">
+                            <tr>
+                                <th></th>
+                                <th class="col" scope="col">ชื่อ-สกุล</th>
+                                <th class="col" scope="col">อีเมล</th>
+                                <th class="col" scope="col">เบอร์โทร</th>
+                                <th class="col" scope="col">ใช้งานล่าสุด</th>
+                                <th class="col" scope="col">สิทธิ์</th>
+                                <th class="col" scope="col">สถานะ</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="xTable">
+                            {% for AllUser in page.object_list %}
+                            {% if AllUser.status == "ปกติ" and AllUser.right == "นักศึกษา" %}
+                            <tr>
+                                <td><input type="checkbox" name="id" value="{{ AllUser.id }}"></td>
+                                <td>{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</td>
+                                <td>{{ AllUser.email }}</td>
+                                <td>
+                                    {% if AllUser.phone == None %}
+                                    <span> N/A </span>
+                                    {% else %}
+                                    <span>{{ AllUser.phone }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ AllUser.last_login|date:"G:i A j F Y" }}</td>
+                                <td>{{ AllUser.right }}</td>
+                                <td>{{ AllUser.status }}</td>
+                                <td>
+                                    <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown"
+                                        aria-expanded="false"></i>
+                                    <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm text-center">
+                                        <li>
+                                            <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#manageitemcatecory-{{forloop.counter}}">จัดการการระงับสิทธิ์</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <!-- moal จัดการการระงับสิทธิ์ -->
+                            <div class="modal fade" id="manageitemcatecory-{{forloop.counter}}" tabindex="-1"
+                                aria-labelledby="edititemModal" aria-hidden="true">
+                                <div class="modal-dialog modal-lg
+                                        modal-fullscreen-lg-down">
+                                    <form method="post" action="/staff_user_deadline/{{AllUser.id}}"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="edititemModal">จัดการสิทธิ์</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-6">
+                                                            <label class="labels" for="name">ชื่อ</label>
+                                                            <input value="{{AllUser.first_name}}" type="text" class="form-control
+                                                                    rounded-pill" disabled>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="labels" for="email">อีเมล</label>
+                                                            <input value="{{AllUser.email}}" type="text" class="form-control
+                                                                    rounded-pill" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-12">
+                                                            <label class="labels"
+                                                                for="deadline">ระยะเวลาที่ถูกระงับสิทธิ์</label>
+                                                            <input class="form-select
+                                                                    rounded-pill" name="deadline" id="deadline"
+                                                                type="date">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label class="labels
+                                                                ps-2" for="reasonfromstaff">
+                                                            เหตุผลการระงับสิทธิ์
+                                                        </label>
+                                                        <textarea id="description" name="reasonfromstaff"
+                                                            name="reasonfromstaff" class="form-control
+                                                                rounded-4" id="exampleFormControlTextarea1"
+                                                            rows="3"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn
+                                                            btn-secondary
+                                                            rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                                    <button type="submit" class="btn
+                                                            btn-warning
+                                                            rounded-pill">ยืนยันการแก้ไข</button>
+                                                </div>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% empty %}
+                            <p class="text-center">ยังไม่มีข้อมูลนักศึกษาในระบบ U Borrow U</p>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#manageitemcatecorymulti">ระงับสิทธิ์หลายรายการที่เลือก</a>
+                    <!-- moal จัดการการระงับสิทธิ์หลายคน -->
+                    <div class="modal fade" id="manageitemcatecorymulti" tabindex="-1"
+                        aria-labelledby="edititemModal" aria-hidden="true">
+                        <div class="modal-dialog modal-lg
+                            modal-fullscreen-lg-down">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edititemModal">จัดการสิทธิ์</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row mt-2">
+                                                <div class="col-md-12">
+                                                    <label class="labels"
+                                                        for="deadline">ระยะเวลาที่ถูกระงับสิทธิ์</label>
+                                                    <input class="form-select
+                                                        rounded-pill" name="deadline" id="deadline" type="date">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="labels
+                                                    ps-2" for="reasonfromstaff">
+                                                    เหตุผลการระงับสิทธิ์
+                                                </label>
+                                                <textarea id="description" name="reasonfromstaff" name="reasonfromstaff"
+                                                    class="form-control
+                                                    rounded-4" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn
+                                                btn-secondary
+                                                rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                            <button type="submit" class="btn
+                                                btn-warning
+                                                rounded-pill">ยืนยันการแก้ไข</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </form>
+                            </form>
                         </div>
-                        <!-- moal จัดการการระงับสิทธิ์ -->
-                        <div class="modal fade" id="manageitemcatecory-{{forloop.counter}}" tabindex="-1"
-                            aria-labelledby="edititemModal" aria-hidden="true">
-                            <div class="modal-dialog modal-lg
-                                        modal-fullscreen-lg-down">
-                                <form method="post" action="/staff_user_deadline/{{AllUser.id}}"
-                                    enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <div class="modal-dialog modal-lg
-                                                modal-fullscreen-lg-down">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="edititemModal">จัดการสิทธิ์</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row mt-2">
-                                                    <div class="col-md-6">
-                                                        <label class="labels" for="name">ชื่อ</label>
-                                                        <input value="{{AllUser.first_name}}" type="text" class="form-control
-                                                                    rounded-pill" disabled>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="labels" for="email">อีเมล</label>
-                                                        <input value="{{AllUser.email}}" type="text" class="form-control
-                                                                    rounded-pill" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2">
-                                                    <div class="col-md-12">
-                                                        <label class="labels"
-                                                            for="deadline">ระยะเวลาที่ถูกระงับสิทธิ์</label>
-                                                        <input class="form-select
-                                                                    rounded-pill" name="deadline" id="deadline"
-                                                            type="date">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <label class="labels
-                                                                ps-2" for="reasonfromstaff">
-                                                        เหตุผลการระงับสิทธิ์
-                                                    </label>
-                                                    <textarea id="description" name="reasonfromstaff"
-                                                        name="reasonfromstaff" class="form-control
-                                                                rounded-4" id="exampleFormControlTextarea1"
-                                                        rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn
-                                                            btn-secondary
-                                                            rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                                <button type="submit" class="btn
-                                                            btn-warning
-                                                            rounded-pill">ยืนยันการแก้ไข</button>
-                                            </div>
-                                        </div>
-                                </form>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% empty %}
-                        <p class="text-center">ยังไม่มีข้อมูลนักศึกษาในระบบ U Borrow U</p>
-
-                        {% endfor %}
-                    </tbody>
-                </table>
+                    </div>
             </div>
             <div class="page-links">
                 {% if page.has_previous %}
                 <div class="ps-5 pb-3">
-                <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+                    <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
                 </div>
                 {% endif %}
                 {% if page.has_next %}
                 <div class="ps-5 pb-3">
-                <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+                    <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
                 </div>
                 {% endif %}
             </div>

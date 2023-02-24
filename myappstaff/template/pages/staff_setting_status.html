@@ -13,9 +13,12 @@
         <div class="tab-content">
             <!-- สถานะ -->
             <div class="tab-pane container active" id="category">
+                <form method="post" action="{% url 'Delete_multi_CategoryStatus' %}">
+                    {% csrf_token %}
                 <table class="table small">
                     <thead class="table">
                       <tr class="table bg-warning">
+                        <th></th>
                             <th class="col-12">สถานะ</th>
                             <th></th>
                         </tr>
@@ -23,6 +26,7 @@
                     <tbody>
                         {% for CategoryStatus in page.object_list %}
                         <tr>
+                            <td><input type="checkbox" name="id" value="{{ CategoryStatus.id }}"></td>
                             <td>
                                 <span>{{ CategoryStatus.name_CategoryStatus }}</span>
                             </td>
@@ -105,6 +109,28 @@
                     <p class="btn btn-outline-dark rounded-pill mt-2" data-bs-toggle="modal"
                         data-bs-target="#additemcatecory">เพิ่มสถานะ</p>
                 </table>
+                <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i class=" fa fa-trash "></i> ลบที่เลือก</a>
+                <!-- อนุมัติ -->
+                <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"
+                aria-hidden="true">
+                    <div class="modal-dialog modal-lg
+                        modal-fullscreen-lg-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="approvedModal">ยืนยันการลบที่เลือก</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn
+                                    btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-warning
+                                    rounded-pill">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
             </div>
             <div class="page-links">
                 {% if page.has_previous %}

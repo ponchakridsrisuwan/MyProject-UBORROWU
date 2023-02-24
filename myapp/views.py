@@ -1413,6 +1413,14 @@ def deleteRecList(req, id):
     messages.success(req, 'ลบการแนะนำรายการสำเร็จ!')
     return redirect('/user_recommend')
 
+@login_required
+def delete_Multi_RecList(request):
+    if request.method == 'POST':
+        ids = request.POST.getlist('id')
+        ListFromRec.objects.filter(id__in=ids).delete()
+        return redirect('user_recommend')
+
+
 def user_position(req):
     AllDurable = Add_Durable.objects.all()
     AllParcel = Add_Parcel.objects.all()

@@ -51,6 +51,8 @@ urlpatterns = [
     path('user_recommend',views.user_recommend, name="user_recommend"), 
     path('user_recommend_edit/<int:id>',views.user_recommend_edit, name="user_recommend_edit"),
     path('deleteRecList/<int:id>', views.deleteRecList, name="deleteRecList"),
+    path('delete_Multi_RecList', views.delete_Multi_RecList, name="delete_Multi_RecList"),
+
     path('user_recommend_history/',views.user_recommend_history, name="user_recommend_history"), 
     path('user_recommend_detail/<int:id>', views.user_recommend_detail, name="user_recommend_detail"),
     
