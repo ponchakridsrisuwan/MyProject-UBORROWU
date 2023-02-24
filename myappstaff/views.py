@@ -982,7 +982,6 @@ def staff_manage_parcel(req):
     if req.user.phone is None or req.user.token is None:
         return redirect('/phone_add_number')
     form = ParcelForm()
-    form.fields['name'].initial = 'test'
     if req.method == 'POST':
         form = ParcelForm(req.POST or None, req.FILES or None)
         if form.is_valid():
@@ -1026,7 +1025,8 @@ def staff_manage_parcel(req):
     try:
         page = p.page(page_num)
     except:
-        page = p.page(1)        
+        page = p.page(1) 
+
     context = {
         "navbar" : "staff_manage_parcel",
         "page" : page,
@@ -1036,8 +1036,34 @@ def staff_manage_parcel(req):
         "categoryType" : categoryType,
         "categoryStatus" : categoryStatus,
         "settingPosition" : settingPosition
-    }    
-    return render(req, 'pages/staff_manage_parcel.html', context)
+    }   
+
+    if req.method == "GET":
+        return render(req, "pages/staff_manage_parcel.html", context)    
+    
+    csv_file = req.FILES['file'] 
+    if not csv_file.name.endswith('.csv'):
+        messages.error(req, 'THIS IS NOT A CSV FILE')    
+    data_set = csv_file.read().decode('UTF-8') 
+    data_set = data_set.replace('"', '') 
+    io_string = io.StringIO(data_set)
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+        position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
+        category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
+        status, _ = CategoryStatus.objects.get_or_create(name_CategoryStatus=column[4])
+        Add_Parcel.objects.create(
+            name=column[0],
+            nameposition=position,
+            nametype=column[2],
+            category=category,
+            status=status,
+            statustype=column[5],
+            quantitytype=column[6],
+            quantity=column[7],
+            description=column[8],
+        )
+    return redirect('staff_manage_parcel')
 
 @login_required
 def edit_staff_manage_parcel(req, id):
@@ -1049,9 +1075,14 @@ def edit_staff_manage_parcel(req, id):
     form = ParcelForm(req.POST or None, req.FILES or None, instance=AllParcel) 
     if form.is_valid():
         form.save()
+        new_image = req.FILES.get('image')
+        if new_image:
+            if AllParcel.image:
+                AllParcel.image.delete(save=False)
+            AllParcel.image = new_image
+            AllParcel.save()
         messages.success(req, 'แก้ไขรายการวัสดุสำเร็จ!')
     return redirect('staff_manage_parcel')
-    
 
 @login_required
 def delete_staff_manage_parcel(req, id):
@@ -1135,7 +1166,33 @@ def staff_manage_durable(req):
         "categoryStatus" : categoryStatus,
         "settingPosition" : settingPosition
     }    
-    return render(req, 'pages/staff_manage_durable.html', context) 
+
+    if req.method == "GET":
+        return render(req, "pages/staff_manage_durable.html", context)    
+        
+    csv_file = req.FILES['file'] 
+    if not csv_file.name.endswith('.csv'):
+        messages.error(req, 'THIS IS NOT A CSV FILE')    
+    data_set = csv_file.read().decode('UTF-8') 
+    data_set = data_set.replace('"', '') 
+    io_string = io.StringIO(data_set)
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+        position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
+        category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
+        status, _ = CategoryStatus.objects.get_or_create(name_CategoryStatus=column[4])
+        Add_Durable.objects.create(
+            name=column[0],
+            nameposition=position,
+            nametype=column[2],
+            category=category,
+            status=status,
+            statustype=column[5],
+            quantitytype=column[6],
+            quantity=column[7],
+            description=column[8],
+        )
+    return redirect('staff_manage_durable')
 
 
 @login_required

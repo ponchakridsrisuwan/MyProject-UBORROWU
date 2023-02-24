@@ -10,6 +10,8 @@
             </div>
             <div class="d-flex flex-row">
                 <a class="btn btn-outline-dark rounded-pill me-1" data-bs-toggle="modal"
+                    data-bs-target="#additemcsv">เพิ่มรายการด้วย csv</a>
+                <a class="btn btn-outline-dark rounded-pill me-1" data-bs-toggle="modal"
                     data-bs-target="#additem">เพิ่มรายการ</a>
                 <a href="{% url 'pdf_staff_parcel' %}" class="btn btn-outline-dark rounded-pill ">PDF</a>
             </div>
@@ -41,6 +43,34 @@
                 </form>
             </div>
         </div>
+        <!-- moal เพิ่มรายการ csv -->
+        <div class="modal fade" id="additemcsv" tabindex="-1" aria-labelledby="additemModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="additemModal">เพิ่มรายการด้วย CSV</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>ลำดับของ CSV ควรเป็น firstname, lastname,email</p>
+                        <input class="form-control rounded-pill" type="file" name="file"
+                            id="file">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary
+    rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-warning
+    rounded-pill">ยืนยัน</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
         <div class="modal fade" id="additem" tabindex="-1" aria-labelledby="additemModal" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
                 <form action="" method="post" enctype="multipart/form-data">
@@ -175,9 +205,12 @@
                                             class="small text-black-50">{{AllParcel.description }}</span>
                                     </div>
                                     <div class="modal-body">
-                                        <span class="fw-bold">รูปภาพ : </span><img alt="image"
-                                            class="rounded me-4 thumb-post" src="{{ AllParcel.image.url | safe }}"
-                                            width="150" height="150">
+                                        <span class="fw-bold">รูปภาพ : </span>
+                                        {% if AllParcel.image %}
+                                            <div class="text-center thumbnailsmall rounded-circle"><img src="{{ AllParcel.image.url | safe }}" width="150" height="150"></div>
+                                        {% else %}
+                                            <p>No image available</p>
+                                        {% endif %}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="cancer" class="btn btn-secondary rounded-pill"
@@ -265,7 +298,15 @@
                                                 <textarea name="description" cols="40" rows="10"
                                                     class="form-control rounded-5" id="id_description">{{ AllParcel.description }}</textarea>
                                             </p>
-
+                                            <p>
+                                                <label for="id_image">แนบไฟล์ภาพวัสดุ :</label><br>
+                                                {% if AllParcel.image %}
+                                                    <img class="m-3 rounded-5" src="{{ AllParcel.image.url | safe }}" width="150" height="150">
+                                                {% else %}
+                                                    <p>No image available</p>
+                                                {% endif %}
+                                                <input type="file" name="image" class="form-control rounded-pill" accept="image/*" id="id_image">
+                                            </p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn
@@ -273,6 +314,8 @@
                                             <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
                                         </div>
                                     </div>
+                                </form>
+                            </div>
                                 </form>
                             </div>
                         </div>

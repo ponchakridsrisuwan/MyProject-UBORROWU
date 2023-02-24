@@ -48,7 +48,7 @@ class Add_Parcel(models.Model):
     quantitytype = models.CharField(max_length=200, choices = QUANTITYTYPE, default="ต้องการระบุจำนวน")
     quantity = models.IntegerField(default= 1 )
     description = models.TextField(default="", blank=True)
-    image = models.ImageField(upload_to='Parcel')
+    image = models.ImageField(upload_to='Parcel', blank=True, null=True, default='broken_image.png')
     date = models.DateTimeField(auto_now_add=True)
     borrow_count = models.PositiveIntegerField(default=0)
 
@@ -67,7 +67,7 @@ class Add_Durable(models.Model):
     quantity = models.IntegerField(default=1 )
     numdate = models.PositiveIntegerField(default= 1 )
     description = models.TextField(default="", blank=True)
-    image = models.ImageField(upload_to='Durable')
+    image = models.ImageField(upload_to='Durable', blank=True, null=True, default='broken_image.png')
     date = models.DateTimeField(auto_now_add=True)
     borrow_count = models.PositiveIntegerField(default=0)
 
