@@ -26,20 +26,24 @@ from myappstaff.models import *
 from myappSuper.models import *
 from django.contrib.auth import views as auth_views
 from mywebsite.settings import AUTHENTICATION_BACKENDS
-
 from django.shortcuts import redirect
 
 def login(req):
-    if req.method == 'POST':
-        if req.user is not None:
-            if req.user.phone is None:
-                return redirect('/phone_add_number')
+    try:
+        if req.method == 'POST':
+            if req.user is not None:
+                if req.user.phone is None:
+                    return redirect('/phone_add_number')
+                else:
+                    return redirect('Home') 
             else:
-                return redirect('Home') 
+                return redirect('/login')
         else:
-            return redirect('/login')
-    else:
-        return render(req, 'login.html')
+            return render(req, 'login.html')
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return HttpResponseServerError("Oops, something went wrong. Please try again later.")             
 
 urlpatterns = [
     path('admin/', admin.site.urls),
