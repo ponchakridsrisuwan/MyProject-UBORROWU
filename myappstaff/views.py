@@ -32,8 +32,10 @@ import csv, io
 def staff_setting_position(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == "POST":
             nameposition = req.POST.get('nameposition')
@@ -60,14 +62,16 @@ def staff_setting_position(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")           
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
 
 @login_required
 def deletePosition(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = SettingPosition.objects.get(id=id)
         obj.delete()
@@ -76,7 +80,7 @@ def deletePosition(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")           
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
 
 @login_required
 def delete_multi_Position(req):
@@ -89,14 +93,16 @@ def delete_multi_Position(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")               
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})      
 
 @login_required
 def edit_position(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = SettingPosition.objects.get(id=id)
         obj.nameposition = req.POST['nameposition']
@@ -106,15 +112,17 @@ def edit_position(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
 @login_required
 def staff_setting(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == "POST":
             name_CategoryType = req.POST.get('name_CategoryType')
@@ -139,14 +147,16 @@ def staff_setting(req):
         }
         return render(req, 'pages/staff_setting.html', context)    
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")     
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"}) 
     
 @login_required
 def deleteCategoryType(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = CategoryType.objects.get(id=id)
         obj.delete()
@@ -155,7 +165,7 @@ def deleteCategoryType(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def delete_multi_CategoryType(req):
@@ -168,14 +178,16 @@ def delete_multi_CategoryType(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")           
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
 
 @login_required
 def edit_staff_setting(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = CategoryType.objects.get(id=id)
         obj.name_CategoryType = req.POST['name_CategoryType']
@@ -185,15 +197,17 @@ def edit_staff_setting(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # การตั้งค่าสถานะ
 @login_required
 def staff_setting_status(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == "POST":
             name_CategoryStatus = req.POST.get('name_CategoryStatus')
@@ -220,14 +234,16 @@ def staff_setting_status(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def DeleteCategoryStatus(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = CategoryStatus.objects.get(id=id)
         obj.delete()
@@ -236,7 +252,7 @@ def DeleteCategoryStatus(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def Delete_multi_CategoryStatus(req):
@@ -249,14 +265,16 @@ def Delete_multi_CategoryStatus(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")           
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
 
 @login_required
 def edit_staff_setting_status(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = CategoryStatus.objects.get(id=id)
         obj.name_CategoryStatus = req.POST['name_CategoryStatus']
@@ -266,15 +284,17 @@ def edit_staff_setting_status(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # การแนะนำวัสดุเข้าสู่ระบบ    
 @login_required
 def staff_introduction(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(status='รออนุมัติ').order_by('name', 'datetime')
         if 'sort' in req.GET:
@@ -318,14 +338,16 @@ def staff_introduction(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_introduction_update(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(id=id).first()
         AllRecList.reasonfromstaff = req.POST['reasonfromstaff']
@@ -352,14 +374,16 @@ def staff_introduction_update(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_introduction_history(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(status='อนุมัติ').order_by('name', 'datetime')
         if 'sort' in req.GET:
@@ -403,15 +427,17 @@ def staff_introduction_history(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # จัดการข้อมูลการแนะนำวัสดุเข้าสู่ระบบ
 @login_required
 def staff_introduction_detail(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(id=id).first()
         context = {
@@ -421,15 +447,17 @@ def staff_introduction_detail(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # ประวัติการยืม
 @login_required
 def staff_borrowing_history(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='ยืมสำเร็จ'))
         if 'sort' in req.GET:
@@ -473,14 +501,16 @@ def staff_borrowing_history(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
     
 @login_required
 def staff_borrowing_history_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='คืนสำเร็จ'))
         if 'sort' in req.GET:
@@ -526,15 +556,17 @@ def staff_borrowing_history_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # จัดการรายการยืม
 @login_required
 def staff_index_borrow(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
         if 'sort' in req.GET:
@@ -576,14 +608,16 @@ def staff_index_borrow(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_index_borrow_wait(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(status='รอยืนยันการรับ').order_by('name', 'date_add')
         if 'sort' in req.GET:
@@ -625,14 +659,16 @@ def staff_index_borrow_wait(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_index_borrow_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
         if 'sort' in req.GET:
@@ -674,14 +710,16 @@ def staff_index_borrow_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_index_borrow_durable_wait(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(status='รอยืนยันการรับ').order_by('name', 'date_add')
         if 'sort' in req.GET:
@@ -723,15 +761,17 @@ def staff_index_borrow_durable_wait(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # จัดการรายการยืม
 @login_required
 def staff_index_borrownow(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='กำลังยืม'))
         if 'sort' in req.GET:
@@ -775,15 +815,17 @@ def staff_index_borrownow(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # จัดการรายการกำลังยืม
 @login_required
 def staff_index_return(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='รอยืนยันการคืน'))
         if 'sort' in req.GET:
@@ -827,14 +869,16 @@ def staff_index_return(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_return_durable(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
         if AllLoanDurable is None:
@@ -859,14 +903,16 @@ def staff_return_durable(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_unreturn_durable(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
         if AllLoanDurable is None:
@@ -892,14 +938,16 @@ def staff_unreturn_durable(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_borrow_parcel(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(id=id).first()
         if AllLoanParcel is None :
@@ -924,14 +972,16 @@ def staff_borrow_parcel(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
     
 @login_required
 def staff_multi_borrow_parcel(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == 'POST':
             ids = req.POST.getlist('id')
@@ -966,15 +1016,17 @@ def staff_multi_borrow_parcel(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
 @login_required
 def staff_multi_borrow_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == 'POST':
             ids = req.POST.getlist('id')
@@ -1003,14 +1055,16 @@ def staff_multi_borrow_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_borrow_durable(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
         if AllLoanDurable is None:
@@ -1036,14 +1090,16 @@ def staff_borrow_durable(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_unborrow_parcel(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(id=id).first()
         if AllLoanParcel is None:
@@ -1069,14 +1125,16 @@ def staff_unborrow_parcel(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_unborrow_durable(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
         if AllLoanDurable is None:
@@ -1102,15 +1160,17 @@ def staff_unborrow_durable(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # รายละเอียดจัดการวัสดุ-ครุภัณฑ์
 @login_required
 def staff_manage_detail(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllParcel = Add_Parcel.objects.filter(id=id).first()
         waiting_qParcel = QueueParcel.objects.filter(queue_item=AllParcel).count()
@@ -1122,14 +1182,16 @@ def staff_manage_detail(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_manage_detail_durable(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.filter(id=id).first()
         waiting_qDurable = QueueDurable.objects.filter(queue_item=AllDurable).count()
@@ -1143,15 +1205,17 @@ def staff_manage_detail_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # จัดการวัสดุ
 @login_required
 def staff_manage_parcel(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         form = ParcelForm()
         if req.method == 'POST':
@@ -1239,14 +1303,16 @@ def staff_manage_parcel(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def edit_staff_manage_parcel(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllParcel = Add_Parcel.objects.get(id=id)
         form = ParcelForm(req.POST or None, req.FILES or None, instance=AllParcel) 
@@ -1263,14 +1329,16 @@ def edit_staff_manage_parcel(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def delete_staff_manage_parcel(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = Add_Parcel.objects.get(id=id)
         obj.delete()
@@ -1279,7 +1347,7 @@ def delete_staff_manage_parcel(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def delete_multi_staff_manage_parcel(req):
@@ -1292,15 +1360,17 @@ def delete_multi_staff_manage_parcel(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")           
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
 
 # จัดการครุภัณฑ์
 @login_required
 def staff_manage_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         form = DurableForm()
 
@@ -1386,14 +1456,16 @@ def staff_manage_durable(req):
             )
         return redirect('staff_manage_durable')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")     
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"}) 
 
 @login_required
 def delete_staff_manage_durable(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = Add_Durable.objects.get(id=id)
         obj.delete()
@@ -1402,7 +1474,7 @@ def delete_staff_manage_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def delete_multi_staff_manage_durable(req):
@@ -1415,14 +1487,16 @@ def delete_multi_staff_manage_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")           
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
 
 @login_required
 def edit_staff_manage_durable(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.get(id=id)
         form = DurableForm(req.POST or None, req.FILES or None, instance=AllDurable) 
@@ -1440,14 +1514,16 @@ def edit_staff_manage_durable(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
 def pdf_print(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.all()             
         context = {
@@ -1457,13 +1533,15 @@ def pdf_print(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_staff_queue(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueParcel = QueueParcel.objects.all()
         context = {
@@ -1473,13 +1551,15 @@ def pdf_staff_queue(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_staff_queue_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueDurable = QueueDurable.objects.all()
         context = {
@@ -1489,13 +1569,15 @@ def pdf_staff_queue_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_staff_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.all()
         context = {
@@ -1505,13 +1587,15 @@ def pdf_staff_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_staff_parcel(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllParcel = Add_Parcel.objects.all()
         context = {
@@ -1521,13 +1605,15 @@ def pdf_staff_parcel(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_staff_max_borrow(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanParcel = Add_Parcel.objects.values("statustype","nametype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
         context = {
@@ -1537,13 +1623,15 @@ def pdf_staff_max_borrow(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_staff_max_borrow_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanDurable = Add_Durable.objects.values("statustype","nametype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
         context = {
@@ -1553,14 +1641,16 @@ def pdf_staff_max_borrow_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
 def pdf_print_position(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
@@ -1580,13 +1670,15 @@ def pdf_print_position(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_borrow(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number') 
         AllLoanParcel = LoanParcel.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='ยืมสำเร็จ')) 
         context = {
@@ -1596,13 +1688,15 @@ def pdf_borrow(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def pdf_borrow_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='คืนสำเร็จ'))
         context = {
@@ -1612,14 +1706,16 @@ def pdf_borrow_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_admin_user(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(Q(right = "นักศึกษา") | Q(status = "ปกติ"))
         AllUser_count = User.objects.filter(right = "นักศึกษา", status = "ปกติ") 
@@ -1661,14 +1757,16 @@ def staff_admin_user(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_admin_user_block(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(status = "ถูกจำกัดสิทธิ์", right = "นักศึกษา")
         AllUser_count = User.objects.filter(status = "ถูกจำกัดสิทธิ์", right = "นักศึกษา")
@@ -1713,14 +1811,16 @@ def staff_admin_user_block(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_user_deadline(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         deadline_str = req.POST['deadline']
@@ -1750,7 +1850,7 @@ def staff_user_deadline(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_user_deadline_multi(req):
@@ -1790,14 +1890,16 @@ def staff_user_deadline_multi(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_user_return(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         obj.status = "ปกติ"
@@ -1820,7 +1922,7 @@ def staff_user_return(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # scheduler.shutdown()
 
@@ -1833,15 +1935,17 @@ def staff_personal_info(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # รายงานภาพรวมวัสดุ
 @login_required
 def staff_report(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList_count = ListFromRec.objects.filter(status='รออนุมัติ') 
         AllLoanDurable_count = LoanDurable.objects.filter(status='รอยืนยันการคืน')
@@ -1873,15 +1977,17 @@ def staff_report(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # รายงานการยืมทั้งหมด
 @login_required
 def staff_max_borrow(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanParcel = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
         if 'sort' in req.GET:
@@ -1911,14 +2017,16 @@ def staff_max_borrow(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_max_borrow_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanDurable = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
         if 'sort' in req.GET:
@@ -1948,14 +2056,16 @@ def staff_max_borrow_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_queue(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueParcel = QueueParcel.objects.all()
         if 'sort' in req.GET:
@@ -1996,14 +2106,16 @@ def staff_queue(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_queue_durable(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueDurable = QueueDurable.objects.all()
         if 'sort' in req.GET:
@@ -2043,14 +2155,16 @@ def staff_queue_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_position(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
@@ -2110,7 +2224,7 @@ def staff_position(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 def staff_add_csv(req):
     try:
@@ -2140,4 +2254,4 @@ def staff_add_csv(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    

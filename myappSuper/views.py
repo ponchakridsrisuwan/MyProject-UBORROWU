@@ -30,6 +30,7 @@ def admin_detail(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(id=id).first()
         context = {
@@ -39,7 +40,7 @@ def admin_detail(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 @login_required
 def delete_user(req, id):
@@ -47,6 +48,7 @@ def delete_user(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         obj.delete()
@@ -55,7 +57,7 @@ def delete_user(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 @login_required
 def admin_user_status(req,id):
@@ -63,6 +65,7 @@ def admin_user_status(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         obj.right = req.POST['right']
@@ -72,7 +75,7 @@ def admin_user_status(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 @login_required
 def admin_user_deadline(req, id):
@@ -80,6 +83,7 @@ def admin_user_deadline(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         deadline_str = req.POST['deadline']
@@ -109,7 +113,7 @@ def admin_user_deadline(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 @login_required
 def admin_user_return(req, id):
@@ -117,6 +121,7 @@ def admin_user_return(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         obj.status = "ปกติ"
@@ -139,7 +144,7 @@ def admin_user_return(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 @login_required
 def admin_user(req):
@@ -147,6 +152,7 @@ def admin_user(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         #gg_id = User.objects.filter(user=req.user, provider='google')[0].uid
         AllUserStudent = User.objects.filter(Q(right = "นักศึกษา") | Q(status = "ปกติ"))
@@ -189,7 +195,7 @@ def admin_user(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 @login_required
 def admin_staff(req):
@@ -197,6 +203,7 @@ def admin_staff(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUserStaff = User.objects.filter(Q(right = "เจ้าหน้าที่")  | Q(right = "ผู้ดูแลระบบ")  | Q(status = "ปกติ"))
         AllUser_count = User.objects.filter(right = "เจ้าหน้าที่", status = "ปกติ")
@@ -236,7 +243,7 @@ def admin_staff(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 @login_required
 def admin_block(req):
@@ -244,6 +251,7 @@ def admin_block(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('/')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
         AllUser_count = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
@@ -284,52 +292,53 @@ def admin_block(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 def person_upload(req):
-    try:
-        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
-        if req.user.phone is None or req.user.token is None:
-            return redirect('/phone_add_number')
-        data = Profile.objects.all()    
-        if 'sort' in req.GET:
-            last_sort = req.GET.get('sort', 'default')
-            if req.GET['sort'] == 'firstname':
-                data = Profile.objects.order_by('firstname')
-            elif req.GET['sort'] == 'lastname':
-                data = Profile.objects.order_by('-lastname')      
-            elif req.GET['sort'] == 'email':
-                data = Profile.objects.order_by('email')       
-            elif req.GET['sort'] == 'default':
-                data = Profile.objects.all()
-            else:
-                last_sort = 'default'
-                data = Profile.objects.all()
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    data = Profile.objects.all()
+    if 'sort' in req.GET:
+        last_sort = req.GET.get('sort', 'default')
+        if req.GET['sort'] == 'firstname':
+            data = Profile.objects.order_by('firstname')
+        elif req.GET['sort'] == 'lastname':
+            data = Profile.objects.order_by('-lastname')
+        elif req.GET['sort'] == 'email':
+            data = Profile.objects.order_by('email')
+        elif req.GET['sort'] == 'default':
+            data = Profile.objects.all()
         else:
             last_sort = 'default'
             data = Profile.objects.all()
-        search_rec = ""
-        if 'search_rec' in req.GET:
-            search_rec = req.GET['search_rec']
-            data = Profile.objects.filter(Q(firstname=search_rec)|Q(lastname=search_rec)
-                                                |Q(email=search_rec))    
+    else:
+        last_sort = 'default'
+        data = Profile.objects.all()
+    search_rec = ""
+    if 'search_rec' in req.GET:
+        search_rec = req.GET['search_rec']
+        data = Profile.objects.filter(Q(firstname=search_rec)|Q(lastname=search_rec)
+                                            |Q(email=search_rec))
 
-        context = {
-            "navbar" : "person_upload",
-            'profiles': data,
-            "search_rec" : search_rec,
-            "last_sort" : last_sort, 
-        }
+    context = {
+        "navbar" : "person_upload",
+        'profiles': data,
+        "search_rec" : search_rec,
+        "last_sort" : last_sort,
+    }
 
-        if req.method == "GET":
-            return render(req, "pages/person_upload.html", context)    
-        
-        csv_file = req.FILES['file'] 
+    if req.method == "GET":
+        return render(req, "pages/person_upload.html", context)
+
+    try:
+        csv_file = req.FILES['file']
         if not csv_file.name.endswith('.csv'):
-            messages.error(req, 'THIS IS NOT A CSV FILE')    
-        data_set = csv_file.read().decode('UTF-8') 
-        data_set = data_set.replace('"', '') 
+            messages.error(req, 'THIS IS NOT A CSV FILE')
+            return redirect('person_upload')
+        data_set = csv_file.read().decode('UTF-8')
+        data_set = data_set.replace('"', '')
         io_string = io.StringIO(data_set)
         next(io_string)
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
@@ -338,19 +347,20 @@ def person_upload(req):
                 lastname=column[1],
                 email=column[2],
             )
-
+        messages.success(req, 'CSV file อัพโหลดสำเร็จ')
         return redirect('person_upload')
-    except Http404:
-        return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        messages.error(req, f'เกิดข้อผิดพลาดขณะอัพโหลด CSV file : {e}')
+        return redirect('person_upload')
 
 @login_required
 def deleteProfile(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่ผู้ดูแลระบบ')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = Profile.objects.get(id=id)
         obj.delete()
@@ -359,7 +369,7 @@ def deleteProfile(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")        
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
 
 def delete_profiles(req):
@@ -371,7 +381,7 @@ def delete_profiles(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")            
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
 

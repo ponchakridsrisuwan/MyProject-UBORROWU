@@ -71,7 +71,7 @@ def HomePage(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")              
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 def Home(req):
     try:
@@ -129,22 +129,23 @@ def Home(req):
     except Http404:
         return render(req, '404_Error_Page.html')        
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 
 def phone_add_number(req):
     try:
         if req.user.is_authenticated:
             if req.method == 'POST':
-                phone = req.POST['phone']
-                token = req.POST['token']
-                if phone is not None or token is not None :
+                phone = req.POST.get('phone')
+                token = req.POST.get('token')
+                if phone or token:
                     req.user.phone = phone
                     req.user.token = token
                     req.user.save()
                     messages.success(req, 'เพิ่มเบอร์โทรศัพท์และเชื่อมต่อไลน์สำเร็จ!')
                     return redirect('Home')
-                else: 
+                else:
+                    messages.error(req, 'กรุณากรอกเบอร์โทรศัพท์และ Token')
                     return redirect('/phone_add_number')
             else:
                 return render(req, 'phone_add_number.html') 
@@ -153,13 +154,14 @@ def phone_add_number(req):
     except Http404:
         return render(req, '404_Error_Page.html')        
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")     
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 @login_required    
 def user_personal_info(req):
     try:
         if req.user.is_authenticated:
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -175,7 +177,7 @@ def user_personal_info(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")     
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 #หน้ายืม
 @login_required
@@ -183,8 +185,10 @@ def user_borrow(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -234,15 +238,17 @@ def user_borrow(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")         
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 @login_required    
 def user_borrow_durable(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -295,15 +301,17 @@ def user_borrow_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")         
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 @login_required
 def confirm_parcel(req,id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllLoanParcel = LoanParcel.objects.filter(id=id).first()
             AllLoanParcel.status = 'ยืมสำเร็จ'
@@ -313,17 +321,20 @@ def confirm_parcel(req,id):
         else:
             return redirect('login')
     except Http404:
-        return render(req, '404_Error_Page.html')
+        return render(req, '404_Error_Page.html')        
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")         
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
+  
 
 @login_required
 def confirm_durable(req,id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllLoanDurable = LoanDurable.objects.filter(id=id).first()
             AllLoanDurable.status = 'กำลังยืม'
@@ -334,15 +345,18 @@ def confirm_durable(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")     
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
+
 
 @login_required
 def return_durable(req,id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllLoanDurable = LoanDurable.objects.filter(id=id).first()
             AllLoanDurable.status = 'รอยืนยันการคืน'
@@ -367,7 +381,7 @@ def return_durable(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")         
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 #หน้าคืน
 @login_required
@@ -375,8 +389,10 @@ def user_borrowed(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -442,7 +458,7 @@ def user_borrowed(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")         
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 #หน้าประวัติ
 @login_required
@@ -450,8 +466,10 @@ def user_history(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -501,15 +519,17 @@ def user_history(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")         
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
     
 @login_required
 def user_history_durable(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -561,7 +581,7 @@ def user_history_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")         
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 #หน้ายืม
 @login_required
@@ -569,8 +589,10 @@ def user_cart(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel = CartParcel.objects.filter(user = req.user)
             AllCartDurable = CartDurable.objects.filter(user = req.user)
@@ -593,15 +615,17 @@ def user_cart(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")      
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})      
 
 @login_required
 def add_to_cart(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
             if parcel_item.quantity > 0 or parcel_item.quantitytype == "∞":
@@ -637,7 +661,7 @@ def add_to_cart(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")            
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
 @login_required
@@ -645,8 +669,10 @@ def add_to_queue(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
             queue_parcel = QueueParcel.objects.create(user=req.user, queue_item=parcel_item)
@@ -661,7 +687,7 @@ def add_to_queue(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
  
 @login_required    
@@ -669,8 +695,10 @@ def cart_update(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
             if parcel_item.quantity > 0 or parcel_item.quantitytype == "∞":
@@ -690,15 +718,17 @@ def cart_update(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def cart_notupdate(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
             if parcel_item.quantity > 0 or parcel_item.quantitytype == "∞":
@@ -723,15 +753,17 @@ def cart_notupdate(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def user_queue(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -780,15 +812,17 @@ def user_queue(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def add_multiple_to_borrow_parcel(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             description = req.POST.get('description')
             if not description or description == "":
@@ -836,15 +870,17 @@ def add_multiple_to_borrow_parcel(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def delete_borrow_parcel(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             try:
                 loan_parcel = LoanParcel.objects.get(id=id)
@@ -869,7 +905,7 @@ def delete_borrow_parcel(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
     
 
 @login_required    
@@ -877,8 +913,10 @@ def delete_add_to_cart(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             if CartParcel.objects.filter(id=id).exists():
                 obj = CartParcel.objects.get(id=id)
@@ -903,15 +941,17 @@ def delete_add_to_cart(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
  
 @login_required    
 def delete_queue(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = QueueParcel.objects.get(id=id)
             obj.delete()
@@ -921,15 +961,17 @@ def delete_queue(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def add_to_cart_durable(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
             if durable_item.quantity > 0 or durable_item.quantitytype == "∞":
@@ -970,15 +1012,17 @@ def add_to_cart_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
     
 @login_required
 def add_to_queue_durable(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
             queue_durable = QueueDurable.objects.create(user=req.user, queue_item=durable_item)
@@ -993,15 +1037,17 @@ def add_to_queue_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def cart_update_durable(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
             if durable_item.quantity > 0 or durable_item.quantitytype == "∞":
@@ -1021,7 +1067,7 @@ def cart_update_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 
 @login_required
@@ -1029,8 +1075,10 @@ def cart_notupdate_durable(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
             if durable_item.quantity > 0 or durable_item.quantitytype == "∞":
@@ -1055,15 +1103,17 @@ def cart_notupdate_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required    
 def user_queue_durable(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1112,15 +1162,17 @@ def user_queue_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
  
 @login_required    
 def add_multiple_to_borrow_durable(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             description = req.POST.get('description')
             if not description or description == "":
@@ -1175,15 +1227,17 @@ def add_multiple_to_borrow_durable(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def delete_borrow_durable(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             try:
                 loan_durable = LoanDurable.objects.get(id=id)
@@ -1208,15 +1262,17 @@ def delete_borrow_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required    
 def delete_durable_add_to_cart(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             if CartDurable.objects.filter(id=id).exists():
                 obj = CartDurable.objects.get(id=id)
@@ -1241,15 +1297,17 @@ def delete_durable_add_to_cart(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required    
 def delete_queue_durable(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = QueueDurable.objects.get(id=id)
             obj.delete()
@@ -1259,7 +1317,7 @@ def delete_queue_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
     
 #หน้ารายละเอียดวัสดุ
 @login_required
@@ -1267,8 +1325,10 @@ def user_detail(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1314,15 +1374,17 @@ def user_detail(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def user_detail_durable(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1372,7 +1434,7 @@ def user_detail_durable(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 
 # หน้ารายการวัสดุ
@@ -1447,7 +1509,7 @@ def user_durable_articles(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
     
 def login_user_durable_articles(req):
     try:
@@ -1505,15 +1567,17 @@ def login_user_durable_articles(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")              
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 @login_required
 def user_recommend_history(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1564,15 +1628,17 @@ def user_recommend_history(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def user_recommend(req):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1653,15 +1719,17 @@ def user_recommend(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")              
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 @login_required
 def user_recommend_edit(req,id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = ListFromRec.objects.get(id=id)
             obj.name = req.POST['name']
@@ -1679,7 +1747,7 @@ def user_recommend_edit(req,id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 # รายงานสถานะข้อมูลการแนะนำวัสดุเข้าสู่ระบบ
 @login_required
@@ -1687,8 +1755,10 @@ def user_recommend_detail(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1706,15 +1776,17 @@ def user_recommend_detail(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def deleteRecList(req, id):
     try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
+                messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
             if req.user.phone is None or req.user.token is None:
+                messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = ListFromRec.objects.get(id=id)
             obj.delete()
@@ -1725,7 +1797,7 @@ def deleteRecList(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 @login_required
 def delete_Multi_RecList(req):
@@ -1740,7 +1812,7 @@ def delete_Multi_RecList(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 
 def user_position(req):
@@ -1811,7 +1883,7 @@ def user_position(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")                  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
 
 def login_user_position(req):
     try:
@@ -1872,7 +1944,7 @@ def login_user_position(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")              
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
     
 def pdf_print_position(req):
     try:
@@ -1894,4 +1966,4 @@ def pdf_print_position(req):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return HttpResponseServerError("Oops, something went wrong. Please try again later.")              
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
