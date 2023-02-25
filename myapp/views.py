@@ -68,83 +68,92 @@ def HomePage(req):
     return render(req, 'pages/user_index.html', context)
 
 def Home(req):
-    AllParcel = Add_Parcel.objects.all()
-    AllDurable = Add_Durable.objects.all()
-    AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-    Total = TotalParcel + TotalDurable
-    AllLoanParcel = LoanParcel.objects.filter(Q(status='รอยืนยันการรับ'), user=req.user)
-    AllLoanDurable = LoanDurable.objects.filter(Q(status='รอยืนยันการรับ') , user=req.user)
-    if req.user:
-        selected_category = req.GET.get('category', None)
-        AllCategoryType = CategoryType.objects.all()   
-        if 'sort' in req.GET:
-            last_sort = req.GET.get('sort', 'default')
-            if req.GET['sort'] == 'category':
-                AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
-                AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+    if req.user.is_authenticated:
+        AllParcel = Add_Parcel.objects.all()
+        AllDurable = Add_Durable.objects.all()
+        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+        Total = TotalParcel + TotalDurable
+        AllLoanParcel = LoanParcel.objects.filter(Q(status='รอยืนยันการรับ'), user=req.user)
+        AllLoanDurable = LoanDurable.objects.filter(Q(status='รอยืนยันการรับ') , user=req.user)
+        if req.user:
+            selected_category = req.GET.get('category', None)
+            AllCategoryType = CategoryType.objects.all()   
+            if 'sort' in req.GET:
+                last_sort = req.GET.get('sort', 'default')
+                if req.GET['sort'] == 'category':
+                    AllDurable = AllDurable.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+                    AllParcel = AllParcel.filter(category=req.GET['category']).order_by('category__name_CategoryType')
+                else:
+                    last_sort = 'default'
+                    AllDurable = Add_Durable.objects.all()
+                    AllParcel = Add_Parcel.objects.all()
             else:
                 last_sort = 'default'
                 AllDurable = Add_Durable.objects.all()
-                AllParcel = Add_Parcel.objects.all()
-        else:
-            last_sort = 'default'
-            AllDurable = Add_Durable.objects.all()
-            AllParcel = Add_Parcel.objects.all() 
-        p_listparcel = Paginator(AllParcel, 8)
-        p_listdurable = Paginator(AllDurable, 8)
-        page_num = req.GET.get('page', 1)
-        try:
-            pageparcel = p_listparcel.page(page_num)
-            pagedurable = p_listdurable.page(page_num)
-        except:
-            pageparcel = p_listparcel.page(1)  
-            pagedurable = p_listdurable.page(1)      
-    context = {
-            "navbar" : "Home",
-            "last_sort" : last_sort,
-            "Total" : Total,
-            "selected_category" : selected_category,
-            "AllCategoryType" : AllCategoryType,
-            "AllParcel" : AllParcel,
-            "AllDurable" : AllDurable,
-            "pageparcel" : pageparcel,
-            "pagedurable" : pagedurable,
-            "AllLoanParcel" : AllLoanParcel,
-            "AllLoanDurable" : AllLoanDurable,
-        }    
-    return render(req, 'pages/Home.html', context)
+                AllParcel = Add_Parcel.objects.all() 
+            p_listparcel = Paginator(AllParcel, 8)
+            p_listdurable = Paginator(AllDurable, 8)
+            page_num = req.GET.get('page', 1)
+            try:
+                pageparcel = p_listparcel.page(page_num)
+                pagedurable = p_listdurable.page(page_num)
+            except:
+                pageparcel = p_listparcel.page(1)  
+                pagedurable = p_listdurable.page(1)      
+        context = {
+                "navbar" : "Home",
+                "last_sort" : last_sort,
+                "Total" : Total,
+                "selected_category" : selected_category,
+                "AllCategoryType" : AllCategoryType,
+                "AllParcel" : AllParcel,
+                "AllDurable" : AllDurable,
+                "pageparcel" : pageparcel,
+                "pagedurable" : pagedurable,
+                "AllLoanParcel" : AllLoanParcel,
+                "AllLoanDurable" : AllLoanDurable,
+            }    
+        return render(req, 'pages/Home.html', context)
+    else:
+        return redirect('login')
 
 def phone_add_number(req):
-    if req.method == 'POST':
-        phone = req.POST['phone']
-        token = req.POST['token']
-        if phone is not None or token is not None :
-            req.user.phone = phone
-            req.user.token = token
-            req.user.save()
-            messages.success(req, 'เพิ่มเบอร์โทรศัพท์และเชื่อมต่อไลน์สำเร็จ!')
-            return redirect('Home')
-        else: 
-            return redirect('/phone_add_number')
+    if req.user.is_authenticated:
+        if req.method == 'POST':
+            phone = req.POST['phone']
+            token = req.POST['token']
+            if phone is not None or token is not None :
+                req.user.phone = phone
+                req.user.token = token
+                req.user.save()
+                messages.success(req, 'เพิ่มเบอร์โทรศัพท์และเชื่อมต่อไลน์สำเร็จ!')
+                return redirect('Home')
+            else: 
+                return redirect('/phone_add_number')
+        else:
+            return render(req, 'phone_add_number.html') 
     else:
-        return render(req, 'phone_add_number.html') 
+        return redirect('login')    
 
 @login_required    
 def user_personal_info(req):
-    if req.user.phone is None or req.user.token is None:
-        return redirect('/phone_add_number')
-    AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
-    TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
-    TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
-    Total = TotalParcel + TotalDurable
-    context = {
-        "Total" : Total,
-    }
-    return render(req, 'pages/user_personal_info.html', context)
+    if req.user.is_authenticated:
+        if req.user.phone is None or req.user.token is None:
+            return redirect('/phone_add_number')
+        AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        AllCartDurabl_sum = CartDurable.objects.filter(user = req.user).aggregate(Sum('quantity'))
+        TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
+        TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
+        Total = TotalParcel + TotalDurable
+        context = {
+            "Total" : Total,
+        }
+        return render(req, 'pages/user_personal_info.html', context)
+    else:
+        return redirect('login')
 
 #หน้ายืม
 @login_required
