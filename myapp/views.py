@@ -978,12 +978,11 @@ def add_to_cart_durable(req, id):
                 if durable_item.quantitytype == "∞":
                     durable_item.borrow_count += 1  
                     durable_item.save()
-                    messages.success(req, 'เพิ่มรายการสำเร็จ!')
+                
                 else:
                     durable_item.quantity -= 1
                     durable_item.borrow_count += 1  
                     durable_item.save()
-                    messages.success(req, 'เพิ่มรายการสำเร็จ!')
                 existing_cart_durable = CartDurable.objects.filter(durable_item=durable_item, user=req.user)
                 if existing_cart_durable.exists():
                     cart_durable = existing_cart_durable.first()
@@ -1005,7 +1004,7 @@ def add_to_cart_durable(req, id):
                     if cart_durable.quantity < 3:
                         cart_durable.save()
                     messages.success(req, 'เพิ่มรายการสำเร็จ!')    
-                queue_durable = QueueParcel.objects.filter(user=req.user, queue_item=durable_item).delete()    
+                queue_durable = QueueDurable.objects.filter(user=req.user, queue_item=durable_item).delete()    
             return redirect('/user_cart')
         else:
             return redirect("login")

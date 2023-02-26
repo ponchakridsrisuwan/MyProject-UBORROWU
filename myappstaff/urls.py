@@ -19,7 +19,7 @@ urlpatterns = [
     path('staff_unreturn_durable/<int:id>', views.staff_unreturn_durable, name="staff_unreturn_durable"),
     path('staff_index_return', views.staff_index_return, name="staff_index_return"),
     
-    path('staff_borrow_parcell/<int:id>', views.staff_borrow_parcell, name="staff_borrow_parcell"),
+    path('staff_borrow_parcel/<int:id>', views.staff_borrow_parcel, name="staff_borrow_parcel"),
     path('staff_multi_borrow_parcel', views.staff_multi_borrow_parcel, name="staff_multi_borrow_parcel"),
     path('staff_unborrow_parcel/<int:id>', views.staff_unborrow_parcel, name="staff_unborrow_parcel"),
     path('staff_borrow_durable/<int:id>', views.staff_borrow_durable, name="staff_borrow_durable"),

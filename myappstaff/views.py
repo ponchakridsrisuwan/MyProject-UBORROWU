@@ -966,6 +966,7 @@ def staff_borrow_parcel(req,id):
             msg = ' '.join(map(str, msg)) 
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_borrow')
+
 @login_required
 def staff_multi_borrow_parcel(req):
     try:
@@ -1048,8 +1049,8 @@ def staff_multi_borrow_durable(req):
                 msg.append(AllLoanDurable.first().reasonfromstaff)
                 msg.append('วันที่อนุมัติ : ')
                 msg.append(datetime_th.strftime("%Y-%m-%d %H:%M"))
-                    msg = ' '.join(map(str, msg)) 
-                    requests.post(url, headers=headers, data={'message': msg})
+                msg = ' '.join(map(str, msg)) 
+                requests.post(url, headers=headers, data={'message': msg})
         return redirect('/staff_index_borrow_durable')
     except Http404:
         return render(req, '404_Error_Page.html')
