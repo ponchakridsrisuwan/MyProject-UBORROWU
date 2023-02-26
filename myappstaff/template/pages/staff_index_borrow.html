@@ -78,11 +78,11 @@
                                             btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#detail-{{forloop.counter}}">รายละเอียด</a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a class="dropdown-item btn-0
                                             btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#approved-{{forloop.counter}}">อนุมัติ</a>
-                                    </li>
+                                    </li> -->
                                     <li>
                                         <a class="dropdown-item btn-0
                                             btn-sm" data-bs-toggle="modal"
@@ -123,16 +123,16 @@
                         </div>
 
                         <!-- อนุมัติ -->
-                        <div class="modal fade" id="approved-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
+                        <!-- <div class="modal fade" id="approved-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedoneModal"
                             aria-hidden="true">
-                            <form method="post" action="/staff_borrow_parcel/{{AllLoanParcel.id }}"
+                            <form method="post" action="/staff_borrow_parcell/{{AllLoanParcel.id }}"
                                 enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="modal-dialog modal-lg
                                     modal-fullscreen-lg-down">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="approvedModal">ยืนยันการอนุมัติการยืมของ
+                                            <h5 class="modal-title" id="approvedoneModal">ยืนยันการอนุมัติการยืมของ
                                                 {{AllLoanParcel.user.first_name}}&nbsp{{AllLoanParcel.user.last_name }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
@@ -163,7 +163,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> -->
 
                         <!-- ไม่อนุมัติ -->
                         <div class="modal fade" id="disapproved-{{forloop.counter}}" tabindex="-1"
@@ -208,6 +208,16 @@
                         </div>
                     </tbody>
                 </table>
+                <script language="JavaScript">
+                    function toggle(source) {
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i] != source)
+                                checkboxes[i].checked = source.checked;
+                        }
+                    }
+                </script>
+                <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
                 <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#approved_multi">อนุมัติ</a>
                 {% empty %}
                 <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมวัสดุ</p>
@@ -260,7 +270,4 @@
         </div>
     </div>
 </div>
-
-
-
 {% endblock %}

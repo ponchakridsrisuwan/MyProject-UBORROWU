@@ -115,7 +115,7 @@
                     <tbody id="xTable">
                         {% for AllParcel in page.object_list %}
                         <tr class="qrow ">
-                            <td><input type="checkbox" name="id" value="{{ AllParcel.id }}"></td>
+                            <td><input type="checkbox" name="foo"  value="{{ AllParcel.id }}"></td>
                             <td>
                                 <a class="d-flex align-items-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' AllParcel.id %}">
@@ -324,6 +324,16 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <script language="JavaScript">
+                    function toggle(source) {
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i] != source)
+                                checkboxes[i].checked = source.checked;
+                        }
+                    }
+                </script>
+                <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
                 <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i class=" fa fa-trash "></i> ลบที่เลือก</a>
                 <!-- อนุมัติ -->
                 <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"

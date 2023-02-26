@@ -61,7 +61,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn
                                         btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                        <a href="/deleteCategoryStatus/{{CategoryStatus.id }}" type="submit"
+                                        <a href="/DeleteCategoryStatus/{{CategoryStatus.id }}" type="submit"
                                             class="btn btn-warning rounded-pill">ยืนยัน</a>
                                     </div>
                                 </div>
@@ -109,6 +109,16 @@
                     <p class="btn btn-outline-dark rounded-pill mt-2" data-bs-toggle="modal"
                         data-bs-target="#additemcatecory">เพิ่มสถานะ</p>
                 </table>
+                <script language="JavaScript">
+                    function toggle(source) {
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i] != source)
+                                checkboxes[i].checked = source.checked;
+                        }
+                    }
+                </script>
+                <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
                 <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i class=" fa fa-trash "></i> ลบที่เลือก</a>
                 <!-- อนุมัติ -->
                 <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"

@@ -765,7 +765,7 @@ def staff_unreturn_durable(req,id):
     return redirect('/staff_index_return')
 
 @login_required
-def staff_borrow_parcel(req,id):
+def staff_borrow_parcell(req,id):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
         return redirect('/')
     if req.user.phone is None or req.user.token is None:
@@ -790,6 +790,7 @@ def staff_borrow_parcel(req,id):
             msg = ' '.join(map(str, msg)) 
             requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_borrow')
+
 @login_required
 def staff_multi_borrow_parcel(req):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
@@ -837,7 +838,7 @@ def staff_multi_borrow_durable(req):
     if req.method == 'POST':
         ids = req.POST.getlist('id')
         AllLoanDurable = LoanDurable.objects.filter(id__in=ids)
-        if AllLoanDurable is None:
+        if not AllLoanDurable.exists():
             return redirect('/staff_index_borrow_durable')
         for loan_durable in AllLoanDurable:
             loan_durable.reasonfromstaff = req.POST['reasonfromstaff']
@@ -854,10 +855,18 @@ def staff_multi_borrow_durable(req):
                         'content-type': 'application/x-www-form-urlencoded',
                         'Authorization': 'Bearer ' + token 
                     }
-                msg = ['รายการ : ', AllLoanDurable.name, "สถานะ : ", AllLoanDurable.status, AllLoanDurable.reasonfromstaff,'วันที่อนุมัติ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ['รายการ : ']
+                for loan_parcel in AllLoanDurable:
+                    msg.append(loan_parcel.name)
+                msg.append('สถานะ : ')
+                msg.append(AllLoanDurable.first().status)
+                msg.append(AllLoanDurable.first().reasonfromstaff)
+                msg.append('วันที่อนุมัติ : ')
+                msg.append(datetime_th.strftime("%Y-%m-%d %H:%M"))
                 msg = ' '.join(map(str, msg)) 
                 requests.post(url, headers=headers, data={'message': msg})
     return redirect('/staff_index_borrow_durable')
+
 
 @login_required
 def staff_borrow_durable(req,id):

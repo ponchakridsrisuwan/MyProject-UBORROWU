@@ -148,6 +148,16 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    <script language="JavaScript">
+                        function toggle(source) {
+                            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                            for (var i = 0; i < checkboxes.length; i++) {
+                                if (checkboxes[i] != source)
+                                    checkboxes[i].checked = source.checked;
+                            }
+                        }
+                    </script>
+                    <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
                     <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#manageitemcatecorymulti">ระงับสิทธิ์หลายรายการที่เลือก</a>
                     <!-- moal จัดการการระงับสิทธิ์หลายคน -->
                     <div class="modal fade" id="manageitemcatecorymulti" tabindex="-1"

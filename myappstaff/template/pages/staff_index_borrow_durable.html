@@ -76,11 +76,11 @@
                                     btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#detaily-{{forloop.counter}}">รายละเอียด</a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a class="dropdown-item btn-0
                                     btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#approvedy-{{forloop.counter}}">อนุมัติ</a>
-                                    </li>
+                                    </li> -->
                                     <li>
                                         <a class="dropdown-item btn-0
                                     btn-sm" data-bs-toggle="modal"
@@ -123,7 +123,7 @@
                 </div>
 
                 <!-- อนุมัติ -->
-                <div class="modal fade" id="approvedy-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
+                <!-- <div class="modal fade" id="approvedy-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
                     aria-hidden="true">
                     <form method="post" action="/staff_borrow_durable/{{ AllLoanDurable.id }}"
                         enctype="multipart/form-data">
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                     </form>
-                </div>
+                </div> -->
 
                 <!-- ไม่อนุมัติ -->
                 <div class="modal fade" id="disapprovedy-{{forloop.counter}}" tabindex="-1"
@@ -206,7 +206,16 @@
                 
                     </tbody>
                 </table>
-                <!-- <button type="submit" class="btn btn-sm btn-warning" >อนุมัติการยืมวัสดุ</button> -->
+                <script language="JavaScript">
+                    function toggle(source) {
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i] != source)
+                                checkboxes[i].checked = source.checked;
+                        }
+                    }
+                </script>
+                <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
                 <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#approved_multi">อนุมัติ</a>
                 {% empty %}
                 <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
