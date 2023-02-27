@@ -97,7 +97,7 @@ def delete_multi_Position(req):
 
 @login_required
 def edit_position(req,id):
-
+    try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
@@ -112,7 +112,10 @@ def edit_position(req,id):
         else:
             nameposition = SettingPosition()   
         return redirect('/staff_setting_position')
-        
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})              
 
 
 @login_required
@@ -194,93 +197,6 @@ def edit_staff_setting(req,id):
         obj.save()
         messages.success(req, 'แก้ไขสำเร็จ!')
         return redirect('/staff_setting')
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
-
-# การตั้งค่าสถานะ
-@login_required
-def staff_setting_status(req):
-    try:
-        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
-            return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
-            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/phone_add_number')
-        if req.method == "POST":
-            name_CategoryStatus = req.POST.get('name_CategoryStatus')
-            obj = CategoryStatus(name_CategoryStatus=name_CategoryStatus)
-            obj.save()
-            messages.success(req, 'เพิ่มสถานะสำเร็จ!')
-            return redirect('/staff_setting_status')   
-        else:
-            obj = CategoryStatus()   
-        obj = CategoryStatus.objects.all()   
-        AllCategoryStatus = CategoryStatus.objects.all()
-        page_num = req.GET.get('page', 1)
-        p = Paginator(AllCategoryStatus, 10)
-        try:
-            page = p.page(page_num)
-        except:
-            page = p.page(1)
-        context = {
-            "navbar" : "staff_setting_status",
-            "All_CategoryStatus": CategoryStatus.objects.all(),
-            "page" : page
-        }    
-        return render(req, 'pages/staff_setting_status.html', context)  
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
-
-@login_required
-def DeleteCategoryStatus(req, id):
-    try:
-        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
-            return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
-            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/phone_add_number')
-        obj = CategoryStatus.objects.get(id=id)
-        obj.delete()
-        messages.success(req, 'ลบสำเร็จ!')
-        return redirect('/staff_setting_status')
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
-
-@login_required
-def Delete_multi_CategoryStatus(req):
-    try:
-        if req.method == 'POST':
-            ids = req.POST.getlist('id')
-            CategoryStatus.objects.filter(id__in=ids).delete()
-            messages.success(req, 'ลบสำเร็จ!')
-            return redirect('/staff_setting_status')
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
-
-@login_required
-def edit_staff_setting_status(req,id):
-    try:
-        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
-            return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
-            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/phone_add_number')
-        obj = CategoryStatus.objects.get(id=id)
-        obj.name_CategoryStatus = req.POST['name_CategoryStatus']
-        obj.save()
-        messages.success(req, 'แก้ไขสำเร็จ!')
-        return redirect('/staff_setting_status')
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -942,30 +858,35 @@ def staff_unreturn_durable(req,id):
 
 @login_required
 def staff_borrow_parcel(req,id):
-    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-        return redirect('/')
-    if req.user.phone is None or req.user.token is None:
-        return redirect('/phone_add_number')
-    AllLoanParcel = LoanParcel.objects.filter(id=id).first()
-    if AllLoanParcel is None :
+    try:
+        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+            return redirect('/')
+        if req.user.phone is None or req.user.token is None:
+            return redirect('/phone_add_number')
+        AllLoanParcel = LoanParcel.objects.filter(id=id).first()
+        if AllLoanParcel is None :
+            return redirect('/staff_index_borrow')
+        AllLoanParcel.reasonfromstaff = req.POST['reasonfromstaff']
+        AllLoanParcel.status = 'รอยืนยันการรับ'
+        AllLoanParcel.save()
+        users = User.objects.filter(right="นักศึกษา")
+        datetime_th = th_tz.localize(datetime.now())
+        for user in users:
+            if user.token:
+                url = 'https://notify-api.line.me/api/notify'
+                token = user.token 
+                headers = {
+                        'content-type': 'application/x-www-form-urlencoded',
+                        'Authorization': 'Bearer ' + token 
+                    }
+                msg = ['รายการ : ', AllLoanParcel.name, "สถานะ : ", AllLoanParcel.status, AllLoanParcel.reasonfromstaff,'วันที่อนุมัติ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ' '.join(map(str, msg)) 
+                requests.post(url, headers=headers, data={'message': msg})
         return redirect('/staff_index_borrow')
-    AllLoanParcel.reasonfromstaff = req.POST['reasonfromstaff']
-    AllLoanParcel.status = 'รอยืนยันการรับ'
-    AllLoanParcel.save()
-    users = User.objects.filter(right="นักศึกษา")
-    datetime_th = th_tz.localize(datetime.now())
-    for user in users:
-        if user.token:
-            url = 'https://notify-api.line.me/api/notify'
-            token = user.token 
-            headers = {
-                    'content-type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Bearer ' + token 
-                }
-            msg = ['รายการ : ', AllLoanParcel.name, "สถานะ : ", AllLoanParcel.status, AllLoanParcel.reasonfromstaff,'วันที่อนุมัติ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
-            msg = ' '.join(map(str, msg)) 
-            requests.post(url, headers=headers, data={'message': msg})
-    return redirect('/staff_index_borrow')
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def staff_multi_borrow_parcel(req):
@@ -1231,7 +1152,6 @@ def staff_manage_parcel(req):
             form = ParcelForm()
         AllParcel = Add_Parcel.objects.all()
         categoryType = CategoryType.objects.all()
-        categoryStatus = CategoryStatus.objects.all()
         settingPosition = SettingPosition.objects.all()
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')
@@ -1271,7 +1191,6 @@ def staff_manage_parcel(req):
             "last_sort" : last_sort,
             "search_query" : search_query,
             "categoryType" : categoryType,
-            "categoryStatus" : categoryStatus,
             "settingPosition" : settingPosition
         }   
 
@@ -1288,13 +1207,12 @@ def staff_manage_parcel(req):
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
             position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
             category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
-            status, _ = CategoryStatus.objects.get_or_create(name_CategoryStatus=column[4])
             Add_Parcel.objects.create(
                 name=column[0],
                 nameposition=position,
                 nametype=column[2],
                 category=category,
-                status=status,
+                status=column[4],
                 statustype=column[5],
                 quantitytype=column[6],
                 quantity=column[7],
@@ -1366,7 +1284,7 @@ def delete_multi_staff_manage_parcel(req):
 # จัดการครุภัณฑ์
 @login_required
 def staff_manage_durable(req):
-
+    try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
@@ -1387,7 +1305,6 @@ def staff_manage_durable(req):
             form = DurableForm()
         AllDurable = Add_Durable.objects.all()
         categoryType = CategoryType.objects.all()
-        categoryStatus = CategoryStatus.objects.all()
         settingPosition = SettingPosition.objects.all()
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')
@@ -1426,7 +1343,6 @@ def staff_manage_durable(req):
             "last_sort" : last_sort,
             "search_query" : search_query,
             "categoryType" : categoryType,
-            "categoryStatus" : categoryStatus,
             "settingPosition" : settingPosition
         }    
 
@@ -1443,19 +1359,22 @@ def staff_manage_durable(req):
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
             position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
             category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
-            status, _ = CategoryStatus.objects.get_or_create(name_CategoryStatus=column[4])
             Add_Durable.objects.create(
                 name=column[0],
                 nameposition=position,
                 nametype=column[2],
                 category=category,
-                status=status,
+                status=column[4],
                 statustype=column[5],
                 quantitytype=column[6],
                 quantity=column[7],
                 description=column[8],
             )
         return redirect('staff_manage_durable')
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def delete_staff_manage_durable(req, id):

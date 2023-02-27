@@ -11,12 +11,7 @@ class AllPositionForm(ModelForm):
 class All_CategoryTypeForm(ModelForm):
     class Meta:
         model = CategoryType
-        fields = ["name_CategoryType"]
-
-class All_CategoryStatusForm(ModelForm):
-    class Meta:
-        model = CategoryStatus
-        fields = ["name_CategoryStatus"]                   
+        fields = ["name_CategoryType"]            
 
 
 class ParcelForm(forms.ModelForm):
