@@ -97,22 +97,22 @@ def delete_multi_Position(req):
 
 @login_required
 def edit_position(req,id):
-    try:
+
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
-        obj = SettingPosition.objects.get(id=id)
-        obj.nameposition = req.POST['nameposition']
-        obj.save()
-        messages.success(req, 'แก้ไขสำเร็จ!')
+        if req.method == "POST":
+            nameposition = req.POST.get('nameposition')
+            nameposition = SettingPosition(nameposition=nameposition)
+            nameposition.save()
+            messages.success(req, 'แก้ไขสำเร็จ!')
+        else:
+            nameposition = SettingPosition()   
         return redirect('/staff_setting_position')
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
+        
 
 
 @login_required
@@ -1356,17 +1356,17 @@ def delete_multi_staff_manage_parcel(req):
         if req.method == 'POST':
             ids = req.POST.getlist('id')
             Add_Parcel.objects.filter(id__in=ids).delete()
-            messages.success(req, 'ลบรายการวัสดุสำเร็จ!')
+            messages.success(req, 'ลบรายการสำเร็จ!')
             return redirect('staff_manage_parcel')
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 # จัดการครุภัณฑ์
 @login_required
 def staff_manage_durable(req):
-    try:
+
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
@@ -1456,8 +1456,6 @@ def staff_manage_durable(req):
                 description=column[8],
             )
         return redirect('staff_manage_durable')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"}) 
 
 @login_required
 def delete_staff_manage_durable(req, id):
@@ -1483,7 +1481,7 @@ def delete_multi_staff_manage_durable(req):
         if req.method == 'POST':
             ids = req.POST.getlist('id')
             Add_Durable.objects.filter(id__in=ids).delete()
-            messages.success(req, 'ลบรายการวัสดุสำเร็จ!')
+            messages.success(req, 'ลบรายการสำเร็จ!')
             return redirect('staff_manage_durable')
     except Http404:
         return render(req, '404_Error_Page.html')

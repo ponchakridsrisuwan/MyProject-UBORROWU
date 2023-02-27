@@ -62,7 +62,8 @@
                                 <input class="form-control rounded-pill" type="file" name="file" id="file">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="button" class="btn btn-secondary rounded-pill"
+                                    data-bs-dismiss="modal">ยกเลิก</button>
                                 <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
                             </div>
                         </div>
@@ -116,7 +117,7 @@
                                 <td><input type="checkbox" name="id" value="{{ AllDurable.id }}"></td>
                                 <td>
                                     <a class="d-flex align-items-center text-black" style="text-decoration:none"
-                                        href="{% url 'staff_manage_detail_durable' AllDurable.id %}">
+                                        href="{% url 'staff_manage_detail' AllDurable.id %}">
                                         <div class="text-center thumbnailsmall rounded-circle"><img
                                                 src="{{ AllDurable.image.url | safe }}"></div>
                                         <div class="ms-3">
@@ -128,33 +129,33 @@
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                        href="{% url 'staff_manage_detail_durable' AllDurable.id %}">{{AllDurable.borrow_count}}</a>
+                                        href="{% url 'staff_manage_detail' AllDurable.id %}">{{ AllDurable.borrow_count}}</a>
                                 </td>
 
                                 {% if AllDurable.quantitytype == "∞" %}
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                        href="{% url 'staff_manage_detail_durable' AllDurable.id %}">{{ AllDurable.quantitytype}}</a>
+                                        href="{% url 'staff_manage_detail' AllDurable.id %}">{{ AllDurable.quantitytype}}</a>
                                 </td>
                                 {% else %}
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                        href="{% url 'staff_manage_detail_durable' AllDurable.id %}">{{ AllDurable.quantity }}</a>
+                                        href="{% url 'staff_manage_detail' AllDurable.id %}">{{ AllDurable.quantity }}</a>
                                 </td>
                                 {% endif %}
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                        href="{% url 'staff_manage_detail_durable' AllDurable.id %}">{{ AllDurable.status }}</a>
+                                        href="{% url 'staff_manage_detail' AllDurable.id %}">{{ AllDurable.status }}</a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                        href="{% url 'staff_manage_detail_durable' AllDurable.id %}">
+                                        href="{% url 'staff_manage_detail' AllDurable.id %}">
                                         {{ AllDurable.date|date:"d M y"}}
                                     </a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                        href="{% url 'staff_manage_detail_durable' AllDurable.id %}">{{ AllDurable.numdate }}
+                                        href="{% url 'staff_manage_detail' AllDurable.id %}">{{ AllDurable.numdate }}
                                     </a>
                                 </td>
                                 <td>
@@ -225,10 +226,11 @@
                                     </div>
                                 </div>
                             </div>
-
+                            {% empty %}
+                            <p class="text-center">ยังไม่มีข้อมูลรายการครุภัณฑ์</p>
+                            {% endfor %}
                         </tbody>
                     </table>
-                    
                     <script language="JavaScript">
                         function toggle(source) {
                             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -242,6 +244,7 @@
                         all</span>
                     <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i
                             class=" fa fa-trash "></i> ลบที่เลือก</a>
+                    <!-- อนุมัติ -->
                     <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg
@@ -255,13 +258,14 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn
                                     btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                    <button type="submit" href="delete_multi_items" class="btn btn-warning
+                                    <button type="submit" class="btn btn-warning
                                     rounded-pill">ยืนยัน</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+                {% for AllDurable in page.object_list %}
                 <!-- moal แก้ไขรายการ -->
                 <div class="modal fade" id="EditTable-{{forloop.counter}}" tabindex="-1" aria-labelledby="edititemModal"
                     aria-hidden="true">
@@ -272,8 +276,7 @@
                             {% csrf_token %}
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="edititemModal">แก้ไขรายการ{{forloop.counter}}
-                                        {{AllDurable.name }}
+                                    <h5 class="modal-title" id="edititemModal">แก้ไขรายการ {{ AllDurable.name }}
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -290,8 +293,7 @@
                                         <select name="nameposition" class="form-control rounded-pill"
                                             id="id_nameposition">
                                             {% for category in settingPosition %}
-                                            <option value="{{category.id}}" {% if category == AllDurable.nameposition %}
-                                                selected {% endif %}>{{category}}</option>
+                                            <option value="{{category.id}}" {% if category == AllDurable.nameposition %} selected {% endif %}>{{category}}</option>
                                             {% endfor %}
                                         </select>
                                     </p>
@@ -343,17 +345,6 @@
                                         <label for="id_description">รายละเอียดครุภัณฑ์ :</label>
                                         <textarea name="description" cols="40" rows="10" class="form-control rounded-5"
                                             id="id_description">{{ AllDurable.description }}</textarea>
-                                    </p>
-                                    <p>
-                                        <label for="id_image">แนบไฟล์ภาพวัสดุ :</label><br>
-                                        {% if AllDurable.image %}
-                                        <img class="m-3 rounded-5" src="{{ AllDurable.image.url | safe }}" width="150"
-                                            height="150">
-                                        {% else %}
-                                    <p>No image available</p>
-                                    {% endif %}
-                                    <input type="file" name="image" class="form-control rounded-pill" accept="image/*"
-                                        id="id_image">
                                     </p>
                                 </div>
                                 <div class="modal-footer">

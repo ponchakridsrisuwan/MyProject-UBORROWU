@@ -1,76 +1,74 @@
 {% extends 'homestaff.html' %} {% block main %}
 <div class="container">
     <div class="bg-white rounded-2 ">
-    <div class="px-5 pt-3">
-        <!-- จัดการวัสดุ-ครุภัณฑ์ -->
-        <div class="d-flex justify-content-between rounded-2
+        <div class="px-5 pt-3">
+            <div class="d-flex justify-content-between rounded-2
             align-items-center">
-            <div>
-                <h5 class="fw-bold">จัดการวัสดุ</h5>
+                <div>
+                    <h5 class="fw-bold">จัดการวัสดุ</h5>
+                </div>
+                <div class="d-flex flex-row">
+                    <a class="btn btn-outline-dark rounded-pill me-1" data-bs-toggle="modal"
+                        data-bs-target="#additemcsv">เพิ่มรายการด้วย csv</a>
+                    <a class="btn btn-outline-dark rounded-pill me-1" data-bs-toggle="modal"
+                        data-bs-target="#additem">เพิ่มรายการ</a>
+                    <a href="{% url 'pdf_staff_parcel' %}" class="btn btn-outline-dark rounded-pill ">PDF</a>
+                </div>
             </div>
-            <div class="d-flex flex-row">
-                <a class="btn btn-outline-dark rounded-pill me-1" data-bs-toggle="modal"
-                    data-bs-target="#additemcsv">เพิ่มรายการด้วย csv</a>
-                <a class="btn btn-outline-dark rounded-pill me-1" data-bs-toggle="modal"
-                    data-bs-target="#additem">เพิ่มรายการ</a>
-                <a href="{% url 'pdf_staff_parcel' %}" class="btn btn-outline-dark rounded-pill ">PDF</a>
-            </div>
-        </div>
-        <div class="d-flex row rounded-2 small fw-bold justify-content-between
+            <div class="d-flex row rounded-2 small fw-bold justify-content-between
             mt-1">
-            <div class="d-flex col-sm-12 col-md-12 col-lg-6">
-                <div class="align-items-center">
+                <div class="d-flex col-sm-12 col-md-12 col-lg-6">
                     <div class="align-items-center">
-                        <span>เรียงโดย</span>
-                        <a href="?sort=name"
-                            class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
-                        <a href="?sort=quantity"
-                            class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
-                        <a href="?sort=borrow_count"
-                            class="px-2 me-2 btn {% if last_sort == 'borrow_count' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ถูกยืม</a>
-                        <a href="?sort=date"
-                            class="px-2 me-2 btn {% if last_sort == 'date' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่เพิ่มเข้าระบบ</a>
-                        <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh"
-                                aria-hidden="true"></i></a>
+                        <div class="align-items-center">
+                            <span>เรียงโดย</span>
+                            <a href="?sort=name"
+                                class="px-2 me-2 btn {% if last_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">รายการ</a>
+                            <a href="?sort=quantity"
+                                class="px-2 me-2 btn {% if last_sort == 'quantity' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">จำนวน</a>
+                            <a href="?sort=borrow_count"
+                                class="px-2 me-2 btn {% if last_sort == 'borrow_count' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ถูกยืม</a>
+                            <a href="?sort=date"
+                                class="px-2 me-2 btn {% if last_sort == 'date' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">วันที่เพิ่มเข้าระบบ</a>
+                            <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh"
+                                    aria-hidden="true"></i></a>
+                        </div>
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2 border-dark" type="search" placeholder="Search"
+                            aria-label="Search" name="search_query" value="{{search_query}}">
+                        <button class="btn btn-outline-dark" type="submit">Search</button>
+                    </form>
+                </div>
             </div>
-            <div class="col-sm-12 col-md-12 col-lg-6">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2 border-dark" type="search" placeholder="Search" aria-label="Search"
-                        name="search_query" value="{{search_query}}">
-                    <button class="btn btn-outline-dark" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-        <!-- moal เพิ่มรายการ csv -->
-        <div class="modal fade" id="additemcsv" tabindex="-1" aria-labelledby="additemModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="additemModal">เพิ่มรายการด้วย CSV</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
+            <!-- moal เพิ่มรายการ csv -->
+            <div class="modal fade" id="additemcsv" tabindex="-1" aria-labelledby="additemModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="additemModal">เพิ่มรายการด้วย CSV</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
 
-                    <div class="modal-body">
-                        <p>ลำดับของ CSV ควรเป็น name, nameposition, nametype, category, status, statustype, quantitytype, quantity, description</p>
-                        <input class="form-control rounded-pill" type="file" name="file"
-                            id="file">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary
+                            <div class="modal-body">
+                                <p>ลำดับของ CSV ควรเป็น name, nameposition, nametype, category, status, statustype,
+                                    quantitytype, quantity, description</p>
+                                <input class="form-control rounded-pill" type="file" name="file" id="file">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary
     rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="submit" class="btn btn-warning
+                                <button type="submit" class="btn btn-warning
     rounded-pill">ยืนยัน</button>
-                    </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-    </div>
+            </div>
         <div class="modal fade" id="additem" tabindex="-1" aria-labelledby="additemModal" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
                 <form action="" method="post" enctype="multipart/form-data">
@@ -115,7 +113,7 @@
                     <tbody id="xTable">
                         {% for AllParcel in page.object_list %}
                         <tr class="qrow ">
-                            <td><input type="checkbox" name="foo"  value="{{ AllParcel.id }}"></td>
+                            <td><input type="checkbox" name="id" value="{{ AllParcel.id }}"></td>
                             <td>
                                 <a class="d-flex align-items-center text-black" style="text-decoration:none"
                                     href="{% url 'staff_manage_detail' AllParcel.id %}">
@@ -205,12 +203,9 @@
                                             class="small text-black-50">{{AllParcel.description }}</span>
                                     </div>
                                     <div class="modal-body">
-                                        <span class="fw-bold">รูปภาพ : </span>
-                                        {% if AllParcel.image %}
-                                            <div class="text-center thumbnailsmall rounded-circle"><img src="{{ AllParcel.image.url | safe }}" width="150" height="150"></div>
-                                        {% else %}
-                                            <p>No image available</p>
-                                        {% endif %}
+                                        <span class="fw-bold">รูปภาพ : </span><img alt="image"
+                                            class="rounded me-4 thumb-post" src="{{ AllParcel.image.url | safe }}"
+                                            width="150" height="150">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="cancer" class="btn btn-secondary rounded-pill"
@@ -223,6 +218,44 @@
                                 </div>
                             </div>
                         </div>
+                        {% empty %}
+                        <p class="text-center">ยังไม่มีข้อมูลรายการวัสดุ</p>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <script language="JavaScript">
+                    function toggle(source) {
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i] != source)
+                                checkboxes[i].checked = source.checked;
+                        }
+                    }
+                </script>
+                <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
+                <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i class=" fa fa-trash "></i> ลบที่เลือก</a>
+                <!-- อนุมัติ -->
+                <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"
+                aria-hidden="true">
+                    <div class="modal-dialog modal-lg
+                        modal-fullscreen-lg-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="approvedModal">ยืนยันการลบที่เลือก</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn
+                                    btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-warning
+                                    rounded-pill">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                </form>
+                {% for AllParcel in page.object_list %}
                         <!-- moal แก้ไขรายการ -->
                         <div class="modal fade" id="EditTable-{{forloop.counter}}" tabindex="-1"
                             aria-labelledby="edititemModal" aria-hidden="true">
@@ -298,15 +331,7 @@
                                                 <textarea name="description" cols="40" rows="10"
                                                     class="form-control rounded-5" id="id_description">{{ AllParcel.description }}</textarea>
                                             </p>
-                                            <p>
-                                                <label for="id_image">แนบไฟล์ภาพวัสดุ :</label><br>
-                                                {% if AllParcel.image %}
-                                                    <img class="m-3 rounded-5" src="{{ AllParcel.image.url | safe }}" width="150" height="150">
-                                                {% else %}
-                                                    <p>No image available</p>
-                                                {% endif %}
-                                                <input type="file" name="image" class="form-control rounded-pill" accept="image/*" id="id_image">
-                                            </p>
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn
@@ -316,46 +341,8 @@
                                     </div>
                                 </form>
                             </div>
-                                </form>
-                            </div>
                         </div>
-                        {% empty %}
-                        <p class="text-center">ยังไม่มีข้อมูลรายการวัสดุ</p>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <script language="JavaScript">
-                    function toggle(source) {
-                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-                        for (var i = 0; i < checkboxes.length; i++) {
-                            if (checkboxes[i] != source)
-                                checkboxes[i].checked = source.checked;
-                        }
-                    }
-                </script>
-                <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
-                <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i class=" fa fa-trash "></i> ลบที่เลือก</a>
-                <!-- อนุมัติ -->
-                <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"
-                aria-hidden="true">
-                    <div class="modal-dialog modal-lg
-                        modal-fullscreen-lg-down">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="approvedModal">ยืนยันการลบที่เลือก</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn
-                                    btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                <button type="submit" class="btn btn-warning
-                                    rounded-pill">ยืนยัน</button>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-                </form>
+                    {% endfor %}
                 <div class="page-links">
                     {% if page.has_previous %}
                     <div class="ps-5 pb-3">

@@ -44,64 +44,6 @@
                                 </ul>
                             </td>
                         </tr>
-
-                        <!-- moal ลบ -->
-                        <div class="modal fade" id="deleteitemcategory-{{forloop.counter}}" tabindex="-1"
-                            aria-labelledby="deleteitemModal" aria-hidden="true">
-                            <div class="modal-dialog modal-lg
-                            modal-fullscreen-lg-down">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="edititemModal">ยืนยันการลบข้อมูล</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <span class="fw-bold">ตำแหน่ง : </span><span class="small text-black-50">{{AllSettingPosition.nameposition }}</span>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn
-                                        btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                        <a href="/deletePosition/{{AllSettingPosition.id }}" type="submit"
-                                            class="btn btn-warning rounded-pill">ยืนยัน</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- moal แก้ไขรายการ -->
-                        <div class="modal fade" id="edititemcatecory-{{forloop.counter}}" tabindex="-1"
-                            aria-labelledby="edititemModal" aria-hidden="true">
-                            <div class="modal-dialog modal-lg
-                            modal-fullscreen-lg-down">
-                                <form action="/edit_position/{{AllSettingPosition.id }}" method="POST"
-                                    enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="edititemModal">แก้ไขตำแหน่ง</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <div class="col">
-                                                    <input type="text" class="form-control rounded-pill"
-                                                        name="name_CategoryType" id="name_CategoryType"
-                                                        value="{{ AllSettingPosition.nameposition }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn
-                                        btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                            <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                         {% empty %}
                         <p class="text-center">ยังไม่มีข้อมูลรายการตำแหน่งและชั้นวาง</p>
 
@@ -143,6 +85,65 @@
                 </div>
                 </form>
             </div>
+            {% for AllSettingPosition in page.object_list %}
+            <!-- moal ลบ -->
+            <div class="modal fade" id="deleteitemcategory-{{forloop.counter}}" tabindex="-1"
+                aria-labelledby="deleteitemModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg
+                modal-fullscreen-lg-down">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edititemModal">ยืนยันการลบข้อมูล</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <span class="fw-bold">ตำแหน่ง : </span><span class="small text-black-50">{{AllSettingPosition.nameposition }}</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn
+                            btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                            <a href="/deletePosition/{{AllSettingPosition.id }}" type="submit"
+                                class="btn btn-warning rounded-pill">ยืนยัน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- moal แก้ไขรายการ -->
+            <div class="modal fade" id="edititemcatecory-{{forloop.counter}}" tabindex="-1"
+                aria-labelledby="edititemModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg
+                modal-fullscreen-lg-down">
+                    <form action="/edit_position/{{AllSettingPosition.id }}" method="POST"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="edititemModal">แก้ไขตำแหน่ง</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <div class="col">
+                                        <input type="text" class="form-control rounded-pill"
+                                            name="name_CategoryType" id="name_CategoryType"
+                                            value="{{ AllSettingPosition.nameposition }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn
+                            btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
             <div class="page-links">
                 {% if page.has_previous %}
                 <div class="ps-5 pb-3">
