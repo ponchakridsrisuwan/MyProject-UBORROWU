@@ -1,5 +1,4 @@
 from datetime import *
-from django.http import HttpResponse
 from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.contrib.auth.decorators import login_required
 #from myapp.task import admin_user_return_task
@@ -22,9 +21,14 @@ th_tz = timezonenow('Asia/Bangkok')
 #from celery.schedules import crontab
 #from celery.task import periodic_task
 import pandas as pd
-import csv
 from django.utils.datastructures import MultiValueDictKeyError
 from io import StringIO
+import csv, io
+from django.shortcuts import render
+from django.contrib import messages
+from django.http import HttpResponse, Http404
+from django.conf import settings
+import os
 
 @login_required
 def staff_setting_position(req):
@@ -1868,9 +1872,7 @@ def staff_position(req):
 #     return render(request, 'pages/staff_add_csv.html', context)
 
 
-import csv, io
-from django.shortcuts import render
-from django.contrib import messages
+@login_required
 def staff_add_csv(request):
     data = Profile.objects.all()
     context = {
@@ -1895,3 +1897,25 @@ def staff_add_csv(request):
         'profiles': data 
     }
     return render(request, "pages/staff_add_csv.html", context)
+
+@login_required
+def csv_parcel_download(req):
+    file_path = os.path.join(settings.MEDIA_ROOT, 'flies/csv_parcel.csv')
+    if not os.path.exists(file_path):
+        raise Http404('File not found')
+
+    with open(file_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+        return response
+
+@login_required
+def csv_durable_download(req):
+    file_path = os.path.join(settings.MEDIA_ROOT, 'flies/csv_durable.csv')
+    if not os.path.exists(file_path):
+        raise Http404('File not found')
+
+    with open(file_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+        return response

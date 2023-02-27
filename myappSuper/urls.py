@@ -16,6 +16,7 @@ urlpatterns = [
     #path('admin_user_setting_detail/<int:id>',views.admin_user_setting_detail, name="admin_user_setting_detail"),
     path('person_upload',views.person_upload, name="person_upload"),
     path('deleteProfile/<int:id>',views.deleteProfile, name="deleteProfile"),
-    path('delete_profiles',views.delete_profiles, name="delete_profiles"),
+    path('delete_profiles',views.delete_profiles, name="delete_profiles"),  
     
+    path('csv_person_download',views.csv_person_download, name="csv_person_download"),
 ]

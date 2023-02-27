@@ -787,7 +787,7 @@ def add_to_cart_durable(req, id):
             if cart_durable.quantity < 3:
                 cart_durable.save()
             messages.success(req, 'เพิ่มรายการสำเร็จ!')    
-        queue_durable = QueueParcel.objects.filter(user=req.user, queue_item=durable_item).delete()    
+        queue_durable = QueueDurable.objects.filter(user=req.user, queue_item=durable_item).delete()    
     return redirect('/user_cart')
     
 @login_required

@@ -87,29 +87,29 @@ WSGI_APPLICATION = 'mywebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASE_URL = os.environ.get('DATABASE_URL', '')
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mariadb', 
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-if DATABASE_URL:
-    import dj_database_url
-    DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)
+# DATABASE_URL = os.environ.get('DATABASE_URL', '')
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mariadb', 
+#         'USER': '',
+#         'PASSWORD': '',
+#         'HOST': '',
+#         'PORT': '',
+#     }
+# }
+
+# if DATABASE_URL:
+#     import dj_database_url
+#     DATABASES['default'] = dj_database_url.config(default=DATABASE_URL)
 
 
 # Password validation

@@ -37,27 +37,23 @@
         </div>
         <div class="col-lg-12 px-2">
             <div class="table-responsive">
-                <form method="post" action="{% url 'staff_multi_borrow_durable' %}">
-                    {% csrf_token %}
                 <table class="table small">
                     <thead class="table">
                         <tr class="table bg-warning">
-                            <th></th>
-                            <th class="col-md-1 text-center"  scope="col">ลำดับ</th>
+                            <th class="col-md-1 text-center" scope="col">ลำดับ</th>
                             <th class="col-md-2 " scope="col">ชื่อ-สกุล</th>
                             <th class="col-md-3 text-truncate">รายการ</th>
-                            <th class="col-md-1 text-center"  scope="col">จำนวน</th>
-                            <th class="col-md-2 text-center"  scope="col">วันที่ทำรายการ</th>
-                            <th class="col-md-2 text-center"  scope="col">วันที่ต้องการยืม </th>
-                            <th class="col-md-1 text-center"  scope="col">สถานะ</th>
+                            <th class="col-md-1 text-center" scope="col">จำนวน</th>
+                            <th class="col-md-2 text-center" scope="col">วันที่ทำรายการ</th>
+                            <th class="col-md-2 text-center" scope="col">วันที่ต้องการยืม </th>
+                            <th class="col-md-1 text-center" scope="col">สถานะ</th>
                             <th class="col-md-1"></th>
-                            
+
                         </tr>
                     </thead>
                     <tbody id="xTable">
                         {% for AllLoanDurable in page.object_list %}
                         <tr class="qrow">
-                            <td><input type="checkbox" name="id" value="{{ AllLoanDurable.id }}"></td>
                             <td class="text-center">{{forloop.counter}}</td>
                             <td>{{ AllLoanDurable.user.first_name }}&nbsp{{AllLoanDurable.user.last_name }}</td>
                             <td class="text-truncate" style="max-width: 150px;">{{ AllLoanDurable.name }}</td>
@@ -89,173 +85,143 @@
                                 </ul>
                             </td>
                         </tr>
-                    
 
-                <!-- รายละเอียด -->
-                <div class="modal fade" id="detaily-{{forloop.counter}}" tabindex="-1" aria-labelledby="detailModal"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title fw-bold" id="detailModal">รายละเอียดการยืม
-                                    {{AllLoanDurable.name}} ของ {{AllLoanDurable.user.first_name}}&nbsp{{AllLoanDurable.user.last_name }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <span class="fw-bold">รายการวัสดุที่ยืม :
-                                </span><span class="small text-black-50">{{AllLoanDurable.name }}</span><br>
-                                <span class="fw-bold">จำนวน : </span><span
-                                    class="small text-black-50">{{AllLoanDurable.quantity }}</span><br>
-                                <span class="fw-bold">หมวดหมู่ : </span><span
-                                    class="small text-black-50">{{AllLoanDurable.type }}</span><br>
-                                <span class="fw-bold">วันที่ต้องการยืม :
-                                </span><span class="small text-black-50">{{AllLoanDurable.start_date }}</span><br>
-                                <span class="fw-bold">กำหนดคืน :
-                                </span><span class="small text-black-50">{{AllLoanDurable.end_date}}</span><br>
-                                <span class="fw-bold">สถานะ : </span><span
-                                    class="small text-black-50">{{AllLoanDurable.status }}</span><br>
-                                <span class="fw-bold">เหตุผลการยืม : </span><span
-                                    class="small text-black-50">{{AllLoanDurable.description }}</span><br>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- อนุมัติ -->
-                <div class="modal fade" id="approvedy-{{forloop.counter}}" tabindex="-1" aria-labelledby="approvedModal"
-                    aria-hidden="true">
-                    <form method="post" action="/staff_borrow_durable/{{ AllLoanDurable.id }}"
-                        enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="approvedModal">ยืนยันการอนุมัติการยืม
-                                        {{AllLoanDurable.name }} ของ {{AllLoanDurable.user.first_name}}&nbsp{{AllLoanDurable.user.last_name }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <span class="fw-bold">จำนวน :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.quantity }}</span>&nbsp
-                                    <span class="fw-bold">เหตุผลการยืม :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.description }}</span><br>
-                                    <span class="fw-bold">วันที่ทำรายการ :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.date_add }}</span>&nbsp
-                                    <span class="fw-bold">วันที่ต้องการยืม :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.start_date }}</span>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" id="reasonfromstaff" style="height: 100px"
-                                            type="text" name="reasonfromstaff"></textarea>
-                                        <label for="floatingTextarea2">รายละเอียดเพิ่มเติม</label>
+                        <!-- รายละเอียด -->
+                        <div class="modal fade" id="detaily-{{forloop.counter}}" tabindex="-1"
+                            aria-labelledby="detailModal" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title fw-bold" id="detailModal">รายละเอียดการยืม
+                                            {{AllLoanDurable.name}} ของ
+                                            {{AllLoanDurable.user.first_name}}&nbsp{{AllLoanDurable.user.last_name }}
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span class="fw-bold">รายการวัสดุที่ยืม :
+                                        </span><span class="small text-black-50">{{AllLoanDurable.name }}</span><br>
+                                        <span class="fw-bold">จำนวน : </span><span
+                                            class="small text-black-50">{{AllLoanDurable.quantity }}</span><br>
+                                        <span class="fw-bold">หมวดหมู่ : </span><span
+                                            class="small text-black-50">{{AllLoanDurable.type }}</span><br>
+                                        <span class="fw-bold">วันที่ต้องการยืม :
+                                        </span><span class="small text-black-50">{{AllLoanDurable.start_date}}</span><br>
+                                        <span class="fw-bold">กำหนดคืน :
+                                        </span><span class="small text-black-50">{{AllLoanDurable.end_date}}</span><br>
+                                        <span class="fw-bold">สถานะ : </span><span
+                                            class="small text-black-50">{{AllLoanDurable.status }}</span><br>
+                                        <span class="fw-bold">เหตุผลการยืม : </span><span
+                                            class="small text-black-50">{{AllLoanDurable.description }}</span><br>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary rounded-pill"
-                                        data-bs-dismiss="modal">ยกเลิก</button>
-                                    <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
-                                </div>
                             </div>
                         </div>
-                    </form>
-                </div>
 
-                <!-- ไม่อนุมัติ -->
-                <div class="modal fade" id="disapprovedy-{{forloop.counter}}" tabindex="-1"
-                    aria-labelledby="disapprovedModal" aria-hidden="true">
-                    <form method="post" action="/staff_unborrow_durable/{{ AllLoanDurable.id }}"
-                        enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="disapprovedModal">ยืนยันการไม่อนุมัติการยืม
-                                        {{AllLoanDurable.name }} ของ {{ AllLoanDurable.user.first_name}}&nbsp{{AllLoanDurable.user.last_name }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <span class="fw-bold">จำนวน :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.quantity }}</span>&nbsp
-                                    <span class="fw-bold">เหตุผลการยืม :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.description }}</span><br>
-                                    <span class="fw-bold">วันที่ทำรายการ :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.date_add }}</span>&nbsp
-                                    <span class="fw-bold">วันที่ต้องการยืม :
-                                    </span><span class="small text-black-50">{{AllLoanDurable.start_date }}</span>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" id="reasonfromstaff" style="height: 100px"
-                                            type="text" name="reasonfromstaff"></textarea>
-                                        <label for="floatingTextarea2">เหตุผลในการไม่อนุมัติ</label>
+                        <!-- อนุมัติ -->
+                        <div class="modal fade" id="approvedy-{{forloop.counter}}" tabindex="-1"
+                            aria-labelledby="approvedModal" aria-hidden="true">
+                            <form method="post" action="/staff_borrow_durable/{{ AllLoanDurable.id }}"
+                                enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="approvedModal">ยืนยันการอนุมัติการยืม
+                                                {{AllLoanDurable.name }} ของ
+                                                {{AllLoanDurable.user.first_name}}&nbsp{{AllLoanDurable.user.last_name}}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span class="fw-bold">จำนวน :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.quantity}}</span>&nbsp
+                                            <span class="fw-bold">เหตุผลการยืม :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.description}}</span><br>
+                                            <span class="fw-bold">วันที่ทำรายการ :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.date_add}}</span>&nbsp
+                                            <span class="fw-bold">วันที่ต้องการยืม :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.start_date}}</span>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-floating">
+                                                <textarea class="form-control" id="reasonfromstaff"
+                                                    style="height: 100px" type="text" name="reasonfromstaff"></textarea>
+                                                <label for="floatingTextarea2">รายละเอียดเพิ่มเติม</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary rounded-pill"
+                                                data-bs-dismiss="modal">ยกเลิก</button>
+                                            <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary rounded-pill"
-                                        data-bs-dismiss="modal">ยกเลิก</button>
-                                    <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-                
+
+                        <!-- ไม่อนุมัติ -->
+                        <div class="modal fade" id="disapprovedy-{{forloop.counter}}" tabindex="-1"
+                            aria-labelledby="disapprovedModal" aria-hidden="true">
+                            <form method="post" action="/staff_unborrow_durable/{{ AllLoanDurable.id }}"
+                                enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="disapprovedModal">ยืนยันการไม่อนุมัติการยืม
+                                                {{AllLoanDurable.name }} ของ {{AllLoanDurable.user.first_name}}&nbsp{{AllLoanDurable.user.last_name }}
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span class="fw-bold">จำนวน :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.quantity}}</span>&nbsp
+                                            <span class="fw-bold">เหตุผลการยืม :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.description}}</span><br>
+                                            <span class="fw-bold">วันที่ทำรายการ :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.date_add}}</span>&nbsp
+                                            <span class="fw-bold">วันที่ต้องการยืม :
+                                            </span><span class="small text-black-50">{{AllLoanDurable.start_date}}</span>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-floating">
+                                                <textarea class="form-control" id="reasonfromstaff"
+                                                    style="height: 100px" type="text" name="reasonfromstaff"></textarea>
+                                                <label for="floatingTextarea2">เหตุผลในการไม่อนุมัติ</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary rounded-pill"
+                                                data-bs-dismiss="modal">ยกเลิก</button>
+                                            <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </tbody>
+                    {% empty %}
+                    <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
+                    {% endfor %}
                 </table>
-                <!-- <button type="submit" class="btn btn-sm btn-warning" >อนุมัติการยืมวัสดุ</button> -->
-                <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#approved_multi">อนุมัติ</a>
-                {% empty %}
-                <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
-                {% endfor %}
-                <!-- อนุมัติ -->
-                <div class="modal fade" id="approved_multi" tabindex="-1" aria-labelledby="approvedModal"
-                aria-hidden="true">
-                    <div class="modal-dialog modal-lg
-                        modal-fullscreen-lg-down">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="approvedModal">ยืนยันการอนุมัติที่เลือก</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-floating">
-                                    <textarea class="form-control" id="reasonfromstaff" style="height:
-                                        100px" type="text" name="reasonfromstaff"></textarea>
-                                    <label for="floatingTextarea2">รายละเอียดเพิ่มเติม</label>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn
-                                    btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-                                <button type="submit" class="btn btn-warning
-                                    rounded-pill">ยืนยัน</button>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </form>
             </div>
         </div>
         <div class="page-links">
             {% if page.has_previous %}
             <div class="ps-5 pb-3">
-            <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+                <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
             </div>
             {% endif %}
             {% if page.has_next %}
             <div class="ps-5 pb-3">
-            <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+                <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
             </div>
             {% endif %}
         </div>
     </div>
 </div>
-
-
-
 {% endblock %}

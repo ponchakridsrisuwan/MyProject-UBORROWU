@@ -33,6 +33,7 @@
 
                                             <div class="modal-body">
                                                 <p>ลำดับของ CSV ควรเป็น firstname, lastname,email</p>
+                                                <a class="m-3" href="{% url 'csv_person_download' %}">Download Example File</a><br>
                                                 <input class="form-control rounded-pill" type="file" name="file"
                                                     id="file">
                                             </div>
@@ -104,12 +105,9 @@
         </div>
         <div class="col-lg-12 px-2">
             <div class="table-responsive">
-                <form method="post" action="{% url 'delete_profiles' %}">
-                    {% csrf_token %}
                 <table class="table small">
                     <thead class="table">
                         <tr class="table table-dark">
-                            <th class=""></th>
                             <th class="col-md-1 text-center" scope="col">ลำดับ</th>
                             <th class="col-md-2 " scope="col">ชื่อ</th>
                             <th class="col-md-2 text-center" scope="col">นามสกุล</th>
@@ -120,7 +118,6 @@
                     <tbody id="xTable">
                         {% for profile in profiles %}
                         <tr class="qrow">
-                            <td><input type="checkbox" name="id" value="{{ profile.id }}"></td>
                             <td class="text-center">{{forloop.counter}}</td>
                             <td>
                                 <a class="text-black" style="text-decoration:none"><span
@@ -177,7 +174,6 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="submit" class="btn btn-sm btn-dark" ><i class=" fa fa-trash text-white "></i></button>
                 <div class="page-links">
                     {% if page.has_previous %}
                     <div class="ps-5 pb-3">
@@ -190,7 +186,6 @@
                     </div>
                     {% endif %}
                 </div>
-                </form>
             </div>
         </div>
     </div>

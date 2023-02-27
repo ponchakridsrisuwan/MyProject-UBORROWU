@@ -20,6 +20,9 @@ from datetime import datetime
 import csv, io
 from django.shortcuts import render
 from django.contrib import messages
+from django.http import HttpResponse, Http404
+from django.conf import settings
+import os
 
 
 
@@ -271,13 +274,22 @@ def person_upload(req):
     if 'search_rec' in req.GET:
         search_rec = req.GET['search_rec']
         data = Profile.objects.filter(Q(firstname=search_rec)|Q(lastname=search_rec)
-                                             |Q(email=search_rec))    
-
+                                             |Q(email=search_rec))   
+    form = ProfileForm() 
+    if req.method == 'POST':
+        form = ProfileForm(req.POST or None)
+        if form.is_valid():
+            form.save()
+            messages.success(req, 'เพิ่มรายการเร็จ!')
+            return redirect('person_upload')
+    else:
+        form = ProfileForm()
     context = {
         "navbar" : "person_upload",
         'profiles': data,
         "search_rec" : search_rec,
         "last_sort" : last_sort, 
+        "form" : form
     }
 
     if req.method == "GET":
@@ -310,12 +322,19 @@ def deleteProfile(req, id):
     messages.success(req, 'ลบสำเร็จ!')
     return redirect("person_upload")
 
-
+@login_required
 def delete_profiles(req):
     if req.method == 'POST':
         ids = req.POST.getlist('id')
         Profile.objects.filter(id__in=ids).delete()
         return redirect('person_upload')
 
-
-
+@login_required
+def csv_person_download(req):
+    file_path = os.path.join(settings.MEDIA_ROOT, 'flies/csv_person.csv')
+    if not os.path.exists(file_path):
+        raise Http404('File not found')
+    with open(file_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+        return response
