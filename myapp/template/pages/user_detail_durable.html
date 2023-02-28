@@ -2,9 +2,7 @@
 {% block main %}
 
 <!-- qr code -->
-{% comment %}
 {% load qr_code %}
-{% endcomment %}
 
 {% if AllDurable %}
 <div class="container-lg mt-1 mb-5">
@@ -114,9 +112,7 @@
         </p>
         
          <!-- qr code  -->
-         {% comment %}
          {% qr_from_text request.build_absolute_uri size="T" image_format="png" error_correction="T" %}
-         {% endcomment %}
 
     </div>
     <div class="bg-white rounded-2 mb-4 px-5 py-3">
