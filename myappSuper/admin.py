@@ -17,7 +17,6 @@ STATUS = (
 
 User.add_to_class('right', models.CharField(max_length = 100, choices = RIGHT, default = 'ผู้ดูแลระบบ'))
 User.add_to_class('status', models.CharField(max_length = 100, choices = STATUS, default = 'ปกติ'))
-User.add_to_class('reason', models.CharField(max_length = 254, null=True, blank=True))
 User.add_to_class('phone', models.CharField(max_length = 10, null=True, blank=True))
 User.add_to_class('reasonfromstaff', models.CharField(max_length = 254, null=True, blank=True))
 User.add_to_class('datestatus', models.DateTimeField(auto_now_add=True, null=True, blank=True))

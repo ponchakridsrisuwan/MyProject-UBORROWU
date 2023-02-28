@@ -1795,7 +1795,7 @@ def staff_user_deadline_multi(req):
                                     'content-type': 'application/x-www-form-urlencoded',
                                     'Authorization': 'Bearer ' + token 
                                     }
-                    msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reason, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                    msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                     msg = ' '.join(map(str, msg)) 
                     requests.post(url, headers=headers, data={'message': msg})
             messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
