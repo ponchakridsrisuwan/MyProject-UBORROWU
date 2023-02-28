@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <div class="text-center">
                         <h5 class="card-title text-dark text-truncate">{{ AllParcel.name }}</h5>
-                        <span class="mb-4 text">{{ AllParcel.status }}</span>
+                        <span class="mb-4 {% if AllParcel.status == 'พร้อมยืม'%} text-success {% elif AllParcel.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}">{{ AllParcel.status }}</span>
                         <a href="{% url 'user_detail' AllParcel.id %}" class="stretched-link"></a>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="card-body">
                     <div class="text-center">
                         <h5 class="card-title text-dark text-truncate">{{ AllDurable.name }}</h5>
-                        <span class="mb-4">{{ AllDurable.status }}</span>
+                        <span class="mb-4 {% if AllDurable.status == 'พร้อมยืม'%} text-success {% elif AllDurable.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}">{{ AllDurable.status }}</span>
                         <a href="{% url 'user_detail_durable' AllDurable.id %}" class="stretched-link"></a>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div>
                         <div class="d-flex justify-content-between">
-                            <span>สถานะ</span><span>{{ AllParcel.status }}</span>
+                            <span>สถานะ</span><span class="{% if AllParcel.status == 'พร้อมยืม'%} text-success {% elif AllParcel.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}">{{ AllParcel.status }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span>หมวดหมู่</span><span>{{ AllParcel.category }}</span>
@@ -140,7 +140,7 @@
                             </div>
                             <div>
                                 <div class="d-flex justify-content-between">
-                                    <span>สถานะ</span><span>{{ AllDurable.status }}</span>
+                                    <span>สถานะ</span><span class="{% if AllDurable.status == 'พร้อมยืม'%} text-success {% elif AllDurable.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}">{{ AllDurable.status }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <span>หมวดหมู่</span><span>{{AllDurable.category }}</span>
