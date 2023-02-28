@@ -62,10 +62,10 @@
                                 <td>{{AllUser.first_name}}&nbsp{{AllUser.last_name}}</td>
                                 <td>{{ AllUser.email }}</td>
                                 <td>
-                                    {% if AllUser.phone == None %}
+                                    {% if AllUser.tellphone == None %}
                                     <span> N/A </span>
                                     {% else %}
-                                    <span>{{ AllUser.phone }}</span>
+                                    <span>{{ AllUser.tellphone }}</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ AllUser.last_login|date:"G:i A j F Y" }}</td>

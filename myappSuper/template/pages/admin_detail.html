@@ -27,10 +27,10 @@
                     <div class="col-md-12">
                         <label class="labels">เบอร์โทรศัพท์</label>
                         <td>
-                            {% if AllUser.phone == None %}
+                            {% if AllUser.tellphone == None %}
                             <input type="text" class="form-control rounded-pill text-muted" value="N/A" disabled>
                             {% else %}
-                            <input type="text" class="form-control rounded-pill text-muted" value="{{AllUser.phone}}"
+                            <input type="text" class="form-control rounded-pill text-muted" value="{{AllUser.tellphone}}"
                                 disabled>
                             {% endif %}
                         </td>

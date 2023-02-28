@@ -34,7 +34,7 @@ def staff_setting_position(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == "POST":
@@ -70,7 +70,7 @@ def deletePosition(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = SettingPosition.objects.get(id=id)
@@ -101,7 +101,7 @@ def edit_position(req, id):
         messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
         return redirect('Home')
     
-    if req.user.phone is None or req.user.token is None:
+    if req.user.tellphone is None or req.user.token is None:
         messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
         return redirect('/phone_add_number')
     
@@ -119,7 +119,7 @@ def staff_setting(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == "POST":
@@ -153,7 +153,7 @@ def deleteCategoryType(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = CategoryType.objects.get(id=id)
@@ -184,7 +184,7 @@ def edit_staff_setting(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = CategoryType.objects.get(id=id)
@@ -204,7 +204,7 @@ def staff_introduction(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(status='รออนุมัติ').order_by('name', 'datetime')
@@ -257,7 +257,7 @@ def staff_introduction_update(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(id=id).first()
@@ -293,7 +293,7 @@ def staff_introduction_history(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(status='อนุมัติ').order_by('name', 'datetime')
@@ -347,7 +347,7 @@ def staff_introduction_detail(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.filter(id=id).first()
@@ -367,7 +367,7 @@ def staff_borrowing_history(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='ยืมสำเร็จ'))
@@ -420,7 +420,7 @@ def staff_borrowing_history_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='คืนสำเร็จ'))
@@ -476,7 +476,7 @@ def staff_index_borrow(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
@@ -527,7 +527,7 @@ def staff_index_borrow_wait(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(status='รอยืนยันการรับ').order_by('name', 'date_add')
@@ -578,7 +578,7 @@ def staff_index_borrow_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(status='รออนุมัติ').order_by('name', 'date_add')
@@ -629,7 +629,7 @@ def staff_index_borrow_durable_wait(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(status='รอยืนยันการรับ').order_by('name', 'date_add')
@@ -681,7 +681,7 @@ def staff_index_borrownow(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='กำลังยืม'))
@@ -735,7 +735,7 @@ def staff_index_return(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='รอยืนยันการคืน'))
@@ -788,7 +788,7 @@ def staff_return_durable(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
@@ -822,7 +822,7 @@ def staff_unreturn_durable(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
@@ -856,7 +856,7 @@ def staff_borrow_parcel(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(id=id).first()
         if AllLoanParcel is None :
@@ -889,7 +889,7 @@ def staff_multi_borrow_parcel(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == 'POST':
@@ -934,7 +934,7 @@ def staff_multi_borrow_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         if req.method == 'POST':
@@ -980,7 +980,7 @@ def staff_borrow_durable(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
@@ -1015,7 +1015,7 @@ def staff_unborrow_parcel(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(id=id).first()
@@ -1050,7 +1050,7 @@ def staff_unborrow_durable(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(id=id).first()
@@ -1086,7 +1086,7 @@ def staff_manage_detail(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllParcel = Add_Parcel.objects.filter(id=id).first()
@@ -1107,7 +1107,7 @@ def staff_manage_detail_durable(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.filter(id=id).first()
@@ -1131,7 +1131,7 @@ def staff_manage_parcel(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         form = ParcelForm()
@@ -1225,9 +1225,9 @@ def edit_staff_manage_parcel(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/phone_add_number')
+            return redirect('/tellphone_add_number')
         AllParcel = Add_Parcel.objects.get(id=id)
         form = ParcelForm(req.POST or None, req.FILES or None, instance=AllParcel) 
         if form.is_valid():
@@ -1251,7 +1251,7 @@ def delete_staff_manage_parcel(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = Add_Parcel.objects.get(id=id)
@@ -1283,7 +1283,7 @@ def staff_manage_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         form = DurableForm()
@@ -1377,7 +1377,7 @@ def delete_staff_manage_durable(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = Add_Durable.objects.get(id=id)
@@ -1408,7 +1408,7 @@ def edit_staff_manage_durable(req,id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.get(id=id)
@@ -1435,7 +1435,7 @@ def pdf_print(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList = ListFromRec.objects.all()             
@@ -1453,7 +1453,7 @@ def pdf_staff_queue(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueParcel = QueueParcel.objects.all()
@@ -1471,7 +1471,7 @@ def pdf_staff_queue_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueDurable = QueueDurable.objects.all()
@@ -1489,7 +1489,7 @@ def pdf_staff_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.all()
@@ -1507,7 +1507,7 @@ def pdf_staff_parcel(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllParcel = Add_Parcel.objects.all()
@@ -1525,7 +1525,7 @@ def pdf_staff_max_borrow(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanParcel = Add_Parcel.objects.values("statustype","nametype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
@@ -1543,7 +1543,7 @@ def pdf_staff_max_borrow_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanDurable = Add_Durable.objects.values("statustype","nametype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
@@ -1562,7 +1562,7 @@ def pdf_print_position(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.all()
@@ -1590,7 +1590,7 @@ def pdf_borrow(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number') 
         AllLoanParcel = LoanParcel.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='ยืมสำเร็จ')) 
@@ -1608,7 +1608,7 @@ def pdf_borrow_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllLoanDurable = LoanDurable.objects.filter(Q(status='ไม่อนุมัติ') | Q(status='คืนสำเร็จ'))
@@ -1627,7 +1627,7 @@ def staff_admin_user(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(Q(right = "นักศึกษา") | Q(status = "ปกติ"))
@@ -1652,7 +1652,7 @@ def staff_admin_user(req):
         if 'search_user' in req.GET:
             search_user = req.GET['search_user']
             AllUser = AllUser.filter(Q(first_name__contains=search_user)|Q(last_name__contains=search_user)
-                                                |Q(email__contains=search_user)|Q(phone__contains=search_user))
+                                                |Q(email__contains=search_user)|Q(tellphone__contains=search_user))
         page_num = req.GET.get('page', 1)
         p = Paginator(AllUser, 10)
         try:
@@ -1678,7 +1678,7 @@ def staff_admin_user_block(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(status = "ถูกจำกัดสิทธิ์", right = "นักศึกษา")
@@ -1732,7 +1732,7 @@ def staff_user_deadline(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -1778,7 +1778,7 @@ def staff_user_deadline_multi(req):
                 deadlinestatus = datetime.strptime(deadline_str, '%Y-%m-%d')
             reasonfromstaff = req.POST['reasonfromstaff']
             for obj in objs:
-                if obj.phone is None or obj.token is None:
+                if obj.tellphone is None or obj.token is None:
                     continue
                 if obj.status == "ถูกจำกัดสิทธิ์" or obj.right == "นักศึกษา":
                     continue
@@ -1811,7 +1811,7 @@ def staff_user_return(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -1857,7 +1857,7 @@ def staff_report(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllRecList_count = ListFromRec.objects.filter(status='รออนุมัติ') 
@@ -1899,7 +1899,7 @@ def staff_max_borrow(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanParcel = Add_Parcel.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
@@ -1938,7 +1938,7 @@ def staff_max_borrow_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         MaxLoanDurable = Add_Durable.objects.values("statustype","nametype","quantitytype","quantity", "id","name").annotate(borrow_count=Max('borrow_count')).order_by('-borrow_count')
@@ -1977,7 +1977,7 @@ def staff_queue(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueParcel = QueueParcel.objects.all()
@@ -2027,7 +2027,7 @@ def staff_queue_durable(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllQueueDurable = QueueDurable.objects.all()
@@ -2076,7 +2076,7 @@ def staff_position(req):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllDurable = Add_Durable.objects.all()
