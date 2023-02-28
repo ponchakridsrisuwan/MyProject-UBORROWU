@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 #from myapp.task import admin_user_return_task
 from myappSuper.forms import *
-from django.http import HttpResponseServerError, Http404, HttpResponse
+from django.http import HttpResponseServerError, Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User, Group, Permission
@@ -18,8 +18,10 @@ from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
 from datetime import datetime
 #from celery.task import periodic_task
-import csv, io, os
-from django.conf import settings
+import csv, io
+from django.shortcuts import render
+from django.contrib import messages
+
 
 
 @login_required
@@ -320,21 +322,12 @@ def person_upload(req):
             search_rec = req.GET['search_rec']
             data = Profile.objects.filter(Q(firstname=search_rec)|Q(lastname=search_rec)
                                                 |Q(email=search_rec))
-        form = ProfileForm() 
-        if req.method == 'POST':
-            form = ProfileForm(req.POST or None)
-            if form.is_valid():
-                form.save()
-                messages.success(req, 'เพิ่มรายการเร็จ!')
-                return redirect('person_upload')
-        else:
-            form = ProfileForm()
+
         context = {
             "navbar" : "person_upload",
             'profiles': data,
             "search_rec" : search_rec,
             "last_sort" : last_sort,
-            "form" : form
         }
 
         if req.method == "GET":
@@ -397,18 +390,4 @@ def delete_profiles(req):
         return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
-@login_required
-def csv_person_download(req):
-    try:        
-        file_path = os.path.join(settings.MEDIA_ROOT, 'flies/csv_person.csv')
-        if not os.path.exists(file_path):
-            raise Http404('File not found')
-        with open(file_path, 'rb') as file:
-            response = HttpResponse(file.read(), content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
-            return response
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 

@@ -1,5 +1,6 @@
 from datetime import *
-from django.http import HttpResponseServerError, Http404, HttpResponse
+from django.http import HttpResponse
+from django.http import HttpResponseServerError, Http404
 from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.contrib.auth.decorators import login_required
 #from myapp.task import admin_user_return_task
@@ -25,8 +26,7 @@ import pandas as pd
 import csv
 from django.utils.datastructures import MultiValueDictKeyError
 from io import StringIO
-from django.conf import settings
-import csv, io, os
+import csv, io
 
 @login_required
 def staff_setting_position(req):
@@ -2168,38 +2168,3 @@ def staff_add_csv(req):
         return render(req, '404_Error_Page.html')
     except Exception as e:
         return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
-    
-
-@login_required
-def csv_parcel_download(req):
-    try:
-        file_path = os.path.join(settings.MEDIA_ROOT, 'flies/csv_parcel.csv')
-        if not os.path.exists(file_path):
-            raise Http404('File not found')
-
-        with open(file_path, 'rb') as file:
-            response = HttpResponse(file.read(), content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
-            return response
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
-    
-
-@login_required
-def csv_durable_download(req):
-    try:
-        file_path = os.path.join(settings.MEDIA_ROOT, 'flies/csv_durable.csv')
-        if not os.path.exists(file_path):
-            raise Http404('File not found')
-
-        with open(file_path, 'rb') as file:
-            response = HttpResponse(file.read(), content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
-            return response
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
-    

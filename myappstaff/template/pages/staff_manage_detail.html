@@ -4,7 +4,7 @@
     <div class="card">
         <div class="row ">
             <div class="col-sm-6 col-md-6 col-lg-6 border-end">
-                <div class="d-flex flex-column text-center p-5 justify-content-center">
+                <div class="d-flex flex-column justify-content-center">
                     <div class="main_image"> <img data-toggle="magnify" src="{{ AllParcel.image.url | safe }}"
                             width="500">
                     </div>
@@ -33,7 +33,7 @@
                     {% endif %}
                     <div class="d-flex">
                         <label class="labels px-2 fw-bold">สถานะ</label>
-                        <p class="{% if AllParcel.status == 'พร้อมยืม'%} text-success {% elif AllParcel.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}">{{ AllParcel.status }}</p>
+                        <p>{{ AllParcel.status }}</p>
                     </div>
                     <div class="d-flex">
                         <label class="labels px-2 fw-bold">หมวดหมู่</label>

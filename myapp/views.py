@@ -30,7 +30,7 @@ def handler404(req, exception):
     
 #หน้าหลัก
 def HomePage(req):
-    # try:
+    try:
         AllParcel = Add_Parcel.objects.all()
         AllDurable = Add_Durable.objects.all()
         selected_category = req.GET.get('category', None)
@@ -68,10 +68,10 @@ def HomePage(req):
                 "pagedurable" : pagedurable,
                 }     
         return render(req, 'pages/user_index.html', context)
-    # except Http404:
-    #     return render(req, '404_Error_Page.html')
-    # except Exception as e:
-    #     return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 def Home(req):
     try:
