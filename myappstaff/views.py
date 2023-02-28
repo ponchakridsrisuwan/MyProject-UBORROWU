@@ -1173,7 +1173,7 @@ def staff_manage_parcel(req):
             search_query = req.GET['search_query']
             AllParcel = AllParcel.filter(name__icontains=search_query)         
         page_num = req.GET.get('page', 1)
-        p = Paginator(AllParcel, 10)
+        p = Paginator(AllParcel, 20)
         try:
             page = p.page(page_num)
         except:
@@ -1326,7 +1326,7 @@ def staff_manage_durable(req):
             search_query = req.GET['search_query']
             AllDurable = AllDurable.filter(name__icontains=search_query)        
         page_num = req.GET.get('page', 1)
-        p = Paginator(AllDurable, 10)
+        p = Paginator(AllDurable, 20)
         try:
             page = p.page(page_num)
         except:
