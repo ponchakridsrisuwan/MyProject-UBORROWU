@@ -144,9 +144,6 @@ def phone_add_number(req):
                     req.user.save()
                     messages.success(req, 'เพิ่มเบอร์โทรศัพท์และเชื่อมต่อไลน์สำเร็จ!')
                     return redirect('Home')
-                else:
-                    messages.error(req, 'กรุณากรอกเบอร์โทรศัพท์และ Token')
-                    return redirect('/phone_add_number')
             else:
                 return render(req, 'phone_add_number.html') 
         else:
