@@ -95,27 +95,22 @@ def delete_multi_Position(req):
     except Exception as e:
         return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})      
 
-@login_required
-def edit_position(req,id):
-    try:
-        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
-            return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
-            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/phone_add_number')
-        if req.method == "POST":
-            nameposition = req.POST.get('nameposition')
-            nameposition = SettingPosition(nameposition=nameposition)
-            nameposition.save()
-            messages.success(req, 'แก้ไขสำเร็จ!')
-        else:
-            nameposition = SettingPosition()   
-        return redirect('/staff_setting_position')
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})              
+def edit_position(req, id):
+
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+        return redirect('Home')
+    
+    if req.user.phone is None or req.user.token is None:
+        messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
+        return redirect('/phone_add_number')
+    
+    obj = SettingPosition.objects.get(id=id)
+    obj.nameposition = req.POST['nameposition']
+    obj.save()
+    
+    messages.success(req, 'แก้ไขสำเร็จและบันทึกลงฐานข้อมูล!')
+    return redirect('/staff_setting_position')
 
 
 @login_required
@@ -860,7 +855,7 @@ def staff_unreturn_durable(req,id):
 def staff_borrow_parcel(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             return redirect('/phone_add_number')
         AllLoanParcel = LoanParcel.objects.filter(id=id).first()
@@ -1848,7 +1843,7 @@ def staff_user_return(req, id):
 def staff_personal_info(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
-            return redirect('/')
+            return redirect('Home')
         return render(req,'pages/staff_personal_info.html')
     except Http404:
         return render(req, '404_Error_Page.html')

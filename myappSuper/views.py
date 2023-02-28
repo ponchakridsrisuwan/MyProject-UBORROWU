@@ -28,7 +28,7 @@ from django.contrib import messages
 def admin_detail(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -46,7 +46,7 @@ def admin_detail(req, id):
 def delete_user(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -63,7 +63,7 @@ def delete_user(req, id):
 def admin_user_status(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -81,7 +81,7 @@ def admin_user_status(req,id):
 def admin_user_deadline(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -119,7 +119,7 @@ def admin_user_deadline(req, id):
 def admin_user_return(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -150,7 +150,7 @@ def admin_user_return(req, id):
 def admin_user(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -201,7 +201,7 @@ def admin_user(req):
 def admin_staff(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -249,7 +249,7 @@ def admin_staff(req):
 def admin_block(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
@@ -297,7 +297,7 @@ def admin_block(req):
 def person_upload(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('/')
+            return redirect('Home')
         if req.user.phone is None or req.user.token is None:
             return redirect('/phone_add_number')
         data = Profile.objects.all()

@@ -890,14 +890,14 @@ def delete_borrow_parcel(req, id):
                     parcel.save()
                     loan_parcel.delete()
                     messages.success(req, 'ยกเลิกการยืม!')
-                    return redirect('/')
+                    return redirect('Home')
                 else:
                     parcel.quantity += loan_parcel.quantity
                     parcel.borrow_count -= loan_parcel.quantity
                     parcel.save()
                     loan_parcel.delete()
                     messages.success(req, 'ยกเลิกการยืม!')
-                    return redirect('/')
+                    return redirect('Home')
             except LoanParcel.DoesNotExist:
                 return redirect('/user_cart')
         else:
@@ -1246,14 +1246,14 @@ def delete_borrow_durable(req, id):
                     durable.save()
                     loan_durable.delete()
                     messages.success(req, 'ยกเลิกการยืม!')
-                    return redirect('/')
+                    return redirect('Home')
                 else:
                     durable.quantity += loan_durable.quantity
                     durable.borrow_count -= loan_durable.quantity
                     durable.save()
                     loan_durable.delete()
                     messages.success(req, 'ยกเลิกการยืม!')
-                    return redirect('/')
+                    return redirect('Home')
             except LoanParcel.DoesNotExist:
                 return redirect('/user_cart')
         else:
