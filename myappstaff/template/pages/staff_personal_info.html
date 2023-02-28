@@ -37,7 +37,7 @@
                 <div class="row mt-2">
                     <div class="col-md-12">
                         <label class="labels">เบอร์โทร</label>
-                        <input type="text" class="form-control rounded-pill" value="{{user.phone}}" disabled>
+                        <input type="text" class="form-control rounded-pill" value="{{user.tellphone}}" disabled>
                     </div>
                 </div>
             </div>
@@ -67,8 +67,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{ user.datestatus}}</span><br>
-                <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{ user.deadline }}</span><br>
+                <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{ user.statusdate}}</span><br>
+                <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{ user.deadlinestatus }}</span><br>
                 <span class="fw-bold">เหตุผลการระงับสิทธิ์ : </span>
                 <span class="small text-black-50">{{ user.reasonfromstaff }}</span>
             </div>
