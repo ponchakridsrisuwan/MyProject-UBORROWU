@@ -7,7 +7,6 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver     
 
 RIGHT = (
-        ('ผู้ดูแลระบบ', 'ผู้ดูแลระบบ'),
         ('เจ้าหน้าที่', 'เจ้าหน้าที่'),
         ('นักศึกษา', 'นักศึกษา'),
     )
