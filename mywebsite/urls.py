@@ -32,7 +32,7 @@ def login(req):
     try:
         if req.method == 'POST':
             if req.user is not None:
-                if req.user.tellphone is None:
+                if req.user.phone is None:
                     return redirect('/phone_add_number')
                 else:
                     return redirect('Home') 

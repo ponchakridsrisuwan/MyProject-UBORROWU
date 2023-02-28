@@ -11,7 +11,7 @@
         <div class="row ">
             <div class="col-sm-6 col-md-6 col-lg-6 border-end">
                 <div class="d-flex flex-column text-center p-5 justify-content-center">
-                    <div class=""> <img data-toggle="magnify"  src="{{ AllParcel.image.url | safe }}" 
+                    <div class="main_image"> <img data-toggle="magnify"  src="{{ AllParcel.image.url | safe }}" 
                             width="500">
                     </div>
                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
@@ -39,7 +39,7 @@
                     {% endif %}
                     <div class="d-flex">
                         <label class="labels px-2 fw-bold">สถานะ</label>
-                        <p>{{ AllParcel.status }}</p>
+                        <p class="{% if AllParcel.status == 'พร้อมยืม'%} text-success {% elif AllParcel.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}">{{ AllParcel.status }}</p>
                     </div>
                     <div class="d-flex">
                         <label class="labels px-2 fw-bold">หมวดหมู่</label>
@@ -142,13 +142,14 @@
         {% for AllParcelAll in pageparcel.object_list %}
             <div class="col-6 col-sm-4 col-md-3 mb-4">
                 <div class=" card ">
-                    <div class="text-center thumbnailey w-100" data-mdb-ripple-color="light">
-                        <img src="{{ AllParcelAll.image.url | safe }}" style=" object-position: center; max-height: 250px; margin-bottom: 1rem;"/>
+                    <div class="text-center" data-mdb-ripple-color="light">
+                        <img src="{{ AllParcelAll.image.url | safe }}" 
+                        style=" object-position: center; max-height: 250px; margin-bottom: 1rem;"/>
                     </div>
                     <div class="card-body small">
                         <div class="text-center">
                             <h5 class="card-title text-truncate">{{ AllParcelAll.name }}</h5>
-                            <span class="mb-4 text-success">{{ AllParcelAll.status }}</span>
+                            <span class="mb-4 {% if AllParcelAll.status == 'พร้อมยืม'%} text-success {% elif AllParcelAll.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}">{{ AllParcelAll.status }}</span>
                         </div>
                         <div>
                             </div>

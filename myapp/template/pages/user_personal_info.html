@@ -37,10 +37,10 @@
                     </div>
                 </div>
                 <div class="row mt-2">
-                    {% if user.tellphone != None %}
+                    {% if user.phone != None %}
                     <div class="col-md-12">
                         <label class="labels">เบอร์โทร</label>
-                        <input type="text" class="form-control rounded-pill" value="{{user.tellphone}}" disabled>
+                        <input type="text" class="form-control rounded-pill" value="{{user.phone}}" disabled>
                     </div>
                     {% else %}
                     <div class="col-md-12">
@@ -68,7 +68,7 @@
                         <span class="font-weight-bold d-block">
                             Line
                         </span>
-                        {% if user.tellphone != none %}
+                        {% if user.phone != none %}
                         <a class="text-success">
                             กำลังเชื่อมต่อ
                         </a>
@@ -103,9 +103,9 @@
                 </div>
                 <div class="modal-body">
                     <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{
-                        user.statusdate }}</span><br>
+                        user.datestatus }}</span><br>
                     <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{
-                        user.deadlinestatus }}</span><br>
+                        user.deadline }}</span><br>
                     <span class="fw-bold">เหตุผลการระงับสิทธิ์ : </span>
                     <span class="small text-black-50">{{ user.reasonfromstaff }}</span>
                 </div>
@@ -125,12 +125,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="col-md-12">
-                            {% if user.tellphone != none %}
-                            <input id="tellphone" value="{{ user.tellphone }}" name="tellphone" type="text" minlength="10"
+                            {% if user.phone != none %}
+                            <input id="phone" value="{{ user.phone }}" name="phone" type="text" minlength="10"
                                 maxlength="10" class="form-control rounded-pill"><br>
                             <input class="form-control rounded-pill" name="token" type="text"  value="{{ user.token }}">    
                             {% else %}
-                            <input class="form-control rounded-pill" name="tellphone" type="text"  minlength="10"
+                            <input class="form-control rounded-pill" name="phone" type="text"  minlength="10"
                             maxlength="10" placeholder="กรุณาระบุหมายเลขโทรศัพท์"><br>
                             <input class="form-control rounded-pill" name="token" type="text"  placeholder="กรุณา Access Token ของ Line">
                             {% endif %}

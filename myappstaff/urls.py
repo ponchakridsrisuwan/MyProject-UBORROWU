@@ -84,5 +84,7 @@ urlpatterns = [
     path('deletePosition/<int:id>',views.deletePosition, name="deletePosition"), 
     path('delete_multi_Position',views.delete_multi_Position, name="delete_multi_Position"),
     path('edit_position/<int:id>',views.edit_position, name="edit_position"),
-    
+
+    path('csv_parcel_download',views.csv_parcel_download, name="csv_parcel_download"), 
+    path('csv_durable_download',views.csv_durable_download, name="csv_durable_download"),
 ]

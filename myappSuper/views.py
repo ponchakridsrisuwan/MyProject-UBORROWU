@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 #from myapp.task import admin_user_return_task
 from myappSuper.forms import *
-from django.http import HttpResponseServerError, Http404
+from django.http import HttpResponseServerError, Http404, HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User, Group, Permission
@@ -18,10 +18,8 @@ from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
 from datetime import datetime
 #from celery.task import periodic_task
-import csv, io
-from django.shortcuts import render
-from django.contrib import messages
-
+import csv, io, os
+from django.conf import settings
 
 
 @login_required
@@ -29,7 +27,7 @@ def admin_detail(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(id=id).first()
@@ -47,7 +45,7 @@ def delete_user(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -64,7 +62,7 @@ def admin_user_status(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -82,20 +80,20 @@ def admin_user_deadline(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         deadline_str = req.POST['deadline']
         if deadline_str == '':
-            obj.deadlinestatus = datetime.now() + timedelta(days=7)
+            obj.deadline = datetime.now() + timedelta(days=7)
         else:
-            obj.deadlinestatus = datetime.strptime(deadline_str, '%Y-%m-%d')
+            obj.deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
         obj.reasonfromstaff = req.POST['reasonfromstaff']
         obj.status = "ถูกจำกัดสิทธิ์"
         obj.save()
         messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadlinestatus)
+        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
         users = User.objects.filter(Q(status="ถูกจำกัดสิทธิ์"))
         datetime_th = th_tz.localize(datetime.now())
         for user in users:
@@ -106,7 +104,7 @@ def admin_user_deadline(req, id):
                                 'content-type': 'application/x-www-form-urlencoded',
                                 'Authorization': 'Bearer ' + token 
                                 }
-                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadlinestatus, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                 msg = ' '.join(map(str, msg)) 
                 requests.post(url, headers=headers, data={'message': msg})
         return redirect('/admin_block') 
@@ -120,7 +118,7 @@ def admin_user_return(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -151,7 +149,7 @@ def admin_user(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         #gg_id = User.objects.filter(user=req.user, provider='google')[0].uid
@@ -177,7 +175,7 @@ def admin_user(req):
         if 'search_user' in req.GET:
             search_user = req.GET['search_user']
             AllUserStudent = AllUserStudent.filter(Q(first_name__contains=search_user)|Q(last_name__contains=search_user)
-                                                |Q(email__contains=search_user)|Q(tellphone__contains=search_user))
+                                                |Q(email__contains=search_user)|Q(phone__contains=search_user))
         page_num = req.GET.get('page', 1)
         p = Paginator(AllUserStudent, 10)
         try:
@@ -202,7 +200,7 @@ def admin_staff(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUserStaff = User.objects.filter(Q(right = "เจ้าหน้าที่")  | Q(right = "ผู้ดูแลระบบ")  | Q(status = "ปกติ"))
@@ -230,7 +228,7 @@ def admin_staff(req):
         if 'search_user' in req.GET:
             search_user = req.GET['search_user']
             AllUserStaff = AllUserStaff.filter(Q(first_name__contains=search_user)|Q(last_name__contains=search_user)
-                                                |Q(email__contains=search_user)|Q(tellphone__contains=search_user))
+                                                |Q(email__contains=search_user)|Q(phone__contains=search_user))
         context = {
             "navbar" : "admin_staff",
             "AllUserStaff" : AllUserStaff,
@@ -250,9 +248,9 @@ def admin_block(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/_add_number')
+            return redirect('/phone_add_number')
         AllUser = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
         AllUser_count = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
         if 'sort' in req.GET:
@@ -298,7 +296,7 @@ def person_upload(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             return redirect('/phone_add_number')
         data = Profile.objects.all()
         if 'sort' in req.GET:
@@ -322,12 +320,21 @@ def person_upload(req):
             search_rec = req.GET['search_rec']
             data = Profile.objects.filter(Q(firstname=search_rec)|Q(lastname=search_rec)
                                                 |Q(email=search_rec))
-
+        form = ProfileForm() 
+        if req.method == 'POST':
+            form = ProfileForm(req.POST or None)
+            if form.is_valid():
+                form.save()
+                messages.success(req, 'เพิ่มรายการเร็จ!')
+                return redirect('person_upload')
+        else:
+            form = ProfileForm()
         context = {
             "navbar" : "person_upload",
             'profiles': data,
             "search_rec" : search_rec,
             "last_sort" : last_sort,
+            "form" : form
         }
 
         if req.method == "GET":
@@ -365,7 +372,7 @@ def deleteProfile(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่ผู้ดูแลระบบ')
             return redirect('Home')
-        if req.user.tellphone is None or req.user.token is None:
+        if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = Profile.objects.get(id=id)
@@ -390,4 +397,18 @@ def delete_profiles(req):
         return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 
+@login_required
+def csv_person_download(req):
+    try:        
+        file_path = os.path.join(settings.MEDIA_ROOT, 'flies/csv_person.csv')
+        if not os.path.exists(file_path):
+            raise Http404('File not found')
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='application/octet-stream')
+            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+            return response
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
