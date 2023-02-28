@@ -19,7 +19,7 @@
                   <span>เรียงโดย</span>
                   <a href="?sort=latest" class="px-2 me-2 btn {% if last_sort == 'latest' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ใช้งานล่าสุด</a>
                   <a href="?sort=first_name" class="px-2 me-2 btn {% if last_sort == 'first_name' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ชื่อ-สกุล</a>
-                  <a href="?sort=deadline" class="px-2 me-2 btn {% if last_sort == 'deadline' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ระยะเวลากลับสู่สถานะปกติ</a>
+                  <a href="?sort=deadlinestatus" class="px-2 me-2 btn {% if last_sort == 'deadlinestatus' %}btn-dark{% else %}btn-outline-dark{% endif %} border-0 rounded-pill">ระยะเวลากลับสู่สถานะปกติ</a>
                   <a href="?sort=default" class="px-2 me-2 btn border-0 rounded-pill"><i class="fa fa-refresh" aria-hidden="true"></i></a>
               </div>
               
@@ -73,7 +73,7 @@
                     {{ AllUser.status }}
                   </td>
                   <td>
-                    {{ AllUser.deadline|timeuntil }}
+                    {{ AllUser.deadlinestatus|timeuntil }}
                   </td>
                   <td>
                     <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>
@@ -107,7 +107,7 @@
                           <span class="small text-black-50">{{ AllUser.statusdate }}</span>
                           <br>
                           <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ :</span>
-                          <span class="small text-black-50">{{ AllUser.deadline }}</span>
+                          <span class="small text-black-50">{{ AllUser.deadlinestatus }}</span>
                           <br>
                           <span class="fw-bold">เหตุผลการระงับสิทธิ์ :</span>
                           <span class="small text-black-50">{{ AllUser.reasonfromstaff }}</span>

@@ -86,14 +86,14 @@ def admin_user_deadline(req, id):
         obj = User.objects.get(id=id)
         deadline_str = req.POST['deadline']
         if deadline_str == '':
-            obj.deadline = datetime.now() + timedelta(days=7)
+            obj.deadlinestatus = datetime.now() + timedelta(days=7)
         else:
-            obj.deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
+            obj.deadlinestatus = datetime.strptime(deadline_str, '%Y-%m-%d')
         obj.reasonfromstaff = req.POST['reasonfromstaff']
         obj.status = "ถูกจำกัดสิทธิ์"
         obj.save()
         messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
+        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadlinestatus)
         users = User.objects.filter(Q(status="ถูกจำกัดสิทธิ์"))
         datetime_th = th_tz.localize(datetime.now())
         for user in users:
@@ -104,7 +104,7 @@ def admin_user_deadline(req, id):
                                 'content-type': 'application/x-www-form-urlencoded',
                                 'Authorization': 'Bearer ' + token 
                                 }
-                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadlinestatus, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                 msg = ' '.join(map(str, msg)) 
                 requests.post(url, headers=headers, data={'message': msg})
         return redirect('/admin_block') 

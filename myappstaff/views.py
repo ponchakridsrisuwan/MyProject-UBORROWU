@@ -1710,7 +1710,7 @@ def staff_admin_user_block(req):
         except:
             page = p.page(1)  
         for AllUser in AllUser:
-            if AllUser.deadline == 0:
+            if AllUser.deadlinestatus == 0:
                 AllUser.status == "ปกติ"
             AllUser.save()    
         context = {
@@ -1736,16 +1736,16 @@ def staff_user_deadline(req, id):
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
-        deadline_str = req.POST['deadline']
-        if deadline_str == '':
-            obj.deadline = datetime.now() + timedelta(days=7)
+        deadlinestatus_str = req.POST['deadlinestatus']
+        if deadlinestatus_str == '':
+            obj.deadlinestatus = datetime.now() + timedelta(days=7)
         else:
-            obj.deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
+            obj.deadlinestatus = datetime.strptime(deadline_str, '%Y-%m-%d')
         obj.reasonfromstaff = req.POST['reasonfromstaff']
         obj.status = "ถูกจำกัดสิทธิ์"
         obj.save()
         messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
+        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadlinestatus)
         users = User.objects.filter(status="ถูกจำกัดสิทธิ์")
         datetime_th = th_tz.localize(datetime.now())
         for user in users:
@@ -1756,7 +1756,7 @@ def staff_user_deadline(req, id):
                                 'content-type': 'application/x-www-form-urlencoded',
                                 'Authorization': 'Bearer ' + token 
                                 }
-                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reason, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadlinestatus, 'วัน เหตุผล : ', obj.reason, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                 msg = ' '.join(map(str, msg)) 
                 requests.post(url, headers=headers, data={'message': msg})
         return redirect('/staff_admin_user_block') 
@@ -1773,20 +1773,20 @@ def staff_user_deadline_multi(req):
             objs = User.objects.filter(id__in=ids)
             deadline_str = req.POST['deadline']
             if deadline_str == '':
-                deadline = datetime.now() + timedelta(days=7)
+                deadlinestatus = datetime.now() + timedelta(days=7)
             else:
-                deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
+                deadlinestatus = datetime.strptime(deadline_str, '%Y-%m-%d')
             reasonfromstaff = req.POST['reasonfromstaff']
             for obj in objs:
                 if obj.phone is None or obj.token is None:
                     continue
                 if obj.status == "ถูกจำกัดสิทธิ์" or obj.right == "นักศึกษา":
                     continue
-                obj.deadline = deadline
+                obj.deadlinestatus = deadlinestatus
                 obj.reasonfromstaff = reasonfromstaff
                 obj.status = "ถูกจำกัดสิทธิ์"
                 obj.save()
-                #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
+                #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadlinestatus)
                 datetime_th = th_tz.localize(datetime.now())
                 if obj.token:
                     url = 'https://notify-api.line.me/api/notify'
@@ -1795,7 +1795,7 @@ def staff_user_deadline_multi(req):
                                     'content-type': 'application/x-www-form-urlencoded',
                                     'Authorization': 'Bearer ' + token 
                                     }
-                    msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                    msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadlinestatus, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                     msg = ' '.join(map(str, msg)) 
                     requests.post(url, headers=headers, data={'message': msg})
             messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
