@@ -16,7 +16,7 @@ STATUS = (
         ('ถูกจำกัดสิทธิ์', 'ถูกจำกัดสิทธิ์'),
     )
 
-User.add_to_class('right', models.CharField(max_length = 100, choices = RIGHT, default = 'นักศึกษา'))
+User.add_to_class('right', models.CharField(max_length = 100, default = 'นักศึกษา'))
 User.add_to_class('status', models.CharField(max_length = 100, choices = STATUS, default = 'ปกติ'))
 User.add_to_class('phone', models.CharField(max_length = 10, null=True, blank=True))
 User.add_to_class('reasonfromstaff', models.CharField(max_length = 254, null=True, blank=True))
@@ -29,3 +29,13 @@ User.add_to_class('token', models.CharField(max_length = 254, null=True, blank=T
 def set_user_right(sender, instance, **kwargs):
     if instance.email.endswith('wancharoen.up.63@ubu.ac.th'):
         instance.right = 'ผู้ดูแลระบบ'
+    else:
+        try:
+            profile = Profile.objects.get(email=instance.email)
+            instance.right = 'นักศึกษา'
+        except Profile.DoesNotExist:
+            try:
+                staff_profile = ProfileStaff.objects.get(email=instance.email)
+                instance.right = 'เจ้าหน้าที่'
+            except ProfileStaff.DoesNotExist:
+                instance.right = ''

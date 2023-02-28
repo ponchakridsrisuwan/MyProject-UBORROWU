@@ -77,68 +77,13 @@
                                     aria-expanded="false"></i>
                                 <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm text-center">
                                     <li>
-                                        <a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#manageitemcatecory-{{forloop.counter}}">เปลี่ยนแปลงสิทธิ์</a>
+                                        <a class="dropdown-item btn-0 btn-sm"
+                                            href="{% url 'admin_detail' AllUserStaff.id %}">ข้อมูลส่วนตัว</a>
                                     </li>
                                 </ul>
                             </td>
                         </tr>
-
-                        <!-- moal เปลี่ยนแปลงสิทธิ์ -->
-                        <div class="modal fade" id="manageitemcatecory-{{forloop.counter}}" tabindex="-1"
-                            aria-labelledby="edititemModal" aria-hidden="true">
-                            <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
-                                <form method="post" action="/admin_user_status/{{AllUserStaff.id}}"
-                                    enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="edititemModal">เปลี่ยนแปลงสิทธิ์
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row mt-2">
-                                                    <div class="col-md-6">
-                                                        <label class="labels" for="name">ชื่อ</label>
-                                                        <input value="{{AllUserStaff.first_name}}" type="text"
-                                                            class="form-control rounded-pill" disabled>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="labels" for="email">อีเมล</label>
-                                                        <input value="{{AllUserStaff.email}}" type="text"
-                                                            class="form-control rounded-pill" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2">
-                                                    <div class="col-md-6">
-                                                        <label class="labels" for="status">สถานะ</label>
-                                                        <input value="{{AllUserStaff.status}}" type="text"
-                                                            class="form-control rounded-pill" disabled>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="labels" for="right">สิทธิ์ผู้ใช้งาน</label>
-                                                        <select class="form-select rounded-pill"
-                                                            aria-label=".form-select-lg" name="right" id="right">
-                                                            <option value="นักศึกษา">นักศึกษา</option>
-                                                            <option value="เจ้าหน้าที่">เจ้าหน้าที่</option>
-                                                            <option value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary rounded-pill"
-                                                    data-bs-dismiss="modal">ยกเลิก</button>
-                                                <button type="submit"
-                                                    class="btn btn-warning rounded-pill">ยืนยันการแก้ไข</button>
-                                            </div>
-                                        </div>
-                                </form>
-                            </div>
-                        </div>
+                      
                         {% endif %}
                         {% empty %}
                         <p class="text-center">ยังไม่มีข้อมูลเจ้าหน้าที่ในระบบ U Borrow U</p>

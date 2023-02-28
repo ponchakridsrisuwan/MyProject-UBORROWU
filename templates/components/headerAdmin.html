@@ -17,8 +17,13 @@
                 <li class="nav-item">
                     <a class="nav-link fs-6 {% if navbar == 'admin_block' %} active {% endif %}" aria-current="page" href="{% url 'admin_block' %}" >ผู้ใช้งานที่ถูกระงับสิทธิ์</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link fs-6 {% if navbar == 'person_upload' %} active {% endif %}" aria-current="page" href="{% url 'person_upload' %}" >นำเข้ารายชื่อ</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'person_upload' or navbar == 'person_upload_staff' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">นำเข้ารายชื่อ</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'person_upload_staff' %}" >เจ้าหน้าที่</a></li>
+                        <li><a class="dropdown-item" href="{% url 'person_upload' %}" >นักศึกษา</a></li>
+                    </ul>
                 </li>
             </ul>
 

@@ -38,7 +38,7 @@ def admin_detail(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})        
 
 @login_required
 def delete_user(req, id):
@@ -55,25 +55,7 @@ def delete_user(req, id):
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
-
-@login_required
-def admin_user_status(req,id):
-    try:
-        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
-            return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
-            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/phone_add_number')
-        obj = User.objects.get(id=id)
-        obj.right = req.POST['right']
-        obj.save()
-        messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-        return redirect('/admin_user') 
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})       
 
 @login_required
 def admin_user_deadline(req, id):
@@ -412,3 +394,106 @@ def csv_person_download(req):
     except Exception as e:
         return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
+def person_upload_staff(req):
+    try:
+        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+            return redirect('Home')
+        if req.user.phone is None or req.user.token is None:
+            return redirect('/phone_add_number')
+        data = ProfileStaff.objects.all()
+        if 'sort' in req.GET:
+            last_sort = req.GET.get('sort', 'default')
+            if req.GET['sort'] == 'firstname':
+                data = ProfileStaff.objects.order_by('firstname')
+            elif req.GET['sort'] == 'lastname':
+                data = ProfileStaff.objects.order_by('-lastname')
+            elif req.GET['sort'] == 'email':
+                data = ProfileStaff.objects.order_by('email')
+            elif req.GET['sort'] == 'default':
+                data = ProfileStaff.objects.all()
+            else:
+                last_sort = 'default'
+                data = ProfileStaff.objects.all()
+        else:
+            last_sort = 'default'
+            data = ProfileStaff.objects.all()
+        search_rec = ""
+        if 'search_rec' in req.GET:
+            search_rec = req.GET['search_rec']
+            data = ProfileStaff.objects.filter(Q(firstname=search_rec)|Q(lastname=search_rec)
+                                                |Q(email=search_rec))
+        form = ProfileStaffForm() 
+        if req.method == 'POST':
+            form = ProfileStaffForm(req.POST or None)
+            if form.is_valid():
+                form.save()
+                messages.success(req, 'เพิ่มรายการเร็จ!')
+                return redirect('person_upload_staff')
+        else:
+            form = ProfileStaffForm()
+        context = {
+            "navbar" : "person_upload_staff",
+            'profiles': data,
+            "search_rec" : search_rec,
+            "last_sort" : last_sort,
+            "form" : form
+        }
+
+        if req.method == "GET":
+            return render(req, "pages/person_upload_staff.html", context)
+
+        try:
+            csv_file = req.FILES['file']
+            if not csv_file.name.endswith('.csv'):
+                messages.error(req, 'THIS IS NOT A CSV FILE')
+                return redirect('person_upload_staff')
+            data_set = csv_file.read().decode('UTF-8')
+            data_set = data_set.replace('"', '')
+            io_string = io.StringIO(data_set)
+            next(io_string)
+            for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+                ProfileStaff.objects.create(
+                    firstname=column[0],
+                    lastname=column[1],
+                    email=column[2],
+                )
+            messages.success(req, 'CSV file อัพโหลดสำเร็จ')
+            return redirect('person_upload_staff')
+        except Exception as e:
+            messages.error(req, f'เกิดข้อผิดพลาดขณะอัพโหลด CSV file : {e}')
+            return redirect('person_upload_staff')
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
+
+
+@login_required
+def deleteProfileStaff(req, id):
+    try:
+        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่ผู้ดูแลระบบ')
+            return redirect('Home')
+        if req.user.phone is None or req.user.token is None:
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
+            return redirect('/phone_add_number')
+        obj = ProfileStaff.objects.get(id=id)
+        obj.delete()
+        messages.success(req, 'ลบสำเร็จ!')
+        return redirect("person_upload_staff")
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
+
+
+def delete_profiles_staff(req):
+    try:
+        if req.method == 'POST':
+            ids = req.POST.getlist('id')
+            ProfileStaff.objects.filter(id__in=ids).delete()
+            return redirect('person_upload_staff')
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   

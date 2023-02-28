@@ -14,3 +14,10 @@ class Profile(models.Model):
     email = models.EmailField(blank=True)    
     def __str__(self):
         return self.firstname
+    
+class ProfileStaff(models.Model):
+    firstname = models.CharField(max_length=150)
+    lastname = models.CharField(max_length=150)
+    email = models.EmailField(blank=True)    
+    def __str__(self):
+        return self.firstname    
