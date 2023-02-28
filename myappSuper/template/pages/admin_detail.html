@@ -27,10 +27,10 @@
                     <div class="col-md-12">
                         <label class="labels">เบอร์โทรศัพท์</label>
                         <td>
-                            {% if AllUser.phone == None %}
+                            {% if AllUser.tellphone == None %}
                             <input type="text" class="form-control rounded-pill text-muted" value="N/A" disabled>
                             {% else %}
-                            <input type="text" class="form-control rounded-pill text-muted" value="{{AllUser.phone}}"
+                            <input type="text" class="form-control rounded-pill text-muted" value="{{AllUser.tellphone}}"
                                 disabled>
                             {% endif %}
                         </td>
@@ -46,9 +46,9 @@
                 {% if AllUser.status != "ปกติ" %}
                 <hr>
                 <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ </span><br>
-                <span class="small">{{ AllUser.datestatus }}</span><br><br>
+                <span class="small">{{ AllUser.statusdate }}</span><br><br>
                 <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ </span><br>
-                <span class="small">{{ AllUser.deadline }}</span><br><br>
+                <span class="small">{{ AllUser.deadlinestatus }}</span><br><br>
                 <span class="fw-bold">เหตุผลการระงับสิทธิ์ </span><br>
                 <span class="small">{{ AllUser.reasonfromstaff }}</span>
                 {% endif %}
@@ -136,9 +136,9 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="labels text-danger small" for="deadline">ระยะเวลาที่ถูกระงับสิทธิ์</label>
+                                    <label class="labels text-danger small" for="deadlinestatus">ระยะเวลาที่ถูกระงับสิทธิ์</label>
                                     <input class="form-select
-                                                rounded-pill" name="deadline" id="deadline" type="date">
+                                                rounded-pill" name="deadlinestatus" id="deadlinestatus" type="date">
                                 </div>
                             </div>
                             <div class="col-md-12">

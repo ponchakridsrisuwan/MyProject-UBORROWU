@@ -27,7 +27,7 @@ def admin_detail(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUser = User.objects.filter(id=id).first()
@@ -45,7 +45,7 @@ def delete_user(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -62,7 +62,7 @@ def admin_user_status(req,id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -80,20 +80,20 @@ def admin_user_deadline(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
         deadline_str = req.POST['deadline']
         if deadline_str == '':
-            obj.deadline = datetime.now() + timedelta(days=7)
+            obj.deadlinestatus = datetime.now() + timedelta(days=7)
         else:
-            obj.deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
+            obj.deadlinestatus = datetime.strptime(deadline_str, '%Y-%m-%d')
         obj.reasonfromstaff = req.POST['reasonfromstaff']
         obj.status = "ถูกจำกัดสิทธิ์"
         obj.save()
         messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
+        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadlinestatus)
         users = User.objects.filter(Q(status="ถูกจำกัดสิทธิ์"))
         datetime_th = th_tz.localize(datetime.now())
         for user in users:
@@ -104,7 +104,7 @@ def admin_user_deadline(req, id):
                                 'content-type': 'application/x-www-form-urlencoded',
                                 'Authorization': 'Bearer ' + token 
                                 }
-                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadlinestatus, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                 msg = ' '.join(map(str, msg)) 
                 requests.post(url, headers=headers, data={'message': msg})
         return redirect('/admin_block') 
@@ -118,7 +118,7 @@ def admin_user_return(req, id):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = User.objects.get(id=id)
@@ -149,7 +149,7 @@ def admin_user(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         #gg_id = User.objects.filter(user=req.user, provider='google')[0].uid
@@ -175,7 +175,7 @@ def admin_user(req):
         if 'search_user' in req.GET:
             search_user = req.GET['search_user']
             AllUserStudent = AllUserStudent.filter(Q(first_name__contains=search_user)|Q(last_name__contains=search_user)
-                                                |Q(email__contains=search_user)|Q(phone__contains=search_user))
+                                                |Q(email__contains=search_user)|Q(tellphone__contains=search_user))
         page_num = req.GET.get('page', 1)
         p = Paginator(AllUserStudent, 10)
         try:
@@ -200,7 +200,7 @@ def admin_staff(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         AllUserStaff = User.objects.filter(Q(right = "เจ้าหน้าที่")  | Q(right = "ผู้ดูแลระบบ")  | Q(status = "ปกติ"))
@@ -228,7 +228,7 @@ def admin_staff(req):
         if 'search_user' in req.GET:
             search_user = req.GET['search_user']
             AllUserStaff = AllUserStaff.filter(Q(first_name__contains=search_user)|Q(last_name__contains=search_user)
-                                                |Q(email__contains=search_user)|Q(phone__contains=search_user))
+                                                |Q(email__contains=search_user)|Q(tellphone__contains=search_user))
         context = {
             "navbar" : "admin_staff",
             "AllUserStaff" : AllUserStaff,
@@ -248,9 +248,9 @@ def admin_block(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
-            return redirect('/phone_add_number')
+            return redirect('/_add_number')
         AllUser = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
         AllUser_count = User.objects.filter(status = "ถูกจำกัดสิทธิ์")
         if 'sort' in req.GET:
@@ -296,7 +296,7 @@ def person_upload(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             return redirect('/phone_add_number')
         data = Profile.objects.all()
         if 'sort' in req.GET:
@@ -372,7 +372,7 @@ def deleteProfile(req, id):
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right != "ผู้ดูแลระบบ":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่ผู้ดูแลระบบ')
             return redirect('Home')
-        if req.user.phone is None or req.user.token is None:
+        if req.user.tellphone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
         obj = Profile.objects.get(id=id)
