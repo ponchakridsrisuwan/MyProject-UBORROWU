@@ -1495,7 +1495,7 @@ def pdf_staff_durable(req):
         AllDurable = Add_Durable.objects.all()
         context = {
             "AllDurable" : AllDurable,
-        }
+        } 
         return render( req, 'pages/pdf_staff_durable.html', context)
     except Http404:
         return render(req, '404_Error_Page.html')
