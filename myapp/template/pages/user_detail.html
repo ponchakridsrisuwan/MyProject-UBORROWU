@@ -53,6 +53,7 @@
                         <label class="labels px-2 fw-bold">เพิ่มเข้าระบบตั้งแต่</label>
                         <p>{{ AllParcel.date|date:"G:i l j F Y" }}</p>
                     </div>
+                    {% if AllParcel.status == "พร้อมยืม" %}
                     {% if AllParcel.quantity > 0 or AllParcel.quantitytype == "∞"%}
                     <div class="d-flex flex-row  gap-3">
                         <a href="{% url 'add_to_cart' AllParcel.id %}" class="btn btn-dark rounded-pill addtocart"
@@ -64,6 +65,12 @@
                         <a href="{% url 'add_to_queue' AllParcel.id %}" class="btn btn-dark rounded-pill addtocart"
                             data-action="add" data-product="{{id}}">
                             จองคิว</a>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="d-flex flex-row  gap-3">
+                        <a class="btn btn-secondary rounded-pill addtocart" >
+                            {{ AllParcel.status }}</a>
                     </div>
                     {% endif %}
                 </div>

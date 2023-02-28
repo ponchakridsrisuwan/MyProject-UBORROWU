@@ -305,12 +305,11 @@
                                         </select>
                                     </p>
                                     <p>
-                                        <label for="id_status">เลือกสถานะครุภัณฑ์ :</label>
-                                        <select name="status" class="form-control rounded-pill" id="id_status">
-                                            {% for category in categoryStatus %}
-                                            <option value="{{category.id}}" {% if category == AllDurable.status %}
-                                                selected {% endif %}>{{category}}</option>
-                                            {% endfor %}
+                                        <label for="id_status">เลือกสถานะครุภัณฑ์:</label>
+                                        <select name="status" class="form-control rounded-pill"
+                                            id="id_status">
+                                            <option value="พร้อมยืม">พร้อมยืม</option>
+                                            <option value="ไม่พร้อมยืม" selected="">ไม่พร้อมยืม</option>
                                         </select>
                                     </p>
                                     <p>

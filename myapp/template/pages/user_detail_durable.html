@@ -65,6 +65,7 @@
                         <label class="labels px-2 fw-bold">จำนวนวันที่อนุญาตให้ยืม</label>
                         <p>{{ AllDurable.numdate }} วัน</p>
                     </div>
+                    {% if AllDurable.status == "พร้อมยืม" %}
                     {% if AllDurable.quantity > 0 %}
                     <div class="d-flex flex-row  gap-3">
                         <a href="{% url 'add_to_cart_durable' AllDurable.id %}"
@@ -76,6 +77,12 @@
                         <a href="{% url 'add_to_queue_durable' AllDurable.id %}"
                             class="btn btn-dark rounded-pill addtocart" data-action="add" data-product="{{id}}">
                             จองคิว</a>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="d-flex flex-row  gap-3">
+                        <a class="btn btn-secondary rounded-pill addtocart" >
+                            {{ AllDurable.status }}</a>
                     </div>
                     {% endif %}
                 </div>
