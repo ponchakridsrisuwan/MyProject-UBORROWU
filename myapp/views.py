@@ -30,7 +30,7 @@ def handler404(req, exception):
     
 #หน้าหลัก
 def HomePage(req):
-    # try:
+    try:
         AllParcel = Add_Parcel.objects.all()
         AllDurable = Add_Durable.objects.all()
         selected_category = req.GET.get('category', None)
@@ -68,10 +68,10 @@ def HomePage(req):
                 "pagedurable" : pagedurable,
                 }     
         return render(req, 'pages/user_index.html', context)
-    # except Http404:
-    #     return render(req, '404_Error_Page.html')
-    # except Exception as e:
-    #     return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 def Home(req):
     try:
@@ -136,10 +136,10 @@ def phone_add_number(req):
     try:
         if req.user.is_authenticated:
             if req.method == 'POST':
-                phone = req.POST.get('phone')
+                tellphone = req.POST.get('tellphone')
                 token = req.POST.get('token')
-                if phone or token:
-                    req.user.phone = phone
+                if tellphone or token:
+                    req.user.tellphone = tellphone
                     req.user.token = token
                     req.user.save()
                     messages.success(req, 'เพิ่มเบอร์โทรศัพท์และเชื่อมต่อไลน์สำเร็จ!')
@@ -160,7 +160,7 @@ def phone_add_number(req):
 def user_personal_info(req):
     try:
         if req.user.is_authenticated:
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -187,7 +187,7 @@ def user_borrow(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -247,7 +247,7 @@ def user_borrow_durable(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -310,7 +310,7 @@ def confirm_parcel(req,id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllLoanParcel = LoanParcel.objects.filter(id=id).first()
@@ -333,7 +333,7 @@ def confirm_durable(req,id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllLoanDurable = LoanDurable.objects.filter(id=id).first()
@@ -355,7 +355,7 @@ def return_durable(req,id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllLoanDurable = LoanDurable.objects.filter(id=id).first()
@@ -391,7 +391,7 @@ def user_borrowed(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -468,7 +468,7 @@ def user_history(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -528,7 +528,7 @@ def user_history_durable(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -591,7 +591,7 @@ def user_cart(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel = CartParcel.objects.filter(user = req.user)
@@ -624,7 +624,7 @@ def add_to_cart(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
@@ -671,7 +671,7 @@ def add_to_queue(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
@@ -697,7 +697,7 @@ def cart_update(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
@@ -727,7 +727,7 @@ def cart_notupdate(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             parcel_item = Add_Parcel.objects.get(id=id)
@@ -762,7 +762,7 @@ def user_queue(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -821,7 +821,7 @@ def add_multiple_to_borrow_parcel(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             description = req.POST.get('description')
@@ -879,7 +879,7 @@ def delete_borrow_parcel(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             try:
@@ -915,7 +915,7 @@ def delete_add_to_cart(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             if CartParcel.objects.filter(id=id).exists():
@@ -950,7 +950,7 @@ def delete_queue(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = QueueParcel.objects.get(id=id)
@@ -970,7 +970,7 @@ def add_to_cart_durable(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
@@ -1020,7 +1020,7 @@ def add_to_queue_durable(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
@@ -1045,7 +1045,7 @@ def cart_update_durable(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
@@ -1076,7 +1076,7 @@ def cart_notupdate_durable(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             durable_item = Add_Durable.objects.get(id=id)
@@ -1111,7 +1111,7 @@ def user_queue_durable(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1170,7 +1170,7 @@ def add_multiple_to_borrow_durable(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             description = req.POST.get('description')
@@ -1235,7 +1235,7 @@ def delete_borrow_durable(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             try:
@@ -1270,7 +1270,7 @@ def delete_durable_add_to_cart(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             if CartDurable.objects.filter(id=id).exists():
@@ -1305,7 +1305,7 @@ def delete_queue_durable(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = QueueDurable.objects.get(id=id)
@@ -1326,7 +1326,7 @@ def user_detail(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1382,7 +1382,7 @@ def user_detail_durable(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1575,7 +1575,7 @@ def user_recommend_history(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1636,7 +1636,7 @@ def user_recommend(req):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1727,7 +1727,7 @@ def user_recommend_edit(req,id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = ListFromRec.objects.get(id=id)
@@ -1756,7 +1756,7 @@ def user_recommend_detail(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             AllCartParcel_sum = CartParcel.objects.filter(user = req.user).aggregate(Sum('quantity'))
@@ -1784,7 +1784,7 @@ def deleteRecList(req, id):
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
                 return redirect('Home')
-            if req.user.phone is None or req.user.token is None:
+            if req.user.tellphone is None or req.user.token is None:
                 messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
                 return redirect('/phone_add_number')
             obj = ListFromRec.objects.get(id=id)

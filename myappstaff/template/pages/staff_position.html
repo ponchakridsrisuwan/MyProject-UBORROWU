@@ -68,7 +68,7 @@
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
-                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-cente {% if items.status == 'พร้อมยืม'%} text-success {% elif items.status == 'ไม่พร้อมยืม' %} text-danger {% endif %}r">{{ items.status }}</span></a>
+                                    href="{% url 'staff_manage_detail' items.id %}"><span class="text-center">{{ items.status }}</span></a>
                                 </td>
                                 <td>
                                     <a class="text-center text-black" style="text-decoration:none"
