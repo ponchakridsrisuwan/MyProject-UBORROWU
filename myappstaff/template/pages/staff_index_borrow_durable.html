@@ -89,6 +89,9 @@
                                 </ul>
                             </td>
                         </tr>
+                        {% empty %}
+                        <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
+                        {% endfor %}
                     </tbody>
                 </table>
                 <script language="JavaScript">
@@ -102,9 +105,7 @@
                 </script>
                 <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
                 <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#approved_multi">อนุมัติ</a>
-                {% empty %}
-                <p class="text-center">ยังไม่มีข้อมูลรายการอนุมัติการยืมครุภัณฑ์</p>
-                {% endfor %}
+                
                 <!-- อนุมัติ -->
                 <div class="modal fade" id="approved_multi" tabindex="-1" aria-labelledby="approvedModal"
                 aria-hidden="true">

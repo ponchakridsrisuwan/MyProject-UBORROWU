@@ -219,7 +219,7 @@ app.autodiscover_tasks()
 CELERY_BEAT_SCHEDULE = {
     'remove_expired_cart_items': {
         'task': 'myapp.tasks.remove_expired_cart_items',
-        'schedule': timedelta(minutes=1),  # run every minute
+        'schedule': timedelta(minutes=20),  # run every minute
     },
 }
 

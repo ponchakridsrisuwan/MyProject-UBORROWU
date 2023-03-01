@@ -131,7 +131,7 @@
                         labels: ['รออนุมัติการยืมวัสดุ', 'รออนุมัติการยืมครุภัณฑ์', 'กำลังยืมครุภัณฑ์', 'รออนุมัติการคืนครุภัณฑ์', 'แนะนำรายการเข้าระบบ'],
                         datasets: [{
                             label: 'Number of Items',
-                            data: [{{ AllLoanParcel_count_borrow.count }}, {{ AllLoanDurable_count_borrow.count }},{{ AllRecList_count.count }}, {{ AllLoanDurable_count.count }}, {{ AllRecList_count.count }}],
+                            data: [{{ AllLoanParcel_count_borrow.count }}, {{ AllLoanDurable_count_borrow.count }},{{ AllLoanDurable_count_borrownow.count }}, {{ AllLoanDurable_count.count }}, {{ AllRecList_count.count }}],
                     backgroundColor: [
                     '#cde4f2',
                     '#cdf2ee',

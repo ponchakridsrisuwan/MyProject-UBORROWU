@@ -30,7 +30,7 @@ def handler404(req, exception):
     
 #หน้าหลัก
 def HomePage(req):
-    # try:
+    try:
         AllParcel = Add_Parcel.objects.all()
         AllDurable = Add_Durable.objects.all()
         selected_category = req.GET.get('category', None)
@@ -68,10 +68,10 @@ def HomePage(req):
                 "pagedurable" : pagedurable,
                 }     
         return render(req, 'pages/user_index.html', context)
-    # except Http404:
-    #     return render(req, '404_Error_Page.html')
-    # except Exception as e:
-    #     return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
+    except Http404:
+         return render(req, '404_Error_Page.html')
+    except Exception as e:
+         return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 def Home(req):
     try:
@@ -1212,7 +1212,7 @@ def add_multiple_to_borrow_durable(req):
                                     'content-type': 'application/x-www-form-urlencoded',
                                     'Authorization': 'Bearer ' + token 
                                 }
-                            msg = [loan_durable.user.email, 'ยืมวัสดุรายการ : ', loan_durable.name, 'จำนวน : ', loan_durable.quantity, "วันที่ต้องการยืม : ", 
+                            msg = [loan_durable.user.email, 'ยืมครุภัณฑ์รายการ : ', loan_durable.name, 'จำนวน : ', loan_durable.quantity, "วันที่ต้องการยืม : ", 
                                 loan_durable.start_date, 'กำหนดคืน : ', loan_durable.end_date, 'เหตุผลการยืม : ', loan_durable.description,'วันที่ทำรายการ : ', 
                                 datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                             msg = ' '.join(map(str, msg)) 

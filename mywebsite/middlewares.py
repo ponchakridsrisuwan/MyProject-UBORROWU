@@ -7,7 +7,7 @@ class SessionTimeoutMiddleware:
         self.get_response = get_response
 
     def __call__(self, req):
-        if req.user.is_authenticated and req.session.get_expiry_age() <= 0:
+        if req.user.is_authenticated and req.session.get_expiry_age() <= 600:
             return redirect(reverse('/'))
 
         response = self.get_response(req)
