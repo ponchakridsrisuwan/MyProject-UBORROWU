@@ -343,7 +343,7 @@ def person_upload(req):
             io_string = io.StringIO(data_set)
             next(io_string)
             for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-                if not Profile.objects.filter(email=column[2]) and not ProfileStaff.objects.filter(email=column[2]).exists():
+                if not Profile.objects.filter(email=column[2]).exists():
                     Profile.objects.create(
                         firstname=column[0],
                         lastname=column[1],
