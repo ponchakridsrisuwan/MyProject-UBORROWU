@@ -1200,19 +1200,25 @@ def staff_manage_parcel(req):
         io_string = io.StringIO(data_set)
         next(io_string)
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-            position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
-            category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
-            Add_Parcel.objects.create(
-                name=column[0],
-                nameposition=position,
-                nametype=column[2],
-                category=category,
-                status=column[4],
-                statustype=column[5],
-                quantitytype=column[6],
-                quantity=column[7],
-                description=column[8],
-            )
+            for parcel in AllParcel:
+                if parcel.name == column[0]:
+                    parcel.quantity += int(column[7])
+                    parcel.save()
+                else:
+                    position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
+                    category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
+                    Add_Parcel.objects.create(
+                        name=column[0],
+                        nameposition=position,
+                        nametype=column[2],
+                        category=category,
+                        status=column[4],
+                        statustype=column[5],
+                        quantitytype=column[6],
+                        quantity=column[7],
+                        description=column[8],
+                    )
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')
         return redirect('staff_manage_parcel')
     except Http404:
         return render(req, '404_Error_Page.html')
@@ -1352,19 +1358,25 @@ def staff_manage_durable(req):
         io_string = io.StringIO(data_set)
         next(io_string)
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-            position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
-            category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
-            Add_Durable.objects.create(
-                name=column[0],
-                nameposition=position,
-                nametype=column[2],
-                category=category,
-                status=column[4],
-                statustype=column[5],
-                quantitytype=column[6],
-                quantity=column[7],
-                description=column[8],
-            )
+            for durable in AllDurable:
+                if durable.name == column[0]:
+                    durable.quantity += int(column[7])
+                    durable.save()
+                else:
+                    position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
+                    category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
+                    Add_Durable.objects.create(
+                        name=column[0],
+                        nameposition=position,
+                        nametype=column[2],
+                        category=category,
+                        status=column[4],
+                        statustype=column[5],
+                        quantitytype=column[6],
+                        quantity=column[7],
+                        description=column[8],
+                    )
+            messages.success(req, 'เพิ่มรายการสำเร็จ!')
         return redirect('staff_manage_durable')
     except Http404:
         return render(req, '404_Error_Page.html')
