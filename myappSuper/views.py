@@ -20,6 +20,8 @@ from datetime import datetime
 #from celery.task import periodic_task
 import csv, io, os
 from django.conf import settings
+from django.db import transaction
+
 
 
 @login_required
@@ -48,14 +50,23 @@ def delete_user(req, id):
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
-        obj = User.objects.get(id=id)
-        obj.delete()
+        
+        user = User.objects.get(id=id)
+        email = user.email
+        profiles = Profile.objects.filter(email=email)
+        profile_staffs = ProfileStaff.objects.filter(email=email)
+      
+        with transaction.atomic():
+            user.delete()
+            profiles.delete()
+            profile_staffs.delete()
+
         messages.success(req, 'ลบผู้ใช้สำเร็จ!')
         return redirect('/admin_user')
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})       
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})        
 
 @login_required
 def admin_user_deadline(req, id):
@@ -307,7 +318,7 @@ def person_upload(req):
             form = ProfileForm(req.POST or None)
             if form.is_valid():
                 form.save()
-                messages.success(req, 'เพิ่มรายการเร็จ!')
+                messages.success(req, 'เพิ่มรายการสำเร็จ!')
                 return redirect('person_upload')
         else:
             form = ProfileForm()
@@ -357,8 +368,13 @@ def deleteProfile(req, id):
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
-        obj = Profile.objects.get(id=id)
-        obj.delete()
+        
+        with transaction.atomic():
+            email = Profile.objects.get(id=id).email
+            Profile.objects.filter(email=email).delete()
+            ProfileStaff.objects.filter(email=email).delete()
+            User.objects.filter(email=email).delete()
+            
         messages.success(req, 'ลบสำเร็จ!')
         return redirect("person_upload")
     except Http404:
@@ -366,17 +382,20 @@ def deleteProfile(req, id):
     except Exception as e:
         return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})    
 
-
 def delete_profiles(req):
     try:
         if req.method == 'POST':
             ids = req.POST.getlist('id')
-            Profile.objects.filter(id__in=ids).delete()
+            profiles = Profile.objects.filter(id__in=ids)
+            emails = [p.email for p in profiles if p.email]
+            User.objects.filter(email__in=emails).delete()
+            ProfileStaff.objects.filter(email__in=emails).delete()
+            profiles.delete()
             return redirect('person_upload')
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 
 @login_required
@@ -427,7 +446,7 @@ def person_upload_staff(req):
             form = ProfileStaffForm(req.POST or None)
             if form.is_valid():
                 form.save()
-                messages.success(req, 'เพิ่มรายการเร็จ!')
+                messages.success(req, 'เพิ่มรายการสำเร็จ!')
                 return redirect('person_upload_staff')
         else:
             form = ProfileStaffForm()
@@ -477,8 +496,13 @@ def deleteProfileStaff(req, id):
         if req.user.phone is None or req.user.token is None:
             messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
             return redirect('/phone_add_number')
-        obj = ProfileStaff.objects.get(id=id)
-        obj.delete()
+        
+        with transaction.atomic():
+            email = ProfileStaff.objects.get(id=id).email
+            ProfileStaff.objects.filter(email=email).delete()
+            Profile.objects.filter(email=email).delete()
+            User.objects.filter(email=email).delete()
+            
         messages.success(req, 'ลบสำเร็จ!')
         return redirect("person_upload_staff")
     except Http404:
@@ -491,7 +515,11 @@ def delete_profiles_staff(req):
     try:
         if req.method == 'POST':
             ids = req.POST.getlist('id')
-            ProfileStaff.objects.filter(id__in=ids).delete()
+            profiles = ProfileStaff.objects.filter(id__in=ids)
+            emails = [p.email for p in profiles if p.email]
+            User.objects.filter(email__in=emails).delete()
+            Profile.objects.filter(email__in=emails).delete()
+            profiles.delete()
             return redirect('person_upload_staff')
     except Http404:
         return render(req, '404_Error_Page.html')

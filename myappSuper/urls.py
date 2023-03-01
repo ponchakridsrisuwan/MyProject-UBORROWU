@@ -20,7 +20,8 @@ urlpatterns = [
     path('person_upload_staff',views.person_upload_staff, name="person_upload_staff"),
     path('deleteProfileStaff/<int:id>',views.deleteProfileStaff, name="deleteProfileStaff"),
     path('delete_profiles_staff',views.delete_profiles_staff, name="delete_profiles_staff"),
-
-
+    
+    path('delete_user/<int:id>',views.delete_user, name="delete_user"),
+    
     path('csv_person_download',views.csv_person_download, name="csv_person_download"),
 ]
