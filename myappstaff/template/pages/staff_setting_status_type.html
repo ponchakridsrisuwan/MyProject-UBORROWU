@@ -1,0 +1,195 @@
+{% extends 'homestaff.html' %}
+{% block main %}
+<div class="container">
+    <div class="bg-white rounded-2 ">
+    <div class="px-5 pt-3">
+        <div>
+            <h5 class="fw-bold">การตั้งค่าตำแหน่งการวาง</h5>
+        </div>
+    </div>
+    <div class="col-lg-12 px-2">
+        <div class="table-responsive">
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- ตำแหน่ง -->
+            <div class="tab-pane container active" id="category">
+                <form method="post" action="{% url 'delete_multi_Status_Type' %}">
+                    {% csrf_token %}
+                <table class="table small">
+                    <thead class="table">
+                      <tr class="table bg-warning">
+                            <th></th>
+                            <th class="col-12">รูปแบบสถานะ</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for AllSettingStatusType in page.object_list %}
+                        <tr>
+                            <td><input type="checkbox" name="id" value="{{ AllSettingStatusType.id }}"></td>
+                            <td>
+                                <span>{{ AllSettingStatusType.namestatustype }}</span>
+                            </td>
+                            <td>
+                                <i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown"
+                                    aria-expanded="false"></i>
+                                <ul class="dropdown-menu dropdown-menu-lg-end shadow-sm text-center">
+                                    <li><a class="dropdown-item btn-0 btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#edititemcatecory-{{forloop.counter}}">แก้ไข</a>
+                                    </li>
+                                    <li><a data-bs-toggle="modal"
+                                            data-bs-target="#deleteitemcategory-{{forloop.counter}}"
+                                            class="dropdown-item btn-0 btn-sm">ลบ</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <p class="text-center">ยังไม่มีข้อมูลรายการรูปแบบสถานะ</p>
+
+                        {% endfor %}
+                    </tbody>
+                    <p class="btn btn-outline-dark rounded-pill mt-2" data-bs-toggle="modal"
+                        data-bs-target="#additemcatecory">เพิ่มรูปแบบสถานะ</p>
+                </table>
+                <script language="JavaScript">
+                    function toggle(source) {
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i] != source)
+                                checkboxes[i].checked = source.checked;
+                        }
+                    }
+                </script>
+                <input type="checkbox" class="small" onclick="toggle(this);" /><span class="ps-2 pe-3 small">Select all</span> 
+                <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#delete_multi"><i class=" fa fa-trash "></i> ลบที่เลือก</a>
+                <!-- อนุมัติ -->
+                <div class="modal fade" id="delete_multi" tabindex="-1" aria-labelledby="approvedModal"
+                aria-hidden="true">
+                    <div class="modal-dialog modal-lg
+                        modal-fullscreen-lg-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="approvedModal">ยืนยันการลบที่เลือก</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn
+                                    btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-warning
+                                    rounded-pill">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+            {% for AllSettingStatusType in page.object_list %}
+            <!-- moal ลบ -->
+            <div class="modal fade" id="deleteitemcategory-{{forloop.counter}}" tabindex="-1"
+                aria-labelledby="deleteitemModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg
+                modal-fullscreen-lg-down">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edititemModal">ยืนยันการลบข้อมูล</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <span class="fw-bold">ตำแหน่ง : </span><span class="small text-black-50">{{AllSettingStatusType.nameposition }}</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn
+                            btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                            <a href="/deleteStatusType/{{AllSettingStatusType.id }}" type="submit"
+                                class="btn btn-warning rounded-pill">ยืนยัน</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- moal แก้ไขรายการ -->
+            <div class="modal fade" id="edititemcatecory-{{forloop.counter}}" tabindex="-1"
+                aria-labelledby="edititemModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg
+                modal-fullscreen-lg-down">
+                    <form action="/edit_status_type/{{AllSettingStatusType.id }}" method="POST"
+                        enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="edititemModal">แก้ไขรูปแบบสถานะ</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <div class="col">
+                                        <input type="text" class="form-control rounded-pill"
+                                            name="namestatustype" id="namestatustype"
+                                            value="{{ AllSettingStatusType.namestatustype }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn
+                            btn-secondary rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-warning rounded-pill">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="page-links">
+                {% if page.has_previous %}
+                <div class="ps-5 pb-3">
+                <a href="?page={{ page.previous_page_number }}">หน้าก่อนหน้า</a>
+                </div>
+                {% endif %}
+                {% if page.has_next %}
+                <div class="ps-5 pb-3">
+                <a href="?page={{ page.next_page_number }}">หน้าถัดไป</a>
+                </div>
+                {% endif %}
+            </div>
+            <!-- moal เพิ่มรายการ -->
+            <div class="modal fade" id="additemcatecory" tabindex="-1" aria-labelledby="additemModal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
+                    <form method="post" action="/staff_setting_status_type" enctype='multipart/form-data'>
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="additemModal">เพิ่มตำแหน่ง</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <div class="col" for="nameposition">
+                                        <input type="text" class="form-control
+                                        rounded-pill" name="namestatustype" id="namestatustype"
+                                            placeholder="รูปแบบสถานะ">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary
+                                rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-warning
+                                rounded-pill">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
