@@ -55,7 +55,7 @@
                     <a class="nav-link fs-6  {% if navbar == 'staff_position' %} active {% endif %}" aria-current="page" href="{% url 'staff_position' %}">ข้อมูลชั้นวาง</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_manage_parcel' or navbar == 'staff_manage_durable'%} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
+                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_manage_parcel' or navbar == 'staff_manage_durable' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">จัดการรายการ</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'staff_manage_parcel' %}" >วัสดุ</a></li>
@@ -63,14 +63,13 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_setting' or navbar == 'staff_setting_status' or navbar == 'staff_setting_position' or navbar == 'staff_setting_status_type' or navbar == 'staff_setting_status'  %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {% if navbar == 'staff_setting' or navbar == 'staff_setting_status' or navbar == 'staff_setting_position' %} active {% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         ตั้งค่า
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'staff_setting' %}">จัดการหมวดหมู่</a></li>
+
                         <li><a class="dropdown-item" href="{% url 'staff_setting_position' %}">จัดการชั้นวาง</a></li>
-                        <li><a class="dropdown-item" href="{% url 'staff_setting_status_type' %}">จัดการรูปแบบสถานะ</a></li>
-                        <li><a class="dropdown-item" href="{% url 'staff_setting_status' %}">จัดการสถานะ</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

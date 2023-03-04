@@ -74,7 +74,7 @@ def HomePage(req):
          return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})     
 
 def Home(req):
-    # try:
+    try:
         if req.user.is_authenticated:
             AllParcel = Add_Parcel.objects.all()
             AllDurable = Add_Durable.objects.all()
@@ -83,10 +83,6 @@ def Home(req):
             TotalParcel = AllCartParcel_sum.get('quantity__sum') or 0
             TotalDurable = AllCartDurabl_sum.get('quantity__sum') or 0
             Total = TotalParcel + TotalDurable
-            status_obj = SettingStatus.objects.get(namestatus='รอยืนยันการรับ')
-            AllLoanParcel = LoanParcel.objects.filter(status=status_obj, user=req.user)
-            AllLoanDurable = LoanDurable.objects.filter(status=status_obj, user=req.user)
-
             AllLoanParcel = LoanParcel.objects.filter(Q(status='รอยืนยันการรับ'), user=req.user)
             AllLoanDurable = LoanDurable.objects.filter(Q(status='รอยืนยันการรับ') , user=req.user)
             if req.user:
@@ -130,10 +126,10 @@ def Home(req):
             return render(req, 'pages/Home.html', context)
         else:
             return redirect('login')
-    # except Http404:
-    #     return render(req, '404_Error_Page.html')        
-    # except Exception as e:
-    #     return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
+    except Http404:
+        return render(req, '404_Error_Page.html')        
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})
 
 
 def phone_add_number(req):
@@ -1445,7 +1441,7 @@ def user_durable_articles(req):
             AllDurable = Add_Durable.objects.all()
             AllParcel = Add_Parcel.objects.all()
             AllCategoryType = CategoryType.objects.all()
-            statustype_list = [i[0] for i in SettingStatustype.namestatustype]
+            statustype_list = [i[0] for i in STATUSTYPE]
             nametype_list = [i[0] for i in NAMETYPE] 
             AllCartParcel_sum = CartParcel.objects.filter(user=req.user).aggregate(Sum('quantity'))
             AllCartDurabl_sum = CartDurable.objects.filter(user=req.user).aggregate(Sum('quantity'))
@@ -1517,7 +1513,7 @@ def login_user_durable_articles(req):
         AllDurable = Add_Durable.objects.all()
         AllParcel = Add_Parcel.objects.all()
         AllCategoryType = CategoryType.objects.all()
-        statustype_list = [i[0] for i in SettingStatustype.namestatustype]
+        statustype_list = [i[0] for i in STATUSTYPE]
         nametype_list = [i[0] for i in NAMETYPE] 
         if 'sort' in req.GET:
             last_sort = req.GET.get('sort', 'default')

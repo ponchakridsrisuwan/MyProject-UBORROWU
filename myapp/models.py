@@ -4,17 +4,17 @@ from django.forms import ValidationError
 from myappSuper.models import *
 from myappstaff.models import *
 
-# BORROWSTATUS = (
-#         ('รออนุมัติ', 'รออนุมัติ'),
-#         ('อนุมัติ', 'อนุมัติ'),
-#         ('ไม่อนุมัติ', 'ไม่อนุมัติ'),
-#         ('รอยืนยันการรับ', 'รอยืนยันการรับ'),
-#         ('กำลังยืม', 'กำลังยืม'),
-#         ('รอยืนยันการคืน', 'รอยืนยันการคืน'),
-#         ('ยืมสำเร็จ', 'ยืมสำเร็จ'),
-#         ('คืนสำเร็จ', 'คืนสำเร็จ'),
-#         ('คืนไม่สำเร็จ', 'คืนไม่สำเร็จ'),
-#     )
+BORROWSTATUS = (
+        ('รออนุมัติ', 'รออนุมัติ'),
+        ('อนุมัติ', 'อนุมัติ'),
+        ('ไม่อนุมัติ', 'ไม่อนุมัติ'),
+        ('รอยืนยันการรับ', 'รอยืนยันการรับ'),
+        ('กำลังยืม', 'กำลังยืม'),
+        ('รอยืนยันการคืน', 'รอยืนยันการคืน'),
+        ('ยืมสำเร็จ', 'ยืมสำเร็จ'),
+        ('คืนสำเร็จ', 'คืนสำเร็จ'),
+        ('คืนไม่สำเร็จ', 'คืนไม่สำเร็จ'),
+    )
 
 
 class ListFromRec(models.Model):
@@ -26,7 +26,7 @@ class ListFromRec(models.Model):
     link = models.URLField(max_length=200, default="")
     description = models.TextField(max_length=500, default="")
     datetime = models.DateTimeField(auto_now_add=True, null=True)
-    status = models.ForeignKey(SettingStatus, on_delete=models.CASCADE, default="รออนุมัติ", blank=True,  related_name="statusrec")
+    status = models.CharField(max_length=200, choices = BORROWSTATUS, default="รออนุมัติ")
     reasonfromstaff = models.TextField(max_length=500, default="")
     
     def total(self):
@@ -95,7 +95,7 @@ class LoanParcel(models.Model):
     description = models.TextField(max_length=500)
     reasonfromstaff = models.TextField(max_length=500, default="")
     #datefromstaff = models.DateField(auto_now=False)
-    status = models.ForeignKey(SettingStatus, on_delete=models.CASCADE, default="รออนุมัติ", blank=True,  related_name="statusrecparcel")
+    status = models.CharField(max_length=200, choices = BORROWSTATUS, default="รออนุมัติ")
     name = models.CharField(max_length=200, default="", blank=True) 
     type = models.CharField(max_length=200, default="", blank=True)   
     quantity = models.IntegerField(default=1) 
@@ -115,7 +115,7 @@ class LoanDurable(models.Model):
     description = models.TextField(max_length=500)
     reasonfromstaff = models.TextField(max_length=500, default="")
     #datefromstaff = models.DateField(auto_now=False)
-    status = models.ForeignKey(SettingStatus, on_delete=models.CASCADE, default="รออนุมัติ", blank=True,  related_name="statusrecdurable")
+    status = models.CharField(max_length=200, choices = BORROWSTATUS, default="รออนุมัติ")
     name = models.CharField(max_length=200, default="", blank=True) 
     type = models.CharField(max_length=200, default="", blank=True)    
     quantity = models.IntegerField(default=1)

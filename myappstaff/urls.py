@@ -45,8 +45,6 @@ urlpatterns = [
     
     path('staff_queue/', views.staff_queue, name="staff_queue"),
     path('staff_queue_durable/', views.staff_queue_durable, name="staff_queue_durable"),
-
-    path('staff_position',views.staff_position, name='staff_position'),
     
     #path manage parcel durable
     path('staff_manage_detail/<int:id>', views.staff_manage_detail, name="staff_manage_detail"),
@@ -81,20 +79,11 @@ urlpatterns = [
     path('delete_multi_CategoryType',views.delete_multi_CategoryType, name="delete_multi_CategoryType"),
     path('edit_staff_setting/<int:id>',views.edit_staff_setting, name="edit_staff_setting"),
     
+    path('staff_position',views.staff_position, name='staff_position'),
     path('staff_setting_position',views.staff_setting_position, name='staff_setting_position'),
     path('deletePosition/<int:id>',views.deletePosition, name="deletePosition"), 
     path('delete_multi_Position',views.delete_multi_Position, name="delete_multi_Position"),
     path('edit_position/<int:id>',views.edit_position, name="edit_position"),
-
-    path('staff_setting_status_type',views.staff_setting_status_type, name='staff_setting_status_type'),
-    path('deleteStatusType/<int:id>',views.deleteStatusType, name="deleteStatusType"), 
-    path('delete_multi_Status_Type',views.delete_multi_Status_Type, name="delete_multi_Status_Type"),
-    path('edit_status_type/<int:id>',views.edit_status_type, name="edit_status_type"),
-
-    path('staff_setting_status',views.staff_setting_status, name='staff_setting_status'),
-    path('deleteStatus/<int:id>',views.deleteStatus, name="deleteStatus"), 
-    path('delete_multi_Status',views.delete_multi_Status, name="delete_multi_Status"),
-    path('edit_status/<int:id>',views.edit_status, name="edit_status"),
 
     path('csv_parcel_download',views.csv_parcel_download, name="csv_parcel_download"), 
     path('csv_durable_download',views.csv_durable_download, name="csv_durable_download"),
