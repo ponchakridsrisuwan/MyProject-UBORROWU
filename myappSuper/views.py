@@ -343,20 +343,12 @@ def person_upload(req):
             io_string = io.StringIO(data_set)
             next(io_string)
             for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-<<<<<<< HEAD
                 if not Profile.objects.filter(email=column[2]).exists():
                     Profile.objects.create(
                         firstname=column[0],
                         lastname=column[1],
                         email=column[2],
                     )
-=======
-                Profile.objects.create(
-                    firstname=column[0],
-                    lastname=column[1],
-                    email=column[2],
-                )
->>>>>>> parent of b4772a9 (edit model)
             messages.success(req, 'CSV file อัพโหลดสำเร็จ')
             return redirect('person_upload')
         except Exception as e:
@@ -480,12 +472,13 @@ def person_upload_staff(req):
             io_string = io.StringIO(data_set)
             next(io_string)
             for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-                ProfileStaff.objects.create(
-                    firstname=column[0],
-                    lastname=column[1],
-                    email=column[2],
-                )
-            messages.success(req, 'CSV file อัพโหลดสำเร็จ')
+                if not ProfileStaff.objects.filter(email=column[2]) or not Profile.objects.filter(email=column[2]).exists():
+                    ProfileStaff.objects.create(
+                        firstname=column[0],
+                        lastname=column[1],
+                        email=column[2],
+                    )
+                messages.success(req, 'CSV file อัพโหลดสำเร็จ')
             return redirect('person_upload_staff')
         except Exception as e:
             messages.error(req, f'เกิดข้อผิดพลาดขณะอัพโหลด CSV file : {e}')
