@@ -56,6 +56,7 @@
         </div>
         <div class="col-md-4">
             <div class="p-3 py-5">
+                {% if AllUser.right != "ผู้ดูแลระบบ" %}
                 <p class="fs-5 fw-bold">จัดการสิทธิ์</p>
                 <p class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#ManageUser">
                     จัดการการระงับสิทธิ์</p>
@@ -64,6 +65,7 @@
                     <i class="fa fa-info-circle " style="font-size:20px; color:rgb(197, 197, 197)" data-bs-toggle="tooltip" data-bs-placement="right"
                     title="การบล็อค"></i>
                 <hr>
+                {% endif %}
                 <div>
                     <p class="fs-5 fw-bold">กิจกรรมการเข้าสู่ระบบ</p>
                     <p class="fw-bold">ครั้งแรกที่เข้ามายังเว็บไซต์</p>

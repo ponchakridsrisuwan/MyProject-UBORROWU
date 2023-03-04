@@ -20,6 +20,18 @@ class ProfileForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control rounded-pill'}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+
+        if Profile.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email already exists in Profile')
+        
+        if ProfileStaff.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email already exists in ProfileStaff')
+
+        return cleaned_data
+    
 class ProfileStaffForm(forms.ModelForm):
     class Meta:
         model = ProfileStaff
@@ -34,3 +46,15 @@ class ProfileStaffForm(forms.ModelForm):
             'lastname': forms.TextInput(attrs={'class': 'form-control rounded-pill'}),
             'email': forms.EmailInput(attrs={'class': 'form-control rounded-pill'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+
+        if Profile.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email already exists in Profile')
+        
+        if ProfileStaff.objects.filter(email=email).exists():
+            raise forms.ValidationError('This email already exists in ProfileStaff')
+
+        return cleaned_data
