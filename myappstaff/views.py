@@ -1205,7 +1205,7 @@ def staff_manage_parcel(req):
                 if parcel.name == column[0]:
                     parcel.quantity += int(column[7])
                     parcel.save()
-                    messages.warning(req, f'เพิ่มจำนวน {parcel.name} สำเร็จ!')
+                    messages.success(req, f'เพิ่มจำนวน {parcel.name} สำเร็จ!')
                     match_found = True
                     break
             if not match_found:
@@ -1367,7 +1367,7 @@ def staff_manage_durable(req):
                 if durable.name == column[0]:
                     durable.quantity += int(column[7])
                     durable.save()
-                    messages.warning(req, f'เพิ่มจำนวน {durable.name} สำเร็จ!')
+                    messages.success(req, f'เพิ่มจำนวน {durable.name} สำเร็จ!')
                     match_found = True
                     break
             if not match_found:
