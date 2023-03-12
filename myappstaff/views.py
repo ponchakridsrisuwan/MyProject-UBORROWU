@@ -1835,10 +1835,6 @@ def staff_user_deadline_multi(req):
         objs = User.objects.filter(id__in=ids)
         deadline_str = req.POST['deadline']
         for obj in objs:
-            if obj.phone is None or obj.token is None:
-                continue
-            if obj.status == "ถูกจำกัดสิทธิ์" or obj.right == "นักศึกษา":
-                continue
             if deadline_str == '':
                 obj.deadline = datetime.now() + timedelta(days=7)
             else:
