@@ -3,6 +3,7 @@ from myappSuper.views import *
 from . import views
 
 urlpatterns = [
+    path('admin_personal_info', views.admin_personal_info, name="admin_personal_info"),
     path('admin_detail/<int:id>',views.admin_detail, name="admin_detail"), #delete
     
     path('admin_user',views.admin_user, name="admin_user"),

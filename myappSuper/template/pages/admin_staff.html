@@ -11,8 +11,7 @@
                     </div>
                     <div class="d-flex flex-row col-md-12 col-lg-6 justify-content-end">
                         <div>
-                            <p class="fw-bold">จำนวนเจ้าหน้าที่ {{ AllUserStaff_count.count }} คน จำนวนผู้ดูแลระบบ
-                                {{AllUser_count_admin.count }} คน</p>
+                            <p class="fw-bold">จำนวนเจ้าหน้าที่ {{ AllUserStaff_count.count }} คน</p>
                         </div>
                     </div>
                 </div>
@@ -58,7 +57,7 @@
                     </thead>
                     <tbody id="xTable">
                         {% for AllUserStaff in AllUserStaff %}
-                        {% if AllUserStaff.right == "เจ้าหน้าที่" and AllUserStaff.status == "ปกติ" or AllUserStaff.right == "ผู้ดูแลระบบ" %}
+                        {% if AllUserStaff.right == "เจ้าหน้าที่" and AllUserStaff.status == "ปกติ" %}
                         <tr class="qrow">
                             <td>{{AllUserStaff.first_name}}&nbsp{{AllUserStaff.last_name}}</td>
                             <td>{{ AllUserStaff.email }}</td>

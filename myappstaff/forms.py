@@ -13,6 +13,10 @@ class All_CategoryTypeForm(ModelForm):
         model = CategoryType
         fields = ["name_CategoryType"]            
 
+class All_CategoryStatusForm(ModelForm):
+    class Meta:
+        model = CategoryStatus
+        fields = ["name_CategoryStatus"]                   
 
 class ParcelForm(forms.ModelForm):
     class Meta:
