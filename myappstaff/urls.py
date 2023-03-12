@@ -64,6 +64,7 @@ urlpatterns = [
     
     path('staff_setting_status',views.staff_setting_status, name='staff_setting_status'),
     path('DeleteCategoryStatus/<int:id>',views.DeleteCategoryStatus, name="DeleteCategoryStatus"),
+    path('delete_multi_CategoryStatus',views.delete_multi_CategoryStatus, name="delete_multi_CategoryStatus"),
     path('edit_staff_setting_status/<int:id>',views.edit_staff_setting_status, name="edit_staff_setting_status"),
     
     path('pdf_print',views.pdf_print, name='pdf_print'),

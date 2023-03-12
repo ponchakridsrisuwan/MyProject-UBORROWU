@@ -31,9 +31,11 @@ import csv, io, os
 @login_required
 def staff_setting_status(req):
     if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
-        return redirect('/')
+            messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
+            return redirect('Home')
     if req.user.phone is None or req.user.token is None:
-        return redirect('/phone_add_number')
+            messages.warning(req, 'กรุณาเพิ่มเบอร์โทรศัพท์และ Token')
+            return redirect('/phone_add_number')
     if req.method == "POST":
         name_CategoryStatus = req.POST.get('name_CategoryStatus')
         obj = CategoryStatus(name_CategoryStatus=name_CategoryStatus)
@@ -55,7 +57,21 @@ def staff_setting_status(req):
         "All_CategoryStatus": CategoryStatus.objects.all(),
         "page" : page
     }    
-    return render(req, 'pages/staff_setting_status.html', context)  
+    return render(req, 'pages/staff_setting_status.html', context) 
+
+@login_required
+def delete_multi_CategoryStatus(req):
+    try:
+        if req.method == 'POST':
+            ids = req.POST.getlist('id')
+            CategoryStatus.objects.filter(id__in=ids).delete()
+            messages.success(req, 'ลบสำเร็จ!')
+            return redirect('/staff_setting_status')
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})      
+
 
 @login_required
 def DeleteCategoryStatus(req, id):
