@@ -19,11 +19,6 @@ QUANTITYTYPE = (
         ('∞', '∞'),
     )
 
-STATUS = (
-    ("พร้อมยืม","พร้อมยืม" ),
-    ("ไม่พร้อมยืม","ไม่พร้อมยืม" ),
-)
-
 class SettingPosition(models.Model):
     nameposition = models.CharField(max_length=100, default="", blank=True)
 
@@ -34,7 +29,13 @@ class CategoryType(models.Model):
     name_CategoryType = models.CharField(max_length=100, default="", blank=True)
 
     def __str__(self):
-        return self.name_CategoryType              
+        return self.name_CategoryType          
+
+class CategoryStatus(models.Model):
+    name_CategoryStatus = models.CharField(max_length=100, default="", blank=True)
+
+    def __str__(self):
+        return self.name_CategoryStatus             
 
 class Add_Parcel(models.Model):
     # id วัสดุไม่ต้องคืน
@@ -42,7 +43,7 @@ class Add_Parcel(models.Model):
     nametype = models.CharField(max_length=200, choices = NAMETYPE, default="วัสดุ")
     nameposition = models.ForeignKey(SettingPosition, on_delete=models.CASCADE, default="", blank=True,  related_name="position_parcel")
     category = models.ForeignKey(CategoryType, on_delete=models.CASCADE, default="", blank=True,  related_name="category_parcel")
-    status = models.CharField(max_length=200, choices = STATUS, default="พร้อมยืม")
+    status = models.ForeignKey(CategoryStatus, on_delete=models.CASCADE, default="", blank=True,  related_name="status_parcel")
     statustype = models.CharField(max_length=200, choices = STATUSTYPE, default="ไม่ต้องคืน")
     quantitytype = models.CharField(max_length=200, choices = QUANTITYTYPE, default="ต้องการระบุจำนวน")
     quantity = models.IntegerField(default= 1 )
@@ -60,7 +61,7 @@ class Add_Durable(models.Model):
     nameposition = models.ForeignKey(SettingPosition, on_delete=models.CASCADE, default="", blank=True,  related_name="position_durable")
     nametype = models.CharField(max_length=200, choices = NAMETYPE, default="ครุภัณฑ์")
     category = models.ForeignKey(CategoryType, on_delete=models.CASCADE, default="", blank=True ,related_name="category_durable")
-    status = models.CharField(max_length=200, choices = STATUS, default="พร้อมยืม")
+    status = models.ForeignKey(CategoryStatus, on_delete=models.CASCADE, default="", blank=True , related_name="status_durable")
     statustype = models.CharField(max_length=200, choices = STATUSTYPE, default="ต้องคืน")
     quantitytype = models.CharField(max_length=200, choices = QUANTITYTYPE, default="ต้องการระบุจำนวน")
     quantity = models.IntegerField(default=1 )

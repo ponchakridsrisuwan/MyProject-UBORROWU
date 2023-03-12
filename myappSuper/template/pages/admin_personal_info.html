@@ -1,0 +1,79 @@
+{% extends 'homeAdmin.html' %}
+{% block main %}
+<div class="container rounded bg-white mt-1 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-pill mt-5"
+                    width="90" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+                <span class="font-weight-bold">{{user.first_name}}&nbsp{{user.last_name}}</span>
+                <span class="text-black-50">{{user.right}}&nbsp{{user.status}}</span>
+                {% if user.status == "ถูกจำกัดสิทธิ์" %}
+                <span data-bs-toggle="modal" data-bs-target="#detail"
+                    class="btn btn-warning rounded-pill badge">รายละเอียดการถูกระงับสิทธิ์</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-right fs-5 fw-bold">ข้อมูลส่วนตัว</p>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label class="labels">ชื่อ</label>
+                        <input type="text" class="form-control rounded-pill" value="{{user.first_name}}" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labels">นามสกุล</label>
+                        <input type="text" class="form-control  rounded-pill" value="{{user.last_name}}" disabled>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <label class="labels">อีเมล</label>
+                        <input type="email" class="form-control rounded-pill" value="{{user.email}}" disabled>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <label class="labels">เบอร์โทร</label>
+                        <input type="text" class="form-control rounded-pill" value="{{user.phone}}" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div>
+                    <p class="fs-5 fw-bold">กิจกรรมการเข้าสู่ระบบ</p>
+                    <p class="fw-bold">ครั้งแรกที่เข้ามายังเว็บไซต์</p>
+                    <p class="small">{{ user.date_joined|date:"G:i l j F Y" }}</p>
+                    <p class="fw-bold">เข้ามายังเว็บไซต์ครั้งสุดท้าย เมื่อ</p>
+                    <p class="small">{{ user.last_login|date:"G:i l j F Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- รายละเอียดการถูกระงับสิทธิ์ -->
+<div class="modal fade" id="detail" tabindex="-1" aria-labelledby="detailModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg
+                         modal-fullscreen-lg-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModal">รายละเอียดการถูกระงับสิทธิ์</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span class="fw-bold">ถูกระงับสิทธิ์เมื่อ : </span><span class="small text-black-50">{{ user.datestatus}}</span><br>
+                <span class="fw-bold">ระยะเวลากลับสู่สถานะปกติ : </span><span class="small text-black-50">{{ user.deadline }}</span><br>
+                <span class="fw-bold">เหตุผลการระงับสิทธิ์ : </span>
+                <span class="small text-black-50">{{ user.reasonfromstaff }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

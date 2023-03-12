@@ -22,7 +22,16 @@ import csv, io, os
 from django.conf import settings
 from django.db import transaction
 
-
+@login_required
+def admin_personal_info(req):
+    try:
+        if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา" or req.user.token == None:
+            return redirect('Home')
+        return render(req,'pages/admin_personal_info.html')
+    except Http404:
+        return render(req, '404_Error_Page.html')
+    except Exception as e:
+        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})  
 
 @login_required
 def admin_detail(req, id):

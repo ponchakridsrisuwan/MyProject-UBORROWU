@@ -29,6 +29,58 @@ from django.conf import settings
 import csv, io, os
 
 @login_required
+def staff_setting_status(req):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    if req.method == "POST":
+        name_CategoryStatus = req.POST.get('name_CategoryStatus')
+        obj = CategoryStatus(name_CategoryStatus=name_CategoryStatus)
+        obj.save()
+        messages.success(req, 'เพิ่มสถานะสำเร็จ!')
+        return redirect('/staff_setting_status')   
+    else:
+        obj = CategoryStatus()   
+    obj = CategoryStatus.objects.all()   
+    AllCategoryStatus = CategoryStatus.objects.all()
+    page_num = req.GET.get('page', 1)
+    p = Paginator(AllCategoryStatus, 10)
+    try:
+        page = p.page(page_num)
+    except:
+        page = p.page(1)
+    context = {
+        "navbar" : "staff_setting_status",
+        "All_CategoryStatus": CategoryStatus.objects.all(),
+        "page" : page
+    }    
+    return render(req, 'pages/staff_setting_status.html', context)  
+
+@login_required
+def DeleteCategoryStatus(req, id):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    obj = CategoryStatus.objects.get(id=id)
+    obj.delete()
+    messages.success(req, 'ลบสำเร็จ!')
+    return redirect('/staff_setting_status')
+
+@login_required
+def edit_staff_setting_status(req,id):
+    if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
+        return redirect('/')
+    if req.user.phone is None or req.user.token is None:
+        return redirect('/phone_add_number')
+    obj = CategoryStatus.objects.get(id=id)
+    obj.name_CategoryStatus = req.POST['name_CategoryStatus']
+    obj.save()
+    messages.success(req, 'แก้ไขสำเร็จ!')
+    return redirect('/staff_setting_status')
+
+@login_required
 def staff_setting_position(req):
     try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
@@ -1127,7 +1179,6 @@ def staff_manage_detail_durable(req, id):
 # จัดการวัสดุ
 @login_required
 def staff_manage_parcel(req):
-    try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
@@ -1211,12 +1262,13 @@ def staff_manage_parcel(req):
             if not match_found:
                 position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
                 category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
+                status, _ = CategoryStatus.objects.get_or_create(name_CategoryStatus=column[4])
                 Add_Parcel.objects.create(
                     name=column[0],
                     nameposition=position,
                     nametype=column[2],
                     category=category,
-                    status=column[4],
+                    status=status,
                     statustype=column[5],
                     quantitytype=column[6],
                     quantity=column[7],
@@ -1224,10 +1276,6 @@ def staff_manage_parcel(req):
                 )
         messages.success(req, 'เพิ่มรายการสำเร็จ!')
         return redirect('staff_manage_parcel')
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
 
 @login_required
 def edit_staff_manage_parcel(req, id):
@@ -1373,12 +1421,13 @@ def staff_manage_durable(req):
             if not match_found:
                 position, _ = SettingPosition.objects.get_or_create(nameposition=column[1])
                 category, _ = CategoryType.objects.get_or_create(name_CategoryType=column[3])
+                status, _ = CategoryStatus.objects.get_or_create(name_CategoryStatus=column[4])
                 Add_Durable.objects.create(
                     name=column[0],
                     nameposition=position,
                     nametype=column[2],
                     category=category,
-                    status=column[4],
+                    status=status,
                     statustype=column[5],
                     quantitytype=column[6],
                     quantity=column[7],
@@ -1748,7 +1797,6 @@ def staff_admin_user_block(req):
 
 @login_required
 def staff_user_deadline(req, id):
-    try:
         if req.user.status == "ถูกจำกัดสิทธิ์" or req.user.right == "นักศึกษา":
             messages.warning(req, 'คุณถูกจำกัดสิทธิ์หรือไม่ใช่เจ้าหน้าที่')
             return redirect('Home')
@@ -1765,7 +1813,6 @@ def staff_user_deadline(req, id):
         obj.status = "ถูกจำกัดสิทธิ์"
         obj.save()
         messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-        #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
         users = User.objects.filter(status="ถูกจำกัดสิทธิ์")
         datetime_th = th_tz.localize(datetime.now())
         for user in users:
@@ -1776,55 +1823,44 @@ def staff_user_deadline(req, id):
                                 'content-type': 'application/x-www-form-urlencoded',
                                 'Authorization': 'Bearer ' + token 
                                 }
-                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reason, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
                 msg = ' '.join(map(str, msg)) 
                 requests.post(url, headers=headers, data={'message': msg})
         return redirect('/staff_admin_user_block') 
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
-
+    
 @login_required
 def staff_user_deadline_multi(req):
-    try:
-        if req.method == 'POST':
-            ids = req.POST.getlist('id')
-            objs = User.objects.filter(id__in=ids)
-            deadline_str = req.POST['deadline']
+    if req.method == 'POST':
+        ids = req.POST.getlist('id')
+        objs = User.objects.filter(id__in=ids)
+        deadline_str = req.POST['deadline']
+        for obj in objs:
+            if obj.phone is None or obj.token is None:
+                continue
+            if obj.status == "ถูกจำกัดสิทธิ์" or obj.right == "นักศึกษา":
+                continue
             if deadline_str == '':
-                deadline = datetime.now() + timedelta(days=7)
+                obj.deadline = datetime.now() + timedelta(days=7)
             else:
-                deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
-            reasonfromstaff = req.POST['reasonfromstaff']
-            for obj in objs:
-                if obj.phone is None or obj.token is None:
-                    continue
-                if obj.status == "ถูกจำกัดสิทธิ์" or obj.right == "นักศึกษา":
-                    continue
-                obj.deadline = deadline
-                obj.reasonfromstaff = reasonfromstaff
-                obj.status = "ถูกจำกัดสิทธิ์"
-                obj.save()
-                #admin_user_return_task.apply_async(args=[obj.id], eta=obj.deadline)
-                datetime_th = th_tz.localize(datetime.now())
-                if obj.token:
-                    url = 'https://notify-api.line.me/api/notify'
-                    token = obj.token 
-                    headers = {
-                                    'content-type': 'application/x-www-form-urlencoded',
-                                    'Authorization': 'Bearer ' + token 
-                                    }
-                    msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
-                    msg = ' '.join(map(str, msg)) 
-                    requests.post(url, headers=headers, data={'message': msg})
-            messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
-        return redirect('/staff_admin_user_block')
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})   
+                obj.deadline = datetime.strptime(deadline_str, '%Y-%m-%d')
+            obj.reasonfromstaff = req.POST['reasonfromstaff']
+            obj.status = "ถูกจำกัดสิทธิ์"
+            obj.save() 
+            datetime_th = th_tz.localize(datetime.now())
+            if obj.token:
+                url = 'https://notify-api.line.me/api/notify'
+                token = obj.token 
+                headers = {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + token 
+                }
+                msg = ['คุณถูกระงับสิทธิ์เป็นระยะเวลา ', obj.deadline, 'วัน เหตุผล : ', obj.reasonfromstaff, 'วันที่ถูกระงับ : ', datetime_th.strftime("%Y-%m-%d %H:%M") ] 
+                msg = ' '.join(map(str, msg)) 
+                requests.post(url, headers=headers, data={'message': msg})
+        messages.success(req, 'เปลี่ยนสถานะสำเร็จ!')
+    return redirect('/staff_admin_user_block')
 
+    
 @login_required
 def staff_user_return(req, id):
     try:

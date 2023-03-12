@@ -11,13 +11,11 @@ from django.core.paginator import Paginator
 from myapp.forms import *
 from myappSuper.models import *
 from myappstaff.models import *
-import datetime
+from datetime import datetime
 from django.contrib import messages
 import requests
-from datetime import datetime
 from pytz import timezone as timezonenow
 th_tz = timezonenow('Asia/Bangkok')
-from datetime import datetime
 import csv
 import pickle
 from mlxtend.preprocessing import TransactionEncoder
@@ -450,8 +448,7 @@ def user_borrowed(req):
                 "search_durable" : search_durable,
             }
             return render(req,'pages/user_borrowed.html', context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -511,8 +508,7 @@ def user_history(req):
                 "search_parcel" : search_parcel,
             }
             return render(req,'pages/user_history.html', context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -573,8 +569,7 @@ def user_history_durable(req):
                 "search_durable" : search_durable,
             }
             return render(req,'pages/user_history_durable.html', context)    
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -607,8 +602,7 @@ def user_cart(req):
                 "Total" : Total,
             }
             return render(req, 'pages/user_cart.html',context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -653,8 +647,7 @@ def add_to_cart(req, id):
                     messages.success(req, 'เพิ่มรายการสำเร็จ!')
                 queue_parcel = QueueParcel.objects.filter(user=req.user, queue_item=parcel_item).delete()
             return redirect('/user_cart')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -679,8 +672,7 @@ def add_to_queue(req, id):
             queue_parcel.save()
             messages.success(req, 'จองคิวสำเร็จ!')
             return redirect('/user_queue')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -710,8 +702,7 @@ def cart_update(req, id):
                         parcel_item.quantity -= 1
                         parcel_item.save()
             return redirect('/user_cart')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -745,8 +736,7 @@ def cart_notupdate(req, id):
                 if cart_parcel.quantity < 0:
                     cart_parcel.delete()
             return redirect('/user_cart')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -804,8 +794,7 @@ def user_queue(req):
                 "last_sort" : last_sort,
             }
             return render(req, 'pages/user_queue.html', context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -813,7 +802,6 @@ def user_queue(req):
 
 @login_required
 def add_multiple_to_borrow_parcel(req):
-    try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
@@ -829,7 +817,7 @@ def add_multiple_to_borrow_parcel(req):
             if start_date is None or start_date == "":
                 start_date = date.today()
             else:
-                start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
+                start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
             for cart_parcel in cart_parcels:
                 add_parcel = Add_Parcel.objects.get(id=cart_parcel.parcel_item.id)
                 if start_date < date.today():
@@ -862,12 +850,7 @@ def add_multiple_to_borrow_parcel(req):
                             msg = ' '.join(map(str, msg)) 
                             requests.post(url, headers=headers, data={'message': msg})
             return redirect('/user_borrow')
-        else:
-            return redirect("login")
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
+
 
 @login_required
 def delete_borrow_parcel(req, id):
@@ -897,8 +880,7 @@ def delete_borrow_parcel(req, id):
                     return redirect('Home')
             except LoanParcel.DoesNotExist:
                 return redirect('/user_cart')
-        else:
-            return redirect("login")    
+    
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -933,8 +915,7 @@ def delete_add_to_cart(req, id):
                     return redirect('/user_cart')
             else:
                 return redirect('/user_cart')
-        else:
-            return redirect("login")    
+    
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -953,8 +934,7 @@ def delete_queue(req, id):
             obj = QueueParcel.objects.get(id=id)
             obj.delete()
             return redirect('/user_queue')          
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1003,8 +983,7 @@ def add_to_cart_durable(req, id):
                     messages.success(req, 'เพิ่มรายการสำเร็จ!')    
                 queue_durable = QueueDurable.objects.filter(user=req.user, queue_item=durable_item).delete()    
             return redirect('/user_cart')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1028,8 +1007,7 @@ def add_to_queue_durable(req, id):
             queue_durable.save()
             messages.success(req, 'จองคิวสำเร็จ!')
             return redirect('/user_queue_durable')    
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1058,8 +1036,7 @@ def cart_update_durable(req, id):
                         durable_item.quantity -= 1
                         durable_item.save()
             return redirect('/user_cart')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1094,8 +1071,7 @@ def cart_notupdate_durable(req, id):
                 if cart_durable.quantity < 1:
                     cart_durable.delete()
             return redirect('/user_cart')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1153,8 +1129,7 @@ def user_queue_durable(req):
                 "search_q" : search_q,
             }
             return render(req, 'pages/user_queue_durable.html', context)    
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1162,7 +1137,6 @@ def user_queue_durable(req):
  
 @login_required    
 def add_multiple_to_borrow_durable(req):
-    try:
         if req.user.is_authenticated:
             if req.user.status == "ถูกจำกัดสิทธิ์":
                 messages.warning(req, 'คุณถูกจำกัดสิทธิ์')
@@ -1181,11 +1155,19 @@ def add_multiple_to_borrow_durable(req):
                 add_durable = Add_Durable.objects.get(id=cart_durable.durable_item.id)
                 if end_date_input:
                     end_date = datetime.strptime(end_date_input, '%Y-%m-%d').date()
+                    if start_date < date.today():
+                        start_date = date.today()
+                        end_date = start_date + timedelta(days=add_durable.numdate)
+                    else:
+                        duration = (end_date - start_date).days
+                        if duration > add_durable.numdate:
+                            end_date = start_date + timedelta(days=add_durable.numdate)
                 else:
                     end_date = start_date + timedelta(days=add_durable.numdate)
-                if start_date < date.today():
-                    pass
-                elif end_date < start_date:
+                    if start_date < date.today():
+                        start_date = date.today()
+                        end_date = start_date + timedelta(days=add_durable.numdate)
+                if end_date < start_date:
                     pass
                 else:
                     loan_durable = LoanDurable()
@@ -1218,12 +1200,7 @@ def add_multiple_to_borrow_durable(req):
                             msg = ' '.join(map(str, msg)) 
                             requests.post(url, headers=headers, data={'message': msg})
             return redirect('/user_borrow_durable')
-        else:
-            return redirect("login")
-    except Http404:
-        return render(req, '404_Error_Page.html')
-    except Exception as e:
-        return render(req, '404_Error_Page.html', {'message': f"Oops, something went wrong. Please try again later. Error message: {str(e)}"})         
+
 
 @login_required
 def delete_borrow_durable(req, id):
@@ -1253,8 +1230,7 @@ def delete_borrow_durable(req, id):
                     return redirect('Home')
             except LoanParcel.DoesNotExist:
                 return redirect('/user_cart')
-        else:
-            return redirect("login")    
+    
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1288,8 +1264,7 @@ def delete_durable_add_to_cart(req, id):
                     return redirect('/user_cart')
             else:
                 return redirect('/user_cart')  
-        else:
-            return redirect("login")    
+    
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1308,8 +1283,7 @@ def delete_queue_durable(req, id):
             obj = QueueDurable.objects.get(id=id)
             obj.delete()
             return redirect('/user_queue_durable')      
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1365,8 +1339,7 @@ def user_detail(req, id):
                 "pageparcel" : pageparcel,
             }
             return render(req,'pages/user_detail.html',context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1425,8 +1398,7 @@ def user_detail_durable(req, id):
                 "pagedurable" : pagedurable,
             }
             return render(req,'pages/user_detail_durable.html',context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1500,8 +1472,7 @@ def user_durable_articles(req):
                 "Total": Total,
             }
             return render(req, 'pages/user_durable_articles.html', context)  
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1619,8 +1590,7 @@ def user_recommend_history(req):
                 "search_rec" : search_rec,
             }
             return render(req, 'pages/user_recommend_history.html', context)     
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1738,8 +1708,7 @@ def user_recommend_edit(req,id):
             obj.save()
             messages.success(req, 'แก้ไขการแนะนำรายการสำเร็จ!')
             return redirect('/user_recommend') 
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1767,8 +1736,7 @@ def user_recommend_detail(req, id):
                 "Total" : Total,
             }
             return render( req, 'pages/user_recommend_detail.html', context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1788,8 +1756,7 @@ def deleteRecList(req, id):
             obj.delete()
             messages.success(req, 'ลบการแนะนำรายการสำเร็จ!')
             return redirect('/user_recommend')
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1803,8 +1770,7 @@ def delete_Multi_RecList(req):
                 ids = req.POST.getlist('id')
                 ListFromRec.objects.filter(id__in=ids).delete()
                 return redirect('user_recommend')
-        else:
-            return redirect("login") 
+ 
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:
@@ -1874,8 +1840,7 @@ def user_position(req):
                         "Total" : Total,
                         }    
             return render(req, 'pages/user_position.html', context)
-        else:
-            return redirect("login")
+
     except Http404:
         return render(req, '404_Error_Page.html')
     except Exception as e:

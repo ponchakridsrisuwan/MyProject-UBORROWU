@@ -62,6 +62,10 @@ urlpatterns = [
     path('delete_multi_staff_manage_durable',views.delete_multi_staff_manage_durable, name="delete_multi_staff_manage_durable"),
     path('edit_staff_manage_durable/<int:id>',views.edit_staff_manage_durable, name="edit_staff_manage_durable"), #edit
     
+    path('staff_setting_status',views.staff_setting_status, name='staff_setting_status'),
+    path('DeleteCategoryStatus/<int:id>',views.DeleteCategoryStatus, name="DeleteCategoryStatus"),
+    path('edit_staff_setting_status/<int:id>',views.edit_staff_setting_status, name="edit_staff_setting_status"),
+    
     path('pdf_print',views.pdf_print, name='pdf_print'),
     path('pdf_borrow',views.pdf_borrow, name='pdf_borrow'),
     path('pdf_borrow_durable',views.pdf_borrow_durable, name='pdf_borrow_durable'),
