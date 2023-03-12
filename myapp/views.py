@@ -829,7 +829,7 @@ def add_multiple_to_borrow_parcel(req):
             if start_date is None or start_date == "":
                 start_date = date.today()
             else:
-                start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
+                start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
             for cart_parcel in cart_parcels:
                 add_parcel = Add_Parcel.objects.get(id=cart_parcel.parcel_item.id)
                 if start_date < date.today():

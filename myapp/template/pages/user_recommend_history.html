@@ -1,6 +1,7 @@
 {% extends 'home.html' %} {% block main %}
 <div class=" container">
-  <div class="bg-white rounded-2 mb-4 px-5 py-3">
+  <div class="bg-white rounded-2 mb-3">
+    <div class="px-5 pt-3">
     <div class="d-flex justify-content-between rounded-2 align-items-center">
       <div>
         <h5 class="fw-bold">ประวัติการแนะนำรายการ</h5>
@@ -26,7 +27,9 @@
           </form>
       </div>
   </div>
-    <div class="row mt-3">
+    </div>
+      <div class="col-lg-12 px-2">
+        <div class="table-responsive">
       <table class="table table-striped">
         <thead class="table-dark">
           <tr>
@@ -44,25 +47,25 @@
           {% for AllRecList in page.object_list %}
           <tr class="qrow text-center">
             <td>
-              <p class="text-start">{{ AllRecList.user.first_name }}&nbsp{{ AllRecList.user.last_name }}</p>
+              <span class="text-start">{{ AllRecList.user.first_name }}&nbsp{{ AllRecList.user.last_name }}</span>
             </td>
             <td>
-              <p class="text-start">{{ AllRecList.name }}</p>
+              <span class="text-start">{{ AllRecList.name }}</span>
             </td>
             <td>
-              <p class="text-center">{{ AllRecList.brand }}</p>
+              <span class="text-center">{{ AllRecList.brand }}</span>
             </td>
             <td>
-              <p class="text-center">{{ AllRecList.quantity }}</p>
+              <span class="text-center">{{ AllRecList.quantity }}</span>
             </td>
             <td>
-              <p class="text-center">{{ AllRecList.price }}</p>
+              <span class="text-center">{{ AllRecList.price }}</span>
             </td>
             <td>
-              <p class="text-center">{{ AllRecList.total }}</p>
+              <span class="text-center">{{ AllRecList.total }}</span>
             </td>
             <td>
-              <p class="text-center">{{ AllRecList.datetime|date:"G:m A d M y" }}</p>
+              <span class="text-center">{{ AllRecList.datetime|date:"G:m A d M y" }}</span>
             </td>
             <td>
               <a class="btn btn-success rounded-pill badge"
@@ -85,8 +88,10 @@
       </div>
       {% endif %}
 </div>
-    </table><br><br>
+    </table>
+        </div>
+      </div>
+      <br><br>
   </div>
-</div>
 </div>
 {% endblock %}
